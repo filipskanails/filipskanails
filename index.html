@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Next Level — курс підвищення кваліфікації</title>
+  <meta name="description" content="Чіткий квадрат, укріплення та ідеальний комбі‑манікюр і френч. Доступ до уроків одразу після оплати.">
+  <style>
+    :root{
+      --bg:#0f0f12; --card:#15161a; --muted:#9aa0a6; --text:#e8eaed; --accent:#7c5cff;
+      --radius:16px; --maxw:980px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, sans-serif; color:var(--text); background:radial-gradient(1200px 600px at 80% -10%, #1b1835 0%, transparent 60%), var(--bg);}
+    a{color:inherit}
+    .wrap{max-width:var(--maxw); margin:0 auto; padding:24px}
+    header{padding:32px 0 24px; display:flex; align-items:center; justify-content:space-between; gap:16px}
+    .logo{font-weight:700; letter-spacing:.3px}
+    .ghost{color:var(--muted); text-decoration:none}
+    .hero{display:grid; grid-template-columns:1.2fr 1fr; gap:28px; align-items:center; padding:24px 0 8px}
+    .card{background:var(--card); border:1px solid #23242a; border-radius:var(--radius); padding:24px}
+    h1{font-size:clamp(28px, 3.4vw, 40px); line-height:1.1; margin:0 0 12px}
+    p.lead{color:var(--muted); font-size:clamp(16px, 2.2vw, 18px); margin:0 0 20px}
+    .cta{display:inline-block; padding:14px 18px; border-radius:12px; background:linear-gradient(135deg, var(--accent), #b388ff); color:#0b0b0e; font-weight:700; text-decoration:none; box-shadow:0 8px 20px rgba(124,92,255,.35)}
+    .cta.secondary{background:#23242a; color:var(--text); box-shadow:none; border:1px solid #2a2b35}
+    .features{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:22px}
+    .feat{background:var(--card); border:1px solid #23242a; border-radius:14px; padding:16px; color:var(--muted)}
+    .section{margin:42px 0}
+    h2{font-size:clamp(22px,2.6vw,28px); margin:0 0 14px}
+    ul.program{list-style:none; padding:0; margin:0; display:grid; gap:10px}
+    ul.program li{background:var(--card); border:1px solid #23242a; border-radius:12px; padding:14px}
+    .price{font-size:28px; font-weight:800; margin:0 0 16px}
+    .footer{color:var(--muted); font-size:14px; padding:24px 0 40px}
+    .buybox{display:flex; flex-direction:column; gap:12px}
+    @media (max-width:880px){ .hero{grid-template-columns:1fr} .features{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">Next Level</div>
+      <nav>
+        <a class="ghost" href="#program">Програма</a>&nbsp;&nbsp;
+        <a class="ghost" href="#buy">Оплата</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="card">
+        <h1>Підвищення кваліфікації для майстрів манікюру</h1>
+        <p class="lead">Чіткий квадрат, надійне укріплення, ідеальний комбі‑манікюр та френч. Доступ одразу після оплати.</p>
+        <div class="buybox">
+          <div class="price"><span id="price">[ВСТАВТЕ ЦІНУ]</span> грн</div>
+          <!-- TODO: ЗАМІНІТЬ href НА ВАШ Payment Link з платіжної системи (Fondy/WayForPay/mono/LiqPay) -->
+          <a class="cta" target="_blank" rel="noopener noreferrer" id="buyBtn" href="https://PAYMENT_LINK_PLACEHOLDER">Купити курс</a>
+          <a class="cta secondary" href="#program">Дивитися програму</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Для кого цей курс</h2>
+        <div class="features">
+          <div class="feat">Після бази — хочеш перейти на рівень PRO</div>
+          <div class="feat">Потрібна швидкість без втрати якості</div>
+          <div class="feat">Виправити помилки з квадратом/укріпленням/френчем</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="program" class="section">
+      <h2>Програма</h2>
+      <ul class="program">
+        <li><strong>Модуль 1.</strong> Чіткий квадрат: форма, архітектура, типові помилки → як виправити.</li>
+        <li><strong>Модуль 2.</strong> Укріплення: тверді матеріали, товщина, вирівнювання.</li>
+        <li><strong>Модуль 3.</strong> Комбі‑манікюр: техніка, безпека, стерильність.</li>
+        <li><strong>Модуль 4.</strong> Ідеальний френч: розмітка, лінії, швидкість виконання.</li>
+      </ul>
+      <p class="lead" style="margin-top:14px">Формат: відео + короткі конспекти + домашні завдання. Доступ — одразу після оплати.</p>
+    </section>
+
+    <section id="buy" class="section card">
+      <h2>Оплата доступу</h2>
+      <p class="lead">Натисніть «Купити курс» — ви перейдете на безпечну платіжну сторінку. Після успішної оплати буде автоматичний перехід на сторінку «Дякуємо», де буде кнопка входу в Telegram‑канал.</p>
+      <a class="cta" target="_blank" rel="noopener noreferrer" href="https://PAYMENT_LINK_PLACEHOLDER">Купити курс</a>
+      <p class="lead" style="margin-top:10px; font-size:14px">Оплатою ви погоджуєтесь з Умовами оферти та Політикою конфіденційності.</p>
+    </section>
+
+    <footer class="footer">
+      © <span id="y"></span> Next Level · Email: <a class="ghost" href="mailto:you@example.com">you@example.com</a>
+    </footer>
+  </div>
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
