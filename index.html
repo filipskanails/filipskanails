@@ -30,13 +30,11 @@
         radial-gradient(1100px 780px at 15% 100%, rgba(18,209,142,.28), transparent 62%),
         var(--bg);
     }
-    /* Фото — трохи правіше для балансу */
     .hero-img{
       position:absolute; right:6%; bottom:8%;
       width:min(600px, 48vw); max-height:96%; object-fit:contain; pointer-events:none;
       filter:drop-shadow(0 16px 28px rgba(0,0,0,.35));
     }
-    /* Текст — з резервом під фото справа (десктоп) */
     .hero-text{
       position:absolute; left:6%; right:46%; top:8%;
       max-width:none; text-shadow:0 1px 0 rgba(0,0,0,.2);
@@ -48,7 +46,6 @@
     .hl{font-size:clamp(28px,5vw,48px); line-height:1.18; font-weight:900; margin:8px 0}
     .lead{color:var(--muted); margin:0 0 10px}
 
-    /* CTA (десктоп) */
     .hero-cta{
       position:absolute; left:6%; bottom:7%;
       display:grid; gap:10px; width:min(440px, 92%)
@@ -88,39 +85,28 @@
     .bubbleWrap::before{content:""; position:absolute; left:16px; bottom:-10px; width:18px; height:18px; background:#e8efe9; transform:rotate(45deg)}
 
     .priceRow{display:flex; align-items:center; gap:18px; margin:12px 0}
-    .pricePill{
-      display:flex; align-items:center; gap:8px;
-      padding:12px 18px; border-radius:999px;
-      background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#062217;
-      font-weight:900; box-shadow:var(--shadow)
-    }
+    .pricePill{display:flex; align-items:center; gap:8px; padding:12px 18px; border-radius:999px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#062217; font-weight:900; box-shadow:var(--shadow)}
     .priceNum{font-size:clamp(22px,3.2vw,30px); font-weight:900}
     .old{color:#95a49b; text-decoration:line-through; font-size:18px; display:none}
 
-    /* === PROMO timer === */
+    /* PROMO timer */
     .bonusList{list-style:none; padding:0; margin:16px 0 12px; display:grid; gap:10px}
     .bonusList li{display:flex; align-items:center; gap:10px}
-    .bonusList li::before{
-      content:""; width:24px; height:24px; border-radius:999px;
-      background:linear-gradient(135deg,var(--accent),var(--accent-2));
-      box-shadow:0 0 0 2px #103c2d inset;
-      display:inline-block;
-    }
-
-    .countdown{
-      display:flex; gap:12px; flex-wrap:nowrap; justify-content:space-between;
-      margin:18px 0 8px; width:100%;
-    }
-    .countbox{
-      flex:1 1 0; min-width:0;
-      border:1px solid #2b4136; border-radius:14px;
-      background:#0f1713; padding:16px 10px;
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-    }
+    .bonusList li::before{content:""; width:24px; height:24px; border-radius:999px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow:0 0 0 2px #103c2d inset; display:inline-block}
+    .countdown{display:flex; gap:12px; flex-wrap:nowrap; justify-content:space-between; margin:18px 0 8px; width:100%}
+    .countbox{flex:1 1 0; min-width:0; border:1px solid #2b4136; border-radius:14px; background:#0f1713; padding:16px 10px; display:flex; flex-direction:column; align-items:center; justify-content:center}
     .countbox .n{font-size:clamp(22px,8vw,40px); font-weight:900; line-height:1; white-space:nowrap}
     .countbox .t{color:var(--muted); margin-top:6px; font-size:clamp(12px,3.6vw,16px); white-space:nowrap}
 
-    .buy-note{color:var(--muted); text-align:center; margin:10px 0 6px}
+    /* Floating CTA (показывается, когда hero вне экрана) */
+    .floater{position:fixed; left:0; right:0; bottom:12px; z-index:50;
+      opacity:0; transform:translateY(16px); pointer-events:none;
+      transition:opacity .28s ease, transform .28s ease}
+    .floater.show{opacity:1; transform:translateY(0); pointer-events:auto}
+    .floater-inner{max-width:var(--maxw); margin:0 auto; padding:0 20px}
+    .floater .cta{width:100%}
 
     /* Адаптив */
     @media (max-width:1200px){
@@ -129,20 +115,10 @@
     }
     @media (max-width:820px){
       .hero-stage{min-height:88vh}
-
-      /* На мобілі текст і CTA — у потоці: CTA чітко під лідом */
-      .hero-text{
-        position:relative; left:auto; right:auto; top:auto;
-        max-width:none; margin:16px 0 10px;
-      }
-      .hero-cta{
-        position:relative; left:auto; right:auto; bottom:auto;
-        width:100%; margin:8px 0 0;
-      }
-
-      /* Фото — трохи правіше, щоб не «виїжджало» вліво */
+      /* Текст и CTA в потоке: кнопка сразу под лідом */
+      .hero-text{position:relative; left:auto; right:auto; top:auto; max-width:none; margin:16px 0 10px}
+      .hero-cta{position:relative; left:auto; right:auto; bottom:auto; width:100%; margin:8px 0 0}
       .hero-img{right:7%; bottom:-2%; width:min(580px, 108vw)}
-
       .slider{grid-auto-columns:88%}
     }
   </style>
@@ -163,14 +139,13 @@
         <p class="lead">Ефективні та швидкі техніки, які дозволяють одразу заробляти та підвищити чек.</p>
       </div>
 
-      <!-- На мобільному ця плашка стає точно під лідом -->
       <div class="hero-cta">
         <a id="buyTop" class="cta big">Придбати курс</a>
         <div id="priceLine" class="priceLine">—</div>
       </div>
     </section>
 
-    <!-- PROMO з таймером — одразу під HERO -->
+    <!-- PROMO (таймер) — сразу под HERO -->
     <section id="promo" class="section card">
       <h2>Приєднуйся зараз та отримай бонуси</h2>
       <ul class="bonusList">
@@ -179,18 +154,9 @@
       </ul>
 
       <div class="countdown" id="countdown">
-        <div class="countbox">
-          <div class="n" id="cd-h">00</div>
-          <div class="t">Годин</div>
-        </div>
-        <div class="countbox">
-          <div class="n" id="cd-m">00</div>
-          <div class="t">Хвилин</div>
-        </div>
-        <div class="countbox">
-          <div class="n" id="cd-s">00</div>
-          <div class="t">Секунд</div>
-        </div>
+        <div class="countbox"><div class="n" id="cd-h">00</div><div class="t">Годин</div></div>
+        <div class="countbox"><div class="n" id="cd-m">00</div><div class="t">Хвилин</div></div>
+        <div class="countbox"><div class="n" id="cd-s">00</div><div class="t">Секунд</div></div>
       </div>
 
       <div class="buy-note">Встигни записатися та навчайся за найвигіднішою ціною</div>
@@ -254,6 +220,13 @@
     </section>
   </div>
 
+  <!-- Floating CTA -->
+  <div class="floater" id="floatCta" aria-hidden="true">
+    <div class="floater-inner">
+      <a id="buyFloat" class="cta big">Отримати доступ</a>
+    </div>
+  </div>
+
   <script>
     /* ===== НАСТРОЙКИ ===== */
     const WORKER = "https://filipskanails-pay.timanov-business.workers.dev";
@@ -297,11 +270,13 @@
       if(pP) pP.textContent = fmt(active)+" грн";
       if(oP){ if(old&&old>active){oP.style.display="inline"; oP.textContent=fmt(old)+" грн"} else oP.style.display="none" }
 
-      setPayHref($("#buyTop"), active);
+      // ссылки для всех кнопок
+      setPayHref($("#buyTop"),   active);
       setPayHref($("#buyPromo"), active);
+      setPayHref($("#buyFloat"), active);
     }
 
-    // evergreen countdown
+    // evergreen countdown (в блоке promo)
     const COUNT = $("#countdown");
     const key = "promoEndsAt-v1";
     const now = Date.now();
@@ -329,8 +304,24 @@
 
       setTimeout(tick,1000);
     }
-
     tick();
+
+    // Floating CTA: показываем, когда hero вне экрана
+    (function(){
+      const hero = $("#hero");
+      const floater = $("#floatCta");
+      if(!hero || !floater) return;
+
+      const io = new IntersectionObserver((entries)=>{
+        const e = entries[0];
+        if(e && e.isIntersecting){
+          floater.classList.remove("show"); // hero виден — скрываем
+        }else{
+          floater.classList.add("show");    // hero вне экрана — показываем
+        }
+      }, {threshold: 0.15});
+      io.observe(hero);
+    })();
   </script>
 </body>
 </html>
