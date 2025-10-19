@@ -24,66 +24,72 @@
     /* ===== HERO (full-bleed) ===== */
     .hero-stage{
       position:relative; min-height:min(92vh, 760px);
-      overflow:hidden;
-      margin:0 -20px; /* по краях екрана, як у референса */
-      background:
-        /* кругове світіння навколо фото */
-        radial-gradient(540px 540px at 74% 82%, rgba(18,209,142,.55), transparent 68%),
-        radial-gradient(900px 600px at 15% 10%, rgba(18,209,142,.22), transparent 62%),
-        var(--bg);
+      overflow:hidden; margin:0 -20px; background:var(--bg);
     }
-    /* Фото трохи правіше */
-    .hero-img{
-      position:absolute; right:10%; bottom:-2%;
-      width:min(640px, 54vw); max-height:96%; object-fit:contain; pointer-events:none;
-      filter:drop-shadow(0 16px 28px rgba(0,0,0,.35));
+    /* кругове яскраве свічення тільки навколо фото */
+    .hero-stage::after{
+      content:""; position:absolute; right:9%; bottom:2%;
+      width:min(120vmin, 820px); height:min(120vmin, 820px); border-radius:50%;
+      background:radial-gradient(circle,
+        rgba(18,209,142,.70) 0%,
+        rgba(18,209,142,.45) 28%,
+        rgba(18,209,142,.22) 52%,
+        rgba(18,209,142,.10) 68%,
+        transparent 78%);
+      filter:blur(2px); z-index:0; pointer-events:none;
+      transform:translate(10%,15%); /* трохи зсунуто під фото */
     }
 
-    /* Весь верхній текст — по центру з боковими відступами */
+    /* Фото: правіше і вище — ближче до ліда */
+    .hero-img{
+      position:absolute; right:10%; bottom:12%;
+      width:min(640px, 54vw); max-height:96%; object-fit:contain;
+      filter:drop-shadow(0 16px 28px rgba(0,0,0,.35)); z-index:1; pointer-events:none;
+    }
+
+    /* Верхній текст — по центру з полями 24px */
     .hero-text{
       position:absolute; top:7%; left:50%; transform:translateX(-50%);
-      max-width:min(760px, calc(100vw - 48px)); /* 24px відступи з боків */
-      width:100%; padding:0 0; text-align:center; text-shadow:0 1px 0 rgba(0,0,0,.2);
+      max-width:min(760px, calc(100vw - 48px)); width:100%;
+      text-align:center; text-shadow:0 1px 0 rgba(0,0,0,.2); z-index:2;
     }
     .eyebrow{font-size:13px; letter-spacing:.06em; color:var(--muted)}
     .chips{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:8px}
-    .chip{padding:8px 14px; border-radius:999px; border:1px solid var(--line); background:#0f1713; color:var(--text)}
+    .chip{padding:8px 14px; border-radius:999px; border:1px solid var(--line); background:#0f1713}
     .chip.outline{background:transparent}
     .hl{font-size:clamp(28px,5vw,48px); line-height:1.18; font-weight:900; margin:10px 0 8px}
     .lead{color:var(--muted); margin:0 0 10px}
 
-    /* Скляна плашка — вужча, більш скруглена, правіше (частково на фото) */
+    /* Скляна плашка — вужча і правіше (частково на фото) */
     .hero-bubble{
-      position:absolute; left:56%; bottom:24%;
-      transform:translateX(-10%);
-      max-width:320px;
-      color:#fff; background:rgba(12,16,14,.55);
+      position:absolute; right:10%; bottom:30%;
+      max-width:260px; color:#fff; background:rgba(12,16,14,.55);
       border:1px solid rgba(142,243,199,.22);
-      padding:14px 16px; border-radius:26px; backdrop-filter:blur(8px);
-      box-shadow:0 10px 30px rgba(0,0,0,.25);
-      font-size:15px; line-height:1.35;
+      padding:12px 14px; border-radius:28px; backdrop-filter:blur(8px);
+      box-shadow:0 10px 30px rgba(0,0,0,.25); font-size:14px; line-height:1.35;
+      z-index:2;
     }
 
     /* Кнопка на фото + ціна під нею */
     .hero-cta{
       position:absolute; left:50%; transform:translateX(-50%);
-      bottom:7%; display:grid; gap:10px; width:auto; text-align:center;
+      bottom:7%; display:grid; gap:10px; width:auto; text-align:center; z-index:2;
     }
     .cta{
       display:inline-flex; align-items:center; justify-content:center; gap:10px;
-      padding:18px 28px; border-radius:999px;
+      padding:16px 26px; border-radius:999px;
       background:linear-gradient(135deg,var(--accent),#36e6a7);
-      color:#ffffff; /* яскравіше */
-      font-weight:900; font-size:22px; letter-spacing:.4px; text-transform:uppercase;
+      color:#fff; font-weight:900;
+      font-size:clamp(18px,5vw,22px); /* щоб в одну строку на мобільних */
+      letter-spacing:.3px; text-transform:uppercase; white-space:nowrap;
       box-shadow:var(--shadow); text-shadow:0 1px 0 rgba(0,0,0,.12);
     }
     .priceLine{
-      font-weight:800; text-align:center; font-size:16px;
-      color:var(--text); opacity:.95;
+      font-weight:800; text-align:center; font-size:16px; color:var(--text); opacity:.95;
     }
     .priceLine .oldline{color:#95a49b; text-decoration:line-through; margin-left:10px}
 
-    /* ===== Sections ===== */
+    /* ===== Sections (нижче без змін) ===== */
     .section{margin:40px 0}
     h2{font-size:clamp(22px,2.4vw,30px); margin:0 0 12px}
     .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:22px}
@@ -136,22 +142,18 @@
 
     /* ===== Адаптив ===== */
     @media (max-width:1200px){
-      .hero-img{right:10%; width:min(600px, 56vw)}
+      .hero-img{right:10%; bottom:12%; width:min(600px, 56vw)}
+      .hero-stage::after{right:9%; bottom:0%;}
     }
     @media (max-width:820px){
-      .hero-stage{
-        min-height:88vh;
-        background:
-          radial-gradient(560px 560px at 68% 88%, rgba(18,209,142,.58), transparent 68%),
-          radial-gradient(700px 520px at 14% 8%, rgba(18,209,142,.22), transparent 60%),
-          var(--bg);
+      .hero-stage{min-height:88vh}
+      .hero-img{right:50%; transform:translateX(44%); bottom:12%; width:min(620px, 112vw)}
+      .hero-stage::after{
+        right:50%; transform:translate(38%,20%);
+        width:min(120vmin, 680px); height:min(120vmin, 680px); bottom:6%;
       }
-      .hero-text{top:6%; max-width:calc(100vw - 48px)} /* 24px поля */
-      /* Фото — трохи правіше, ніж було */
-      .hero-img{right:50%; transform:translateX(42%); bottom:-6%; width:min(620px, 118vw)}
-      /* Плашку піджали і змістили праворуч */
-      .hero-bubble{left:auto; right:8%; bottom:28%; max-width:72vw}
-      .hero-cta{bottom:8%; width:auto}
+      .hero-bubble{right:8%; bottom:30%; max-width:60vw}
+      .hero-cta{bottom:8%}
       .slider{grid-auto-columns:88%}
     }
   </style>
@@ -173,13 +175,13 @@
         <p class="lead">Ефективні та швидкі техніки, які дозволяють одразу заробляти та підвищити чек.</p>
       </div>
 
-      <!-- Скляна плашка правіше, частково на фото -->
+      <!-- Скляна плашка -->
       <div class="hero-bubble">
         Клієнти шукають сучасних і професійних майстрів.
         Не втрачай свій шанс бути серед кращих!
       </div>
 
-      <!-- Кнопка + ціна під нею -->
+      <!-- Кнопка + ціна -->
       <div class="hero-cta">
         <a id="buyTop" class="cta">Придбати курс</a>
         <div id="priceLine" class="priceLine">лише — грн <span class="oldline">— грн</span></div>
@@ -280,7 +282,6 @@
     const $ = s=>document.querySelector(s);
     const fmt = n=>new Intl.NumberFormat("uk-UA").format(n);
 
-    // дата у чипі
     (function(){
       const chip = $("#chipDate");
       if(chip){
@@ -299,18 +300,15 @@
     }
 
     function renderPrices(active, old){
-      // hero line (під кнопкою)
       const line = $("#priceLine");
       if(line){
         line.innerHTML = old && old>active
           ? `лише ${fmt(active)} грн <span class="oldline">${fmt(old)} грн</span>`
           : `ціна ${fmt(active)} грн`;
       }
-      // promo block
       const pP=$("#pricePromo"), oP=$("#oldPromo");
       if(pP) pP.textContent = fmt(active)+" грн";
       if(oP){ if(old&&old>active){oP.style.display="inline"; oP.textContent=fmt(old)+" грн"} else oP.style.display="none" }
-
       setPayHref($("#buyTop"),   active);
       setPayHref($("#buyPromo"), active);
       setPayHref($("#buyFloat"), active);
