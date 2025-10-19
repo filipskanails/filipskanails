@@ -1,289 +1,388 @@
 <!doctype html>
 <html lang="uk">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Швидкісне нарощення на верхні форми — Next Level</title>
-<meta name="description" content="Ефективні техніки: верхні форми, чіткий квадрат, укріплення, комбі-манікюр та френч. Доступ до уроків одразу після оплати.">
-<meta name="color-scheme" content="dark">
-<style>
-  :root{
-    /* Яркая зелёно-серая тема */
-    --bg:#0c100e; --card:#121614; --line:#223129;
-    --text:#e7f0ea; --muted:#a1b3ab;
-    --accent:#12d18e; --accent-2:#8ef3c7;
-    --radius:18px; --maxw:1140px; --shadow:0 10px 30px rgba(18,209,142,.18);
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;background:
-    radial-gradient(1100px 540px at 80% -8%, #103e2d 0%, transparent 60%),
-    var(--bg);color:var(--text);
-    font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif}
-  a{color:inherit;text-decoration:none}
-  img{max-width:100%;display:block}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:20px}
-  header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:8px 0}
-  .logo{font-weight:900;letter-spacing:.2px}
-  nav a{color:var(--muted);padding:8px 10px;border-radius:10px}
-  nav a:hover{background:#17211c}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Швидкісне нарощення на верхні форми — Next Level</title>
+  <meta name="description" content="Ефективні та швидкі техніки нарощення: верхні форми, чіткий квадрат, укріплення, комбі-манікюр і френч. Доступ одразу після оплати.">
+  <meta name="color-scheme" content="dark">
 
-  .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:stretch;margin:18px 0 6px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
-  .cover{position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line)}
-  .cover:before{content:"";position:absolute;inset:auto -10% -10% -10%;height:70%;
-    background:radial-gradient(650px 350px at 50% 30%, rgba(18,209,142,.45), transparent 60%);filter:blur(10px)}
-  h1{font-size:clamp(26px,3.6vw,46px);line-height:1.08;margin:0 0 10px}
-  p.lead{color:var(--muted);font-size:clamp(16px,2.2vw,18px);margin:0 0 14px}
+  <style>
+    :root{
+      /* Яркая зелёно-серая палитра */
+      --bg:#0c100e;        /* фон */
+      --card:#121614;      /* карточки */
+      --line:#223129;      /* бордеры */
+      --text:#e7f0ea;      /* основной текст */
+      --muted:#a1b3ab;     /* вторичный текст */
+      --accent:#12d18e;    /* изумрудный акцент */
+      --accent-2:#8ef3c7;  /* светлый акцент */
+      --radius:18px;
+      --maxw:1140px;
+      --shadow:0 10px 30px rgba(18,209,142,.18);
+    }
 
-  .cta{display:inline-flex;align-items:center;gap:10px;padding:14px 18px;border-radius:14px;
-    background:linear-gradient(135deg,var(--accent),#36e6a7);color:#042517;font-weight:900;box-shadow:var(--shadow)}
-  .cta.secondary{background:#18241e;color:var(--text);box-shadow:none;border:1px solid var(--line)}
-  .cta.pill{border-radius:999px}
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;
+      background:
+        radial-gradient(1100px 540px at 80% -8%, #103e2d 0%, transparent 60%),
+        var(--bg);
+      color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
 
-  .priceRow{display:flex;align-items:flex-end;gap:12px;margin:8px 0 12px}
-  .price{font-size:clamp(28px,3.2vw,34px);font-weight:900}
-  .old{color:#95a49b;text-decoration:line-through;font-size:18px;display:none}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:20px}
 
-  .bar{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px;background:#14211b;border:1px dashed #2b4136}
-  .timer{display:flex;gap:10px;font-weight:800}
-  .timer span{min-width:56px;text-align:center;background:#182820;border:1px solid #264338;padding:8px 10px;border-radius:12px}
-  .muted{color:var(--muted)}
+    /* Header */
+    header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:8px 0}
+    .logo{font-weight:900;letter-spacing:.2px}
+    nav a{color:var(--muted);padding:8px 10px;border-radius:10px}
+    nav a:hover{background:#17211c}
 
-  .section{margin:40px 0}
-  h2{font-size:clamp(22px,2.4vw,30px);margin:0 0 12px}
-  .pill{display:inline-block;padding:8px 12px;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#062217;font-weight:900;border:1px solid #54e0a9}
-  .checklist{display:grid;gap:10px;margin-top:14px}
-  .li{position:relative;padding:12px 12px 12px 46px;background:#101713;border:1px solid var(--line);border-radius:14px}
-  .li:before{content:"";position:absolute;left:12px;top:12px;width:22px;height:22px;border-radius:999px;border:2px solid var(--accent);box-shadow:0 0 0 3px rgba(18,209,142,.15) inset}
-  .li:after{content:"";position:absolute;left:18px;top:18px;width:10px;height:5px;border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg)}
+    /* HERO (как на референсе) */
+    .hero-ref{display:grid;gap:16px;margin:10px 0 6px}
+    .hero-head{display:grid;gap:10px;text-align:center}
+    .eyebrow{font-size:13px;letter-spacing:.06em;color:var(--muted)}
+    .chips{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+    .chip{padding:8px 14px;border-radius:999px;border:1px solid var(--line);color:var(--text);background:#0f1713}
+    .chip.outline{background:transparent}
+    .hl{font-size:clamp(26px,4.2vw,40px);line-height:1.18;font-weight:900;margin:0}
+    .lead{color:var(--muted);font-size:clamp(16px,2.2vw,18px);margin:0}
 
-  .slider{display:grid;grid-auto-flow:column;grid-auto-columns:86%;gap:12px;overflow-x:auto;padding:4px;scroll-snap-type:x mandatory}
-  .slide{scroll-snap-align:center;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#0b0f0d}
-  .slide img{aspect-ratio:1/1;object-fit:cover}
+    .hero-media{position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line)}
+    .hero-media::after{
+      content:"";position:absolute;inset:auto -10% -10% -10%;height:65%;
+      background:radial-gradient(700px 360px at 50% 35%, rgba(18,209,142,.42), transparent 60%);
+      filter:blur(10px);
+    }
 
-  .faq details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
-  .faq details+details{margin-top:8px}
-  .faq summary{cursor:pointer;font-weight:700}
+    .cta{display:inline-flex;align-items:center;gap:10px;padding:14px 18px;border-radius:14px;
+      background:linear-gradient(135deg,var(--accent),#36e6a7);color:#042517;font-weight:900;box-shadow:var(--shadow)}
+    .cta.secondary{background:#18241e;color:var(--text);box-shadow:none;border:1px solid var(--line)}
+    .cta.big{padding:16px 22px;font-size:18px;border-radius:999px}
+    .priceLine{margin-top:6px;text-align:center;font-weight:800;color:var(--text)}
+    .priceLine .oldline{color:#95a49b;text-decoration:line-through;margin-left:10px}
 
-  .sticky{position:fixed;left:0;right:0;bottom:0;padding:10px 14px;background:rgba(10,14,12,.92);backdrop-filter:blur(6px);border-top:1px solid var(--line);display:none}
-  .sticky .cta{width:100%}
+    /* Discount bar */
+    .bar{display:none;align-items:center;gap:12px;padding:10px 14px;border-radius:14px;background:#14211b;border:1px dashed #2b4136}
+    .bar.show{display:flex}
+    .timer{display:flex;gap:10px;font-weight:800}
+    .timer span{min-width:56px;text-align:center;background:#182820;border:1px solid #264338;padding:8px 10px;border-radius:12px}
+    .muted{color:var(--muted)}
 
-  @media (max-width:1020px){
-    .hero{grid-template-columns:1fr}
-    .slider{grid-auto-columns:88%}
-    .sticky{display:block}
-  }
-</style>
+    /* Generic cards/sections */
+    .section{margin:40px 0}
+    h2{font-size:clamp(22px,2.4vw,30px);margin:0 0 12px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+
+    /* How it works card */
+    .steps{display:grid;gap:12px}
+    .step{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:start;background:#101713;border:1px solid var(--line);border-radius:14px;padding:12px}
+    .step .n{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:#14211b;border:1px solid #2b4136;color:var(--accent);font-weight:900}
+
+    /* What you'll get (01..06) */
+    .listNum{display:grid;gap:10px}
+    .numItem{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:start}
+    .num{font-family:ui-monospace, Menlo, Consolas, monospace;color:var(--muted);font-size:28px;opacity:.9}
+
+    /* Checklist cards (Практика/Теорія) */
+    .pill{display:inline-block;padding:8px 12px;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#062217;font-weight:900;border:1px solid #54e0a9}
+    .checklist{display:grid;gap:10px;margin-top:12px}
+    .li{position:relative;padding:12px 12px 12px 46px;background:#101713;border:1px solid var(--line);border-radius:14px}
+    .li::before{content:"";position:absolute;left:12px;top:12px;width:22px;height:22px;border-radius:999px;border:2px solid var(--accent);box-shadow:0 0 0 3px rgba(18,209,142,.15) inset}
+    .li::after{content:"";position:absolute;left:18px;top:18px;width:10px;height:5px;border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg)}
+
+    /* Gallery / Certificates / Reviews */
+    .slider{display:grid;grid-auto-flow:column;grid-auto-columns:86%;gap:12px;overflow-x:auto;padding:4px;scroll-snap-type:x mandatory}
+    .slide{scroll-snap-align:center;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#0b0f0d}
+    .slide img{aspect-ratio:1/1;object-fit:cover}
+    .bubble{background:#e8efe9;color:#0c100e;border-radius:20px;padding:16px 14px 18px;max-width:740px;margin:0 auto}
+    .bubbleWrap{position:relative}
+    .bubbleWrap::before{content:"";position:absolute;left:16px;bottom:-10px;width:18px;height:18px;background:#e8efe9;transform:rotate(45deg)}
+
+    /* Buy block */
+    .priceRow{display:flex;align-items:flex-end;gap:12px;margin:8px 0 12px}
+    .price{font-size:clamp(28px,3.2vw,34px);font-weight:900}
+    .old{color:#95a49b;text-decoration:line-through;font-size:18px;display:none}
+
+    /* FAQ */
+    .faq details{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px}
+    .faq details+details{margin-top:10px}
+    .faq summary{cursor:pointer;font-weight:700}
+
+    /* Sticky CTA (mobile) */
+    .sticky{position:fixed;left:0;right:0;bottom:0;padding:10px 14px;background:rgba(10,14,12,.92);backdrop-filter:blur(6px);border-top:1px solid var(--line);display:none}
+    .sticky .cta{width:100%}
+
+    @media (max-width:1020px){
+      .slider{grid-auto-columns:88%}
+      .sticky{display:block}
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="logo">Next Level</div>
-    <nav>
-      <a href="#program">Програма</a>
-      <a href="#gallery">Роботи</a>
-      <a href="#buy">Оплата</a>
-    </nav>
-  </header>
+  <div class="wrap">
+    <header>
+      <div class="logo">Next Level</div>
+      <nav>
+        <a href="#how">Як це працює</a>
+        <a href="#program">Програма</a>
+        <a href="#buy">Оплата</a>
+      </nav>
+    </header>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="card">
-      <h1>Швидкісне нарощення на верхні форми</h1>
-      <p class="lead">Ефективні та швидкі техніки нарощення, які дозволяють одразу заробляти та підвищити чек. Доступ відкривається одразу після оплати.</p>
-
-      <div class="priceRow">
-        <div id="price" class="price">— ₴</div>
-        <div id="old" class="old">— ₴</div>
+    <!-- HERO -->
+    <section class="hero-ref" id="hero">
+      <div class="hero-head">
+        <div class="eyebrow">ОНЛАЙН КУРС ВІД ІНСТРУКТОРА МАНІКЮРУ</div>
+        <div class="chips">
+          <span class="chip">Доступ назавжди</span>
+          <span class="chip outline" id="chipDate">Сьогодні</span>
+        </div>
+        <h1 class="hl">Швидкісне нарощення<br>на верхні форми</h1>
+        <p class="lead">Ефективні та швидкі техніки, які дозволяють одразу заробляти та підвищити чек.</p>
       </div>
 
-      <div id="discountBar" class="bar" style="display:none">
+      <div class="hero-media">
+        <!-- заміни на свою обкладинку -->
+        <img src="img/hero-cover.jpg" alt="Обкладинка курсу">
+      </div>
+
+      <div style="display:grid;gap:8px;justify-items:center">
+        <a id="buyTop" class="cta big">Придбати курс</a>
+        <div id="priceLine" class="priceLine">—</div>
+      </div>
+
+      <div id="discountBar" class="bar" aria-live="polite">
         <small class="muted">Знижка закінчиться через:</small>
-        <div class="timer" aria-live="polite">
+        <div class="timer">
           <span><b id="d">00</b><br><small class="muted">дн</small></span>
           <span><b id="h">00</b><br><small class="muted">год</small></span>
           <span><b id="m">00</b><br><small class="muted">хв</small></span>
           <span><b id="s">00</b><br><small class="muted">с</small></span>
         </div>
       </div>
+    </section>
 
-      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-        <a id="buyTop" class="cta pill">Отримати доступ</a>
-        <a class="cta secondary" href="#program">Дивитися програму</a>
+    <!-- HOW IT WORKS -->
+    <section id="how" class="section">
+      <h2>Як буде проходити курс</h2>
+      <div class="card steps">
+        <div class="step"><div class="n">1</div><div><strong>Доступ у Telegram</strong><br><span class="muted">Після оплати одразу отримуєш доступ до платформи з уроками.</span></div></div>
+        <div class="step"><div class="n">2</div><div><strong>Сфокусовані уроки</strong><br><span class="muted">Відео й конспекти з чіткими покроковими поясненнями.</span></div></div>
+        <div class="step"><div class="n">3</div><div><strong>Чат підтримки</strong><br><span class="muted">Закрита група, де можна ставити запитання.</span></div></div>
       </div>
-    </div>
+    </section>
 
-    <div class="cover">
-      <img src="img/hero-cover.jpg" alt="Обкладинка курсу">
-    </div>
-  </section>
-
-  <!-- ПРОГРАМА -->
-  <section id="program" class="section">
-    <h2>Програма курсу</h2>
-    <div class="card" style="margin-bottom:16px">
-      <span class="pill">Практика</span>
-      <div class="checklist" style="margin-top:12px">
-        <div class="li">Якісні відео уроки з покроковою демонстрацією процесу нарощення на верхні форми</div>
-        <div class="li">Схеми викладки та фіксації форм для чистого відпечатку без надмірних затікань</div>
-        <div class="li">Розбір найчастіших помилок в роботі з верхніми формами та їх демонстрація</div>
-        <div class="li">Моделювання форм: квадрат, балерина, мигдаль та овал</div>
-        <div class="li">Схеми мінімального опилу нарощеного нігтя</div>
-        <div class="li">Швидкі дизайни: омбре, градієнти, текстури</div>
-        <div class="li">Викладний френч швидкісною технікою</div>
-        <div class="li">Реставрація вільного краю</div>
+    <!-- WHAT YOU'LL GET -->
+    <section class="section">
+      <h2>Що ви отримаєте на моєму курсі</h2>
+      <div class="card listNum">
+        <div class="numItem"><div class="num">/01</div><div>Миттєвий результат — після опрацювання курсу зможете якісно нарощувати нігті та заробляти.</div></div>
+        <div class="numItem"><div class="num">/02</div><div>30+ відеоуроків з якісною картинкою та чіткими поетапними поясненнями.</div></div>
+        <div class="numItem"><div class="num">/03</div><div>Вміння обирати матеріали і поєднувати їх із декором у техніці верхніх форм.</div></div>
+        <div class="numItem"><div class="num">/04</div><div>Ефективні способи нарощення, що економлять час і зберігають якість.</div></div>
+        <div class="numItem"><div class="num">/05</div><div>Нові техніки, зростання доходу та рух до статусу ТОП-майстра.</div></div>
+        <div class="numItem"><div class="num">/06</div><div>Закритий канал з уроками, чат із колегами, електронний сертифікат.</div></div>
       </div>
-    </div>
+    </section>
 
-    <div class="card">
-      <span class="pill">Теорія</span>
-      <div class="checklist" style="margin-top:12px">
-        <div class="li">Архітектура нігтя та типи нігтьової пластини</div>
-        <div class="li">Типи верхніх форм та показання до використання</div>
-        <div class="li">Підготовка під гелеву систему та тверді полімери</div>
-        <div class="li">Схеми підстановки форм для чистої викладки</div>
-        <div class="li">Демонстрація різних технік викладки матеріалу</div>
-        <div class="li">Вибір якісних форм та матеріалів, робота без відшарувань</div>
-        <div class="li">Послідовність викладного френчу на верхні форми</div>
+    <!-- PROGRAM -->
+    <section id="program" class="section">
+      <h2>Програма курсу</h2>
+
+      <div class="card" style="margin-bottom:16px">
+        <span class="pill">Практика</span>
+        <div class="checklist">
+          <div class="li">Якісні відео уроки з покроковою демонстрацією процесу нарощення на верхні форми</div>
+          <div class="li">Схеми викладки та фіксації форм для чистого відпечатку без надмірних затікань</div>
+          <div class="li">Розбір найчастіших помилок у роботі з верхніми формами</div>
+          <div class="li">Моделювання форм: квадрат, балерина, мигдаль та овал</div>
+          <div class="li">Схеми мінімального опилу нарощеного нігтя</div>
+          <div class="li">Швидкі дизайни: омбре, градієнти, текстури</div>
+          <div class="li">Викладний френч швидкісною технікою</div>
+          <div class="li">Реставрація вільного краю</div>
+        </div>
       </div>
-    </div>
-  </section>
 
-  <!-- ПРО МЕНЕ -->
-  <section class="section">
-    <h2>Про мене</h2>
-    <div class="card">
-      <div class="checklist">
-        <div class="li">Власник успішної студії нігтьового сервісу</div>
-        <div class="li">Практикуючий ТОП майстер з базою 200+ клієнтів</div>
-        <div class="li">Дипломований nail-інструктор (6+ років)</div>
-        <div class="li">300+ успішних майстрів офлайн, 500+ онлайн-учнів</div>
-        <div class="li">Автор курсу зі швидкісного нарощення</div>
-        <div class="li">Постійно підвищую кваліфікацію, йду в ногу з трендами</div>
+      <div class="card">
+        <span class="pill">Теорія</span>
+        <div class="checklist">
+          <div class="li">Архітектура нігтя та типи нігтьової пластини</div>
+          <div class="li">Типи верхніх форм та показання до використання</div>
+          <div class="li">Підготовка під гелеву систему та тверді полімери</div>
+          <div class="li">Схеми підстановки форм для чистої викладки</div>
+          <div class="li">Демонстрація різних технік викладки матеріалу</div>
+          <div class="li">Вибір якісних форм та матеріалів, робота без відшарувань</div>
+          <div class="li">Послідовність викладного френчу на верхні форми</div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ВІДПРАЦЮВАННЯ / ГАЛЕРЕЯ -->
-  <section id="gallery" class="section">
-    <h2>Відпрацювання учнів курсу</h2>
-    <div class="slider" aria-label="Горизонтальний слайдер робіт">
-      <figure class="slide"><img src="img/work-1.jpg" alt="Робота 1" loading="lazy"></figure>
-      <figure class="slide"><img src="img/work-2.jpg" alt="Робота 2" loading="lazy"></figure>
-      <figure class="slide"><img src="img/work-3.jpg" alt="Робота 3" loading="lazy"></figure>
-      <figure class="slide"><img src="img/work-4.jpg" alt="Робота 4" loading="lazy"></figure>
-      <figure class="slide"><img src="img/work-5.jpg" alt="Робота 5" loading="lazy"></figure>
-    </div>
-  </section>
+    <!-- GALLERY -->
+    <section class="section" id="gallery">
+      <h2>Відпрацювання учнів курсу</h2>
+      <div class="slider" aria-label="Горизонтальний слайдер робіт">
+        <figure class="slide"><img src="img/work-1.jpg" alt="Робота 1" loading="lazy"></figure>
+        <figure class="slide"><img src="img/work-2.jpg" alt="Робота 2" loading="lazy"></figure>
+        <figure class="slide"><img src="img/work-3.jpg" alt="Робота 3" loading="lazy"></figure>
+        <figure class="slide"><img src="img/work-4.jpg" alt="Робота 4" loading="lazy"></figure>
+        <figure class="slide"><img src="img/work-5.jpg" alt="Робота 5" loading="lazy"></figure>
+      </div>
+    </section>
 
-  <!-- ЦІНА / ОПЛАТА -->
-  <section id="buy" class="section card">
-    <h2>Приєднуйся зараз та отримай бонуси</h2>
-    <p class="muted" style="margin-top:-4px">Гайд «Причини відшарувань», відео-урок «Чистий комбі зріз»</p>
+    <!-- CERTIFICATES -->
+    <section class="section">
+      <h2>На кожного учня чекає сертифікат</h2>
+      <div class="slider">
+        <figure class="slide"><img src="img/cert-1.jpg" alt="Сертифікат та роботи" loading="lazy"></figure>
+        <figure class="slide"><img src="img/cert-2.jpg" alt="Certificate sample" loading="lazy"></figure>
+      </div>
+    </section>
 
-    <div class="priceRow">
-      <div id="price2" class="price">— ₴</div>
-      <div id="old2" class="old">— ₴</div>
-    </div>
+    <!-- REVIEWS -->
+    <section class="section">
+      <h2>Відгуки</h2>
+      <div class="bubbleWrap">
+        <div class="bubble">
+          Добрий ранок) Хотіла похвалитися) Вже краще відпрацьовую верхні форми, стараюся їх використовувати скрізь і форму виправити, і піднаростити) Вже набагато краще)! Дійшла черга до викладного 😊
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:12px">
+        <a href="#buy" class="cta big">Придбати курс</a>
+      </div>
+    </section>
 
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
-      <a id="buyBottom" class="cta pill">Отримати доступ</a>
-      <a class="cta secondary" href="#gallery">Подивитись роботи</a>
-    </div>
-    <p class="muted" style="margin-top:8px;font-size:14px">Ми настільки впевнені в ефективності курсу, що пропонуємо 14-денну гарантію повернення коштів.</p>
-  </section>
+    <!-- BUY -->
+    <section id="buy" class="section card">
+      <h2>Приєднуйся зараз та отримай бонуси</h2>
+      <p class="muted" style="margin-top:-4px">Гайд «Причини відшарувань», відео-урок «Чистий комбі зріз»</p>
 
-  <!-- СЕРТИФІКАТ -->
-  <section class="section">
-    <h2>На кожного учня чекає сертифікат</h2>
-    <div class="slider">
-      <figure class="slide"><img src="img/cert-1.jpg" alt="Сертифікат та роботи" loading="lazy"></figure>
-      <figure class="slide"><img src="img/cert-2.jpg" alt="Certificate sample" loading="lazy"></figure>
-    </div>
-  </section>
+      <div class="priceRow">
+        <div id="price2" class="price">— ₴</div>
+        <div id="old2" class="old">— ₴</div>
+      </div>
 
-  <!-- FAQ -->
-  <section class="section faq">
-    <h2>Найчастіші запитання</h2>
-    <details><summary>Кому підійде курс?</summary><p>Початківцям та практикуючим майстрам, які хочуть швидкі та чисті результати і підвищити чек.</p></details>
-    <details><summary>Чи потрібно вміти нарощувати нігті?</summary><p>Буде корисно на будь-якому рівні: від бази до PRO, пояснення покрокові.</p></details>
-    <details><summary>Як отримати доступ до курсу?</summary><p>Після оплати автоматично перейдеш на сторінку «Дякуємо» з кнопкою входу в Telegram.</p></details>
-    <details><summary>Скільки часу діє доступ?</summary><p>Безстроково (або вкажіть ваш термін доступу).</p></details>
-  </section>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+        <a id="buyBottom" class="cta big">Отримати доступ</a>
+        <a class="cta secondary" href="#gallery">Подивитись роботи</a>
+      </div>
+      <p class="muted" style="margin-top:8px;font-size:14px">
+        Ми настільки впевнені в ефективності курсу, що пропонуємо 14-денну гарантію повернення коштів.
+      </p>
+    </section>
 
-  <footer class="muted" style="padding:26px 0 40px">© <span id="y"></span> Next Level · Email: <a class="muted" href="mailto:you@example.com">you@example.com</a></footer>
-</div>
+    <!-- FAQ -->
+    <section class="section faq">
+      <h2>Найчастіші запитання</h2>
+      <details><summary>Кому підійде курс?</summary><p>Початківцям і практикуючим майстрам, які хочуть швидкі та чисті результати і підвищити чек.</p></details>
+      <details><summary>Чи потрібно вміти нарощувати нігті?</summary><p>Корисно на будь-якому рівні: від бази до PRO. Пояснення покрокові.</p></details>
+      <details><summary>Як отримати доступ до курсу?</summary><p>Після оплати автоматично перейдеш на сторінку «Дякуємо» з кнопкою входу в Telegram.</p></details>
+      <details><summary>Скільки часу діє доступ?</summary><p>Безстроково (або вкажіть свій термін).</p></details>
+    </section>
 
-<!-- Липкий CTA на мобилі -->
-<div class="sticky"><a id="buySticky" class="cta pill">Отримати доступ</a></div>
+    <footer class="muted" style="padding:26px 0 40px">
+      © <span id="y"></span> Next Level · Email: <a class="muted" href="mailto:you@example.com">you@example.com</a>
+    </footer>
+  </div>
 
-<script>
-  /* ===== НАСТРОЙКИ — під себе =============================== */
-  const WORKER = "https://filipskanails-pay.timanov-business.workers.dev";
-  const THANK  = "https://filipskanails.github.io/filipskanails/thankyou.html";
-  const TITLE  = "Доступ до курсу Next Level";
+  <!-- Sticky CTA (mobile) -->
+  <div class="sticky"><a id="buySticky" class="cta big">Отримати доступ</a></div>
 
-  const BASE_PRICE     = 10000; // базова
-  const DISCOUNT_PRICE = 7800;  // зі знижкою
-  const PROMO_HOURS    = 5;     // дедлайн 5 годин з моменту першого візиту
-  /* =========================================================== */
+  <script>
+    /* ===== НАСТРОЙКИ ===================================== */
+    const WORKER = "https://filipskanails-pay.timanov-business.workers.dev"; // твій Cloudflare Worker
+    const THANK  = "https://filipskanails.github.io/filipskanails/thankyou.html"; // твоя thank-you
+    const TITLE  = "Доступ до курсу Next Level";
 
-  const $ = s=>document.querySelector(s);
-  const fmt = n=>new Intl.NumberFormat("uk-UA").format(n) + " ₴";
+    const BASE_PRICE     = 10000; // базова ціна
+    const DISCOUNT_PRICE = 7800;  // ціна зі знижкою
+    const PROMO_HOURS    = 5;     // дедлайн з моменту першого візиту
+    /* ===================================================== */
 
-  function setHref(el, amount){
-    const u = new URL(WORKER);
-    u.searchParams.set("amount", String(amount));
-    u.searchParams.set("title", TITLE);
-    u.searchParams.set("thank", THANK);
-    el.href = u.toString();
-    el.target = "_blank"; el.rel = "noopener";
-  }
+    const $ = (s)=>document.querySelector(s);
+    const fmt = (n)=>new Intl.NumberFormat("uk-UA").format(n);
 
-  function setPrices(active, old){
-    $("#price").textContent = fmt(active);
-    $("#price2").textContent = fmt(active);
-    if (old && old > active){
-      $("#old").style.display = "inline";  $("#old").textContent  = fmt(old);
-      $("#old2").style.display = "inline"; $("#old2").textContent = fmt(old);
-    } else { $("#old").style.display = "none"; $("#old2").style.display = "none"; }
-    setHref($("#buyTop"), active); setHref($("#buyBottom"), active); setHref($("#buySticky"), active);
-  }
+    // «пилла» з датою сьогодні
+    (function(){
+      const chip = $("#chipDate");
+      if (!chip) return;
+      const dt = new Date();
+      const day = dt.getDate();
+      const month = dt.toLocaleString("uk-UA",{ month:"long" });
+      chip.textContent = `${day} ${month}`;
+    })();
 
-  // Evergreen countdown: 5 годин з моменту першого візиту (зберігаємо в localStorage)
-  const BAR = $("#discountBar");
-  const key = "promoEndsAt";
-  const now = Date.now();
-  let ends = parseInt(localStorage.getItem(key)||"0",10);
-  if (!ends || ends < now){ // перший візит або промо минуло — ставимо нові 5 годин
-    ends = now + PROMO_HOURS*60*60*1000;
-    localStorage.setItem(key, String(ends));
-  }
-
-  function tick(){
-    const left = Math.max(0, ends - Date.now());
-    if (left <= 0){
-      BAR.style.display = "none";
-      setPrices(BASE_PRICE, null);
-      return;
+    function setPayHref(el, amount){
+      if (!el) return;
+      const u = new URL(WORKER);
+      u.searchParams.set("amount", String(amount));
+      u.searchParams.set("title", TITLE);
+      u.searchParams.set("thank", THANK);
+      el.href = u.toString();
+      el.target = "_blank"; el.rel = "noopener";
     }
-    BAR.style.display = "flex";
-    setPrices(DISCOUNT_PRICE, BASE_PRICE);
 
-    const d = Math.floor(left/86400000);
-    const h = Math.floor((left%86400000)/3600000);
-    const m = Math.floor((left%3600000)/60000);
-    const s = Math.floor((left%60000)/1000);
-    const pad = n=>String(n).padStart(2,"0");
-    $("#d").textContent = pad(d);
-    $("#h").textContent = pad(h);
-    $("#m").textContent = pad(m);
-    $("#s").textContent = pad(s);
-    setTimeout(tick, 1000);
-  }
+    function renderPrices(active, old){
+      // строка под большой кнопкой в hero
+      const line = $("#priceLine");
+      if (line){
+        if (old && old > active){
+          line.innerHTML = `лише ${fmt(active)} грн <span class="oldline">${fmt(old)} грн</span>`;
+        } else {
+          line.textContent = `ціна ${fmt(active)} грн`;
+        }
+      }
+      // цены в блоке «Оплата»
+      const p2 = $("#price2"), o2 = $("#old2");
+      if (p2) p2.textContent = fmt(active) + " ₴";
+      if (o2){
+        if (old && old > active){ o2.style.display="inline"; o2.textContent = fmt(old) + " ₴"; }
+        else o2.style.display="none";
+      }
+      // ссылки оплаты
+      setPayHref($("#buyTop"), active);
+      setPayHref($("#buyBottom"), active);
+      setPayHref($("#buySticky"), active);
+    }
 
-  $("#y").textContent = new Date().getFullYear();
-  tick();
-</script>
+    // Evergreen countdown: сохраняем край дедлайна в localStorage
+    const BAR = $("#discountBar");
+    const key = "promoEndsAt-v1";
+    const now = Date.now();
+    let ends = parseInt(localStorage.getItem(key)||"0",10);
+    if (!ends || ends < now){
+      ends = now + PROMO_HOURS*60*60*1000;
+      localStorage.setItem(key, String(ends));
+    }
+
+    function tick(){
+      const left = Math.max(0, ends - Date.now());
+      if (left <= 0){
+        BAR.classList.remove("show");
+        renderPrices(BASE_PRICE, null);
+        return;
+      }
+      BAR.classList.add("show");
+      renderPrices(DISCOUNT_PRICE, BASE_PRICE);
+
+      const d = Math.floor(left/86400000);
+      const h = Math.floor((left%86400000)/3600000);
+      const m = Math.floor((left%3600000)/60000);
+      const s = Math.floor((left%60000)/1000);
+      const pad = (n)=>String(n).padStart(2,"0");
+      $("#d").textContent = pad(d);
+      $("#h").textContent = pad(h);
+      $("#m").textContent = pad(m);
+      $("#s").textContent = pad(s);
+      setTimeout(tick, 1000);
+    }
+
+    $("#y").textContent = new Date().getFullYear();
+    tick();
+  </script>
 </body>
 </html>
