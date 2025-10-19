@@ -27,7 +27,7 @@
     nav a{color:var(--muted);padding:8px 10px;border-radius:10px}
     nav a:hover{background:#17211c}
 
-    /* HERO: фото снизу, текст поверх, зелёная аура сзади */
+    /* HERO */
     .hero-stage{
       position:relative; min-height:min(92vh, 760px);
       border-radius:var(--radius); overflow:hidden; border:1px solid var(--line);
@@ -36,13 +36,16 @@
         radial-gradient(1100px 780px at 15% 100%, rgba(18,209,142,.28), transparent 62%),
         var(--bg);
     }
+    /* Фото — вище та трохи лівіше для кращого центрування */
     .hero-img{
-      position:absolute; right:-4%; bottom:-2%;
-      width:min(560px, 56vw); max-height:96%; object-fit:contain; pointer-events:none;
+      position:absolute; right:2%; bottom:8%;
+      width:min(600px, 48vw); max-height:96%; object-fit:contain; pointer-events:none;
       filter:drop-shadow(0 16px 28px rgba(0,0,0,.35));
     }
+    /* Текст — резерв місця справа під фото */
     .hero-text{
-      position:absolute; left:6%; top:8%; max-width:620px; text-shadow:0 1px 0 rgba(0,0,0,.2);
+      position:absolute; left:6%; right:46%; top:8%;
+      max-width:none; text-shadow:0 1px 0 rgba(0,0,0,.2);
     }
     .eyebrow{font-size:13px; letter-spacing:.06em; color:var(--muted)}
     .chips{display:flex; gap:10px; flex-wrap:wrap; margin-top:6px}
@@ -51,15 +54,11 @@
     .hl{font-size:clamp(28px,5vw,48px); line-height:1.18; font-weight:900; margin:8px 0}
     .lead{color:var(--muted); margin:0 0 10px}
 
-    /* Таймер — статично под лидом, не перекрывает фото */
-    .bar{display:inline-flex; align-items:center; gap:12px; padding:10px 14px; border-radius:14px;
-      background:#14211b; border:1px dashed #2b4136}
-    .timer{display:flex; gap:10px; font-weight:800}
-    .timer span{min-width:56px; text-align:center; background:#182820; border:1px solid #264338; padding:8px 10px; border-radius:12px}
-    .muted{color:var(--muted)}
-
-    /* CTA под фото (поверх) */
-    .hero-cta{position:absolute; left:6%; bottom:7%; display:grid; gap:10px; width:min(440px, 92%)}
+    /* CTA */
+    .hero-cta{
+      position:absolute; left:6%; bottom:7%;
+      display:grid; gap:10px; width:min(440px, 92%)
+    }
     .cta{display:inline-flex; align-items:center; gap:10px; padding:14px 18px; border-radius:14px;
       background:linear-gradient(135deg,var(--accent),#36e6a7); color:#042517; font-weight:900; box-shadow:var(--shadow)}
     .cta.big{padding:16px 22px; font-size:18px; border-radius:999px}
@@ -94,22 +93,59 @@
     .bubble{background:#e8efe9; color:#0c100e; border-radius:20px; padding:16px 14px 18px; max-width:740px; margin:0 auto}
     .bubbleWrap::before{content:""; position:absolute; left:16px; bottom:-10px; width:18px; height:18px; background:#e8efe9; transform:rotate(45deg)}
 
-    .priceRow{display:flex; align-items:flex-end; gap:12px; margin:8px 0 12px}
-    .price{font-size:clamp(28px,3.2vw,34px); font-weight:900}
+    .priceRow{display:flex; align-items:center; gap:18px; margin:12px 0}
+    .pricePill{
+      display:flex; align-items:center; gap:8px;
+      padding:12px 18px; border-radius:999px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#062217;
+      font-weight:900; box-shadow:var(--shadow)
+    }
+    .priceNum{font-size:clamp(22px,3.2vw,30px); font-weight:900}
     .old{color:#95a49b; text-decoration:line-through; font-size:18px; display:none}
 
     .faq details{background:var(--card); border:1px solid var(--line); border-radius:20px; padding:14px}
     .faq details+details{margin-top:10px}
     .faq summary{cursor:pointer; font-weight:700}
 
+    /* === BUY (timer like reference) === */
+    .bonusList{list-style:none; padding:0; margin:16px 0 12px; display:grid; gap:10px}
+    .bonusList li{
+      display:flex; align-items:center; gap:10px; color:var(--text);
+    }
+    .bonusList li::before{
+      content:""; width:24px; height:24px; border-radius:999px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      box-shadow:0 0 0 2px #103c2d inset; /* темний відтінок всередині */
+      display:inline-block;
+    }
+
+    .countdown{
+      display:flex; justify-content:center; gap:18px; flex-wrap:wrap;
+      margin:18px 0 8px;
+    }
+    .countbox{
+      width:min(160px,28vw); aspect-ratio:1.2/1;
+      border:1px solid #2b4136; border-radius:14px;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      background:#0f1713;
+    }
+    .countbox .n{font-size:clamp(28px,6.6vw,44px); font-weight:900; line-height:1}
+    .countbox .t{color:var(--muted); margin-top:6px}
+
+    .buy-note{color:var(--muted); text-align:center; margin:10px 0 6px}
+
     /* Sticky CTA (mobile) */
     .sticky{position:fixed; left:0; right:0; bottom:0; padding:10px 14px; background:rgba(10,14,12,.92); backdrop-filter:blur(6px); border-top:1px solid var(--line); display:none}
     .sticky .cta{width:100%}
 
-    /* Mobile tweaks */
+    /* Адаптив */
+    @media (max-width:1200px){
+      .hero-text{right:42%}
+      .hero-img{right:1%; bottom:6%; width:min(560px, 52vw)}
+    }
     @media (max-width:820px){
       .hero-stage{min-height:88vh}
-      .hero-img{right:-16%; bottom:-8%; width:min(700px, 140vw)}
+      .hero-img{right:-6%; bottom:-2%; width:min(640px, 120vw)}
       .hero-text{left:6%; right:6%; top:6%}
       .hero-cta{left:6%; right:6%; bottom:6%; width:auto}
       .slider{grid-auto-columns:88%}
@@ -128,12 +164,9 @@
       </nav>
     </header>
 
-    <!-- HERO -->
+    <!-- HERO (таймера тут більше немає) -->
     <section id="hero" class="hero-stage">
-      <!-- Фото с прозрачным фоном -->
       <img class="hero-img" src="img/main.png" alt="Інструктор курсу">
-
-      <!-- Текст + таймер (таймер статично под лидом) -->
       <div class="hero-text">
         <div class="eyebrow">ОНЛАЙН КУРС ВІД ІНСТРУКТОРА МАНІКЮРУ</div>
         <div class="chips">
@@ -142,19 +175,8 @@
         </div>
         <h1 class="hl">Швидкісне нарощення<br>на верхні форми</h1>
         <p class="lead">Ефективні та швидкі техніки, які дозволяють одразу заробляти та підвищити чек.</p>
-
-        <div id="discountBar" class="bar" aria-live="polite">
-          <small class="muted">Знижка закінчиться через:</small>
-          <div class="timer">
-            <span><b id="d">00</b><br><small class="muted">дн</small></span>
-            <span><b id="h">00</b><br><small class="muted">год</small></span>
-            <span><b id="m">00</b><br><small class="muted">хв</small></span>
-            <span><b id="s">00</b><br><small class="muted">с</small></span>
-          </div>
-        </div>
       </div>
 
-      <!-- CTA поверх фото -->
       <div class="hero-cta">
         <a id="buyTop" class="cta big">Придбати курс</a>
         <div id="priceLine" class="priceLine">—</div>
@@ -184,34 +206,42 @@
       </div>
     </section>
 
-    <!-- PROGRAM -->
-    <section id="program" class="section">
-      <h2>Програма курсу</h2>
-      <div class="card" style="margin-bottom:16px">
-        <span class="pill">Практика</span>
-        <div class="checklist">
-          <div class="li">Покрокова демонстрація нарощення на верхні форми</div>
-          <div class="li">Схеми викладки та фіксації для чистого відбитку без затікань</div>
-          <div class="li">Розбір найчастіших помилок</div>
-          <div class="li">Моделювання: квадрат, балерина, мигдаль, овал</div>
-          <div class="li">Мінімальний опил нарощеного нігтя</div>
-          <div class="li">Швидкі дизайни: омбре, градієнти, текстури</div>
-          <div class="li">Викладний френч швидкісною технікою</div>
-          <div class="li">Реставрація вільного краю</div>
+    <!-- BUY (з таймером) -->
+    <section id="buy" class="section card">
+      <h2>Приєднуйся зараз та отримай бонуси</h2>
+
+      <ul class="bonusList">
+        <li>Гайд «Причини відшарувань»</li>
+        <li>Відео-урок «Чистий комбі зріз»</li>
+      </ul>
+
+      <div class="countdown" id="countdown">
+        <div class="countbox">
+          <div class="n" id="cd-h">00</div>
+          <div class="t">Годин</div>
+        </div>
+        <div class="countbox">
+          <div class="n" id="cd-m">00</div>
+          <div class="t">Хвилин</div>
+        </div>
+        <div class="countbox">
+          <div class="n" id="cd-s">00</div>
+          <div class="t">Секунд</div>
         </div>
       </div>
-      <div class="card">
-        <span class="pill">Теорія</span>
-        <div class="checklist">
-          <div class="li">Архітектура нігтя та типи пластини</div>
-          <div class="li">Типи верхніх форм та показання</div>
-          <div class="li">Підготовка під гелеву систему та тверді полімери</div>
-          <div class="li">Схеми підстановки форм</div>
-          <div class="li">Демонстрація різних технік викладки</div>
-          <div class="li">Вибір матеріалів без відшарувань</div>
-          <div class="li">Послідовність викладного френчу</div>
-        </div>
+
+      <div class="buy-note">Встигни записатися та навчайся за найвигіднішою ціною</div>
+
+      <div class="priceRow">
+        <div class="pricePill"><small class="muted" style="color:#083a27">лише</small> <span id="price2" class="priceNum">— грн</span></div>
+        <div id="old2" class="old">— грн</div>
       </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+        <a id="buyBottom" class="cta big">Отримати доступ</a>
+        <a class="cta secondary" href="#gallery">Подивитись роботи</a>
+      </div>
+      <p class="muted" style="margin-top:8px;font-size:14px">14-денна гарантія повернення коштів.</p>
     </section>
 
     <!-- GALLERY -->
@@ -245,21 +275,6 @@
         <a href="#buy" class="cta big">Придбати курс</a>
       </div>
     </section>
-
-    <!-- BUY -->
-    <section id="buy" class="section card">
-      <h2>Приєднуйся зараз та отримай бонуси</h2>
-      <p class="muted" style="margin-top:-4px">Гайд «Причини відшарувань», відео-урок «Чистий комбі зріз»</p>
-      <div class="priceRow">
-        <div id="price2" class="price">— ₴</div>
-        <div id="old2" class="old">— ₴</div>
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
-        <a id="buyBottom" class="cta big">Отримати доступ</a>
-        <a class="cta secondary" href="#gallery">Подивитись роботи</a>
-      </div>
-      <p class="muted" style="margin-top:8px;font-size:14px">14-денна гарантія повернення коштів.</p>
-    </section>
   </div>
 
   <!-- Sticky CTA (mobile) -->
@@ -278,7 +293,7 @@
     const $ = s=>document.querySelector(s);
     const fmt = n=>new Intl.NumberFormat("uk-UA").format(n);
 
-    // дата в пилле
+    // дата в пиллі
     (function(){
       const chip = $("#chipDate");
       if(chip){
@@ -306,8 +321,8 @@
       }
       // buy block
       const p2=$("#price2"), o2=$("#old2");
-      if(p2) p2.textContent = fmt(active)+" ₴";
-      if(o2){ if(old&&old>active){o2.style.display="inline"; o2.textContent=fmt(old)+" ₴"} else o2.style.display="none" }
+      if(p2) p2.textContent = fmt(active)+" грн";
+      if(o2){ if(old&&old>active){o2.style.display="inline"; o2.textContent=fmt(old)+" грн"} else o2.style.display="none" }
 
       // ссылки
       setPayHref($("#buyTop"), active);
@@ -315,8 +330,8 @@
       setPayHref($("#buySticky"), active);
     }
 
-    // evergreen countdown
-    const BAR = $("#discountBar");
+    // evergreen countdown (в окремому блоці)
+    const COUNT = $("#countdown");
     const key = "promoEndsAt-v1";
     const now = Date.now();
     let ends = parseInt(localStorage.getItem(key)||"0",10);
@@ -325,19 +340,24 @@
     function tick(){
       const left = Math.max(0, ends - Date.now());
       if(left<=0){
-        if (BAR) BAR.style.display = "none";
+        if (COUNT) COUNT.style.display = "none";
         renderPrices(BASE_PRICE, null);
         return;
       }
-      if (BAR) BAR.style.display = "inline-flex";
+      if (COUNT) COUNT.style.display = "flex";
       renderPrices(DISCOUNT_PRICE, BASE_PRICE);
 
-      const d=Math.floor(left/86400000),
-            h=Math.floor((left%86400000)/3600000),
+      // Показуємо години, хвилини, секунди (референс)
+      const h=Math.floor(left/3600000),
             m=Math.floor((left%3600000)/60000),
             s=Math.floor((left%60000)/1000),
             pad=n=>String(n).padStart(2,"0");
-      $("#d").textContent=pad(d); $("#h").textContent=pad(h); $("#m").textContent=pad(m); $("#s").textContent=pad(s);
+
+      const elH=$("#cd-h"), elM=$("#cd-m"), elS=$("#cd-s");
+      if(elH) elH.textContent = pad(h);
+      if(elM) elM.textContent = pad(m);
+      if(elS) elS.textContent = pad(s);
+
       setTimeout(tick,1000);
     }
 
