@@ -4,35 +4,47 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Next Level — курс підвищення кваліфікації</title>
-  <meta name="description" content="Чіткий квадрат, укріплення та ідеальний комбі‑манікюр і френч. Доступ до уроків одразу після оплати.">
+  <meta name="description" content="Чіткий квадрат, укріплення та ідеальний комбі-манікюр і френч. Доступ одразу після оплати.">
   <style>
     :root{
       --bg:#0f0f12; --card:#15161a; --muted:#9aa0a6; --text:#e8eaed; --accent:#7c5cff;
-      --radius:16px; --maxw:980px;
+      --radius:16px; --maxw:1080px;
     }
     *{box-sizing:border-box}
-    body{margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, sans-serif; color:var(--text); background:radial-gradient(1200px 600px at 80% -10%, #1b1835 0%, transparent 60%), var(--bg);}
-    a{color:inherit}
+    html,body{margin:0; background:radial-gradient(1200px 600px at 80% -10%, #1b1835 0%, transparent 60%), var(--bg); color:var(--text); font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif}
+    a{color:inherit; text-decoration:none}
+    img{max-width:100%; display:block}
     .wrap{max-width:var(--maxw); margin:0 auto; padding:24px}
-    header{padding:32px 0 24px; display:flex; align-items:center; justify-content:space-between; gap:16px}
-    .logo{font-weight:700; letter-spacing:.3px}
-    .ghost{color:var(--muted); text-decoration:none}
+    header{padding:18px 0 6px; display:flex; align-items:center; justify-content:space-between; gap:16px}
+    .logo{font-weight:800; letter-spacing:.3px}
+    .ghost{color:var(--muted)}
     .hero{display:grid; grid-template-columns:1.2fr 1fr; gap:28px; align-items:center; padding:24px 0 8px}
     .card{background:var(--card); border:1px solid #23242a; border-radius:var(--radius); padding:24px}
-    h1{font-size:clamp(28px, 3.4vw, 40px); line-height:1.1; margin:0 0 12px}
-    p.lead{color:var(--muted); font-size:clamp(16px, 2.2vw, 18px); margin:0 0 20px}
-    .cta{display:inline-block; padding:14px 18px; border-radius:12px; background:linear-gradient(135deg, var(--accent), #b388ff); color:#0b0b0e; font-weight:700; text-decoration:none; box-shadow:0 8px 20px rgba(124,92,255,.35)}
+    h1{font-size:clamp(28px,3.4vw,42px); line-height:1.1; margin:0 0 12px}
+    p.lead{color:var(--muted); font-size:clamp(16px,2.2vw,18px); margin:0 0 18px}
+    .cta{display:inline-flex; align-items:center; gap:10px; padding:14px 18px; border-radius:12px; background:linear-gradient(135deg,var(--accent),#b388ff); color:#0b0b0e; font-weight:800; box-shadow:0 8px 20px rgba(124,92,255,.35)}
     .cta.secondary{background:#23242a; color:var(--text); box-shadow:none; border:1px solid #2a2b35}
-    .features{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:22px}
-    .feat{background:var(--card); border:1px solid #23242a; border-radius:14px; padding:16px; color:var(--muted)}
+    .priceBox{display:flex; align-items:flex-end; gap:12px; margin:2px 0 10px}
+    .price{font-size:34px; font-weight:900}
+    .old{color:#a3a3a3; text-decoration:line-through; font-size:18px}
+    .timerBar{margin:10px 0 0; display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:12px; background:#201f2d; border:1px dashed #3b3a47}
+    .timer{display:flex; gap:10px; font-weight:700}
+    .timer span{min-width:46px; text-align:center; background:#2a2940; padding:8px 10px; border-radius:10px}
     .section{margin:42px 0}
     h2{font-size:clamp(22px,2.6vw,28px); margin:0 0 14px}
+    .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .feat{background:var(--card); border:1px solid #23242a; border-radius:14px; padding:16px; color:var(--muted)}
     ul.program{list-style:none; padding:0; margin:0; display:grid; gap:10px}
     ul.program li{background:var(--card); border:1px solid #23242a; border-radius:12px; padding:14px}
-    .price{font-size:28px; font-weight:800; margin:0 0 16px}
+    .gallery{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+    .gallery figure{margin:0; border-radius:12px; overflow:hidden; border:1px solid #23242a; background:#111}
+    .gallery img{aspect-ratio: 1 / 1; object-fit:cover}
+    .reviews{display:grid; grid-auto-flow:column; grid-auto-columns:80%; gap:14px; overflow-x:auto; padding-bottom:6px; scroll-snap-type:x mandatory}
+    .reviews blockquote{scroll-snap-align:start; margin:0; background:var(--card); border:1px solid #23242a; border-radius:14px; padding:16px}
+    .buyCard .note{color:var(--muted); font-size:14px}
     .footer{color:var(--muted); font-size:14px; padding:24px 0 40px}
-    .buybox{display:flex; flex-direction:column; gap:12px}
-    @media (max-width:880px){ .hero{grid-template-columns:1fr} .features{grid-template-columns:1fr} }
+    .muted{color:var(--muted)}
+    @media (max-width:980px){ .hero{grid-template-columns:1fr} .grid3{grid-template-columns:1fr} .gallery{grid-template-columns:repeat(2,1fr)} .reviews{grid-auto-columns:88%} }
   </style>
 </head>
 <body>
@@ -41,6 +53,7 @@
       <div class="logo">Next Level</div>
       <nav>
         <a class="ghost" href="#program">Програма</a>&nbsp;&nbsp;
+        <a class="ghost" href="#gallery">Роботи</a>&nbsp;&nbsp;
         <a class="ghost" href="#buy">Оплата</a>
       </nav>
     </header>
@@ -48,48 +61,167 @@
     <section class="hero">
       <div class="card">
         <h1>Підвищення кваліфікації для майстрів манікюру</h1>
-        <p class="lead">Чіткий квадрат, надійне укріплення, ідеальний комбі‑манікюр та френч. Доступ одразу після оплати.</p>
-        <div class="buybox">
-          <div class="price"><span id="price">1</span> грн</div>
-          <!-- TODO: ЗАМІНІТЬ href НА ВАШ Payment Link з платіжної системи (Fondy/WayForPay/mono/LiqPay) -->
-          <a class="cta" target="_blank" rel="noopener noreferrer" id="buyBtn" href="https://filipskanails-pay.timanov-business.workers.dev/?amount=1&title=Доступ%20до%20курсу%20Next%20Level&thank=https%3A%2F%2Ffilipskanails.github.io%2Ffilipskanails%2Fthankyou.html">Купити курс</a>
+        <p class="lead">Чіткий квадрат, надійне укріплення, ідеальний комбі-манікюр та френч. Доступ одразу після оплати.</p>
+        <div class="priceBox">
+          <div id="price" class="price">— ₴</div>
+          <div id="old" class="old" aria-hidden="true" style="display:none">— ₴</div>
+        </div>
+        <div class="timerBar" id="timerBar" style="display:none">
+          <div class="muted">Знижка закінчиться через:</div>
+          <div class="timer" aria-live="polite">
+            <span><b id="d">00</b><br><small class="muted">дн</small></span>
+            <span><b id="h">00</b><br><small class="muted">год</small></span>
+            <span><b id="m">00</b><br><small class="muted">хв</small></span>
+            <span><b id="s">00</b><br><small class="muted">с</small></span>
+          </div>
+        </div>
+        <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap">
+          <a id="buyTop" class="cta" target="_blank" rel="noopener">Купити курс</a>
           <a class="cta secondary" href="#program">Дивитися програму</a>
         </div>
       </div>
+
       <div class="card">
         <h2>Для кого цей курс</h2>
-        <div class="features">
+        <div class="grid3">
           <div class="feat">Після бази — хочеш перейти на рівень PRO</div>
           <div class="feat">Потрібна швидкість без втрати якості</div>
-          <div class="feat">Виправити помилки з квадратом/укріпленням/френчем</div>
+          <div class="feat">Виправити помилки з квадратом / укріпленням / френчем</div>
+        </div>
+        <div class="section" style="margin:18px 0 0">
+          <h2 style="margin-bottom:8px">Що отримаєш</h2>
+          <ul class="program">
+            <li><strong>Модуль 1.</strong> Чіткий квадрат: форма, архітектура, типові помилки → як виправити.</li>
+            <li><strong>Модуль 2.</strong> Укріплення: тверді матеріали, товщина, вирівнювання.</li>
+            <li><strong>Модуль 3.</strong> Комбі-манікюр: техніка, безпека, стерильність.</li>
+            <li><strong>Модуль 4.</strong> Ідеальний френч: розмітка, лінії, швидкість виконання.</li>
+          </ul>
+          <p class="lead" style="margin-top:10px">Формат: відео + короткі конспекти + домашні завдання. Доступ — одразу після оплати.</p>
         </div>
       </div>
     </section>
 
-    <section id="program" class="section">
-      <h2>Програма</h2>
-      <ul class="program">
-        <li><strong>Модуль 1.</strong> Чіткий квадрат: форма, архітектура, типові помилки → як виправити.</li>
-        <li><strong>Модуль 2.</strong> Укріплення: тверді матеріали, товщина, вирівнювання.</li>
-        <li><strong>Модуль 3.</strong> Комбі‑манікюр: техніка, безпека, стерильність.</li>
-        <li><strong>Модуль 4.</strong> Ідеальний френч: розмітка, лінії, швидкість виконання.</li>
-      </ul>
-      <p class="lead" style="margin-top:14px">Формат: відео + короткі конспекти + домашні завдання. Доступ — одразу після оплати.</p>
+    <section id="gallery" class="section">
+      <h2>Роботи та кейси</h2>
+      <!-- заміни src на свої зображення у папці /img -->
+      <div class="gallery">
+        <figure><img src="img/work-1.jpg" loading="lazy" width="640" height="640" alt="Приклад роботи 1"></figure>
+        <figure><img src="img/work-2.jpg" loading="lazy" width="640" height="640" alt="Приклад роботи 2"></figure>
+        <figure><img src="img/work-3.jpg" loading="lazy" width="640" height="640" alt="Приклад роботи 3"></figure>
+        <figure><img src="img/work-4.jpg" loading="lazy" width="640" height="640" alt="Приклад роботи 4"></figure>
+        <figure><img src="img/work-5.jpg" loading="lazy" width="640" height="640" alt="Приклад роботи 5"></figure>
+        <figure><img src="img/work-6.jpg" loading="lazy" width="640" height="640" alt="Приклад роботи 6"></figure>
+      </div>
     </section>
 
-    <section id="buy" class="section card">
+    <section class="section">
+      <h2>Відгуки</h2>
+      <div class="reviews">
+        <blockquote>«За 2 тижні прискорилась на 30%. Окреме спасибі за квадрат!» — Марина</blockquote>
+        <blockquote>«Нарешті ідеальний френч без переробок. Дуже структуровано.» — Оля</blockquote>
+        <blockquote>«Після модуля по укріпленню перестали ламатися клієнтські нігті.» — Анна</blockquote>
+      </div>
+    </section>
+
+    <section id="buy" class="section card buyCard">
       <h2>Оплата доступу</h2>
-      <p class="lead">Натисніть «Купити курс» — ви перейдете на безпечну платіжну сторінку. Після успішної оплати буде автоматичний перехід на сторінку «Дякуємо», де буде кнопка входу в Telegram‑канал.</p>
-      <a class="cta" target="_blank" rel="noopener noreferrer" href="https://filipskanails-pay.timanov-business.workers.dev/?amount=1&title=Доступ%20до%20курсу%20Next%20Level&thank=https%3A%2F%2Ffilipskanails.github.io%2Ffilipskanails%2Fthankyou.html">Купити курс</a>
-      <p class="lead" style="margin-top:10px; font-size:14px">Оплатою ви погоджуєтесь з Умовами оферти та Політикою конфіденційності.</p>
+      <div class="priceBox">
+        <div id="price2" class="price">— ₴</div>
+        <div id="old2" class="old" aria-hidden="true" style="display:none">— ₴</div>
+      </div>
+      <p class="lead">Натисніть «Купити курс» — ви перейдете на безпечну платіжну сторінку. Після успішної оплати ми переведемо вас на сторінку «Дякуємо», де буде кнопка входу в Telegram-канал.</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap">
+        <a id="buyBottom" class="cta" target="_blank" rel="noopener">Купити курс</a>
+        <a class="cta secondary" href="#gallery">Подивитись роботи</a>
+      </div>
+      <p class="note">Оплатою ви погоджуєтесь з Умовами оферти та Політикою конфіденційності.</p>
     </section>
 
     <footer class="footer">
       © <span id="y"></span> Next Level · Email: <a class="ghost" href="mailto:you@example.com">you@example.com</a>
     </footer>
   </div>
+
 <script>
+  // === НАЛАШТУВАННЯ (зміни під себе) ===========================
+  const WORKER = "https://filipskanails-pay.timanov-business.workers.dev"; // твій Worker URL
+  const THANK  = "https://filipskanails.github.io/filipskanails/thankyou.html"; // твій thank-you
+  const TITLE  = "Доступ до курсу Next Level";
+
+  // ціни в гривнях:
+  const BASE_PRICE     = 1500;   // базова ціна
+  const DISCOUNT_PRICE = 1200;   // ціна зі знижкою
+
+  // коли закінчується знижка (локальний час з поясом, напр. +03:00):
+  const DISCOUNT_END_ISO = "2025-10-31T23:59:59+03:00";
+  // =============================================================
+
+  function fmt(n){ return new Intl.NumberFormat("uk-UA").format(n); }
+
+  function buildBuyLink(amount){
+    const url = new URL(WORKER);
+    url.searchParams.set("amount", String(amount));
+    url.searchParams.set("title", TITLE);
+    url.searchParams.set("thank", THANK);
+    return url.toString();
+  }
+
+  function setPrices(activePrice, oldPrice){
+    const p = document.getElementById("price");
+    const o = document.getElementById("old");
+    const p2 = document.getElementById("price2");
+    const o2 = document.getElementById("old2");
+
+    p.textContent = fmt(activePrice) + " ₴";
+    p2.textContent = fmt(activePrice) + " ₴";
+
+    if (oldPrice && oldPrice > activePrice){
+      o.style.display = "inline";
+      o.textContent = fmt(oldPrice) + " ₴";
+      o2.style.display = "inline";
+      o2.textContent = fmt(oldPrice) + " ₴";
+    } else {
+      o.style.display = "none";
+      o2.style.display = "none";
+    }
+    // оновлюємо посилання на оплату
+    document.getElementById("buyTop").href = buildBuyLink(activePrice);
+    document.getElementById("buyBottom").href = buildBuyLink(activePrice);
+  }
+
+  // таймер знижки
+  const timerBar = document.getElementById("timerBar");
+  const end = new Date(DISCOUNT_END_ISO).getTime();
+
+  function tick(){
+    const now = Date.now();
+    const left = Math.max(0, end - now);
+    if (left <= 0){
+      timerBar.style.display = "none";
+      setPrices(BASE_PRICE, null);
+      return;
+    }
+    // показуємо бар та дискаунтну ціну
+    timerBar.style.display = "flex";
+    setPrices(DISCOUNT_PRICE, BASE_PRICE);
+
+    const d = Math.floor(left/86400000);
+    const h = Math.floor((left%86400000)/3600000);
+    const m = Math.floor((left%3600000)/60000);
+    const s = Math.floor((left%60000)/1000);
+    const pad = n=>String(n).padStart(2,"0");
+    document.getElementById("d").textContent = pad(d);
+    document.getElementById("h").textContent = pad(h);
+    document.getElementById("m").textContent = pad(m);
+    document.getElementById("s").textContent = pad(s);
+    requestAnimationFrame(()=>setTimeout(tick, 1000));
+  }
+
+  // рік у футері
   document.getElementById('y').textContent = new Date().getFullYear();
+
+  // старт
+  tick();
 </script>
 </body>
 </html>
