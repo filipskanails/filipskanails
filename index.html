@@ -21,22 +21,22 @@
     img{max-width:100%;display:block}
     .wrap{max-width:var(--maxw);margin:0 auto;padding:20px}
 
-    /* ===== HERO (full-bleed, стабільна висота) ===== */
+    /* ===== HERO (full-bleed, стабільна адаптація) ===== */
     .hero-stage{
       position:relative;
       min-height:min(96vh, 820px);
       overflow:hidden; margin:0 -20px; background:var(--bg);
       isolation:isolate;
-      /* runtime-змінні (JS оновлює) */
-      --img-top: 320px;
-      --cta-top: 560px;
-      --bubble-top: 450px;
-      --glow-top: 420px;
+      /* значення JS виставляє динамічно */
+      --img-top: 320px;     /* фото */
+      --cta-top: 560px;     /* кнопка */
+      --bubble-top: 450px;  /* скляна плашка */
+      --glow-top: 420px;    /* свічення */
     }
     @supports (height: 100dvh){ .hero-stage{ min-height:min(96dvh, 820px) } }
     @supports (height: 100svh){ .hero-stage{ min-height:min(96svh, 820px) } }
 
-    /* Свічення: прив’язане до фото */
+    /* Свічення: прив’язане до фото, м’який край */
     .hero-stage::after{
       content:""; position:absolute; right:9%; top:var(--glow-top);
       width:min(120vmin, 820px); height:min(120vmin, 820px); border-radius:50%;
@@ -53,14 +53,15 @@
       transform:translate(25%, -25%);
     }
 
-    /* Фото: ТЕПЕР ЗАВЖДИ ПІД ТЕКСТОМ (позиція зверху в px) */
+    /* Фото: ЗАВЖДИ одразу під лідом з маленьким відступом */
     .hero-img{
       position:absolute; right:10%; top:var(--img-top);
       width:min(640px, 54vw); max-height:96%; object-fit:contain;
       filter:drop-shadow(0 16px 28px rgba(0,0,0,.35)); z-index:1; pointer-events:none;
+      will-change: top;
     }
 
-    /* Текст зверху, без лишніх зазорів */
+    /* Верхній текст */
     .hero-text{
       position:absolute; top:2%; left:50%; transform:translateX(-50%);
       max-width:min(760px, calc(100vw - 48px)); width:100%;
@@ -74,20 +75,21 @@
     .hl{font-size:clamp(28px,5vw,48px); line-height:1.18; font-weight:900; margin:10px 0 8px}
     .lead{color:var(--muted); margin:0 0 10px}
 
-    /* Скляна плашка — праворуч, частково на фото (також від top) */
+    /* Скляна плашка — праворуч, частково на фото */
     .hero-bubble{
       position:absolute; right:10%; top:var(--bubble-top);
       max-width:260px; color:#fff; background:rgba(12,16,14,.55);
       border:1px solid rgba(142,243,199,.22);
       padding:12px 14px; border-radius:28px; backdrop-filter:blur(8px);
       box-shadow:0 10px 30px rgba(0,0,0,.25); font-size:14px; line-height:1.35;
-      z-index:2;
+      z-index:2; will-change: top;
     }
 
-    /* Кнопка — НА ФОТО (прив’язана до top) */
+    /* Кнопка — НА ФОТО */
     .hero-cta{
       position:absolute; left:50%; transform:translateX(-50%);
       top:var(--cta-top); display:grid; gap:10px; width:auto; text-align:center; z-index:3;
+      will-change: top;
     }
     .cta{
       display:inline-flex; align-items:center; justify-content:center; gap:10px;
@@ -106,7 +108,7 @@
     h2{font-size:clamp(22px,2.4vw,30px); margin:0 0 12px}
     .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:22px}
 
-    /* Таймер приклеєно до hero */
+    /* Таймер «вплотную» до HERO */
     #promo{ margin-top:0 } 
     #promo::before{ content:""; display:block; height:0 }
 
@@ -155,7 +157,6 @@
     .floater-inner{max-width:var(--maxw); margin:0 auto; padding:0 20px}
     .floater .cta{width:100%}
 
-    /* ===== Адаптив ===== */
     @media (max-width:1200px){
       .hero-img{right:10%; width:min(600px, 56vw)}
     }
@@ -292,7 +293,8 @@
     const $ = s=>document.querySelector(s);
     const fmt = n=>new Intl.NumberFormat("uk-UA").format(n);
 
-    (function(){ // дата в чипі
+    // дата в чипі
+    (function(){
       const chip = $("#chipDate");
       if(chip){
         const dt = new Date();
@@ -319,63 +321,55 @@
       const pP=$("#pricePromo"), oP=$("#oldPromo");
       if(pP) pP.textContent = fmt(active)+" грн";
       if(oP){ if(old&&old>active){oP.style.display="inline"; oP.textContent=fmt(old)+" грн"} else oP.style.display="none" }
+
       setPayHref($("#buyTop"),   active);
       setPayHref($("#buyFloat"), active);
     }
 
-    // ===== Адаптивне позиціонування фото/кнопки/плашки/свічення
+    /* ===== Адаптивне позиціонування hero ===== */
     function layoutHero(){
-      const stage = document.getElementById('hero');
-      const text  = stage.querySelector('.hero-text');
-      const img   = stage.querySelector('.hero-img');
-      const cta   = stage.querySelector('.hero-cta');
-      const bubble= stage.querySelector('.hero-bubble');
+      try{
+        const stage  = document.getElementById('hero');
+        const text   = stage.querySelector('.hero-text');
+        const img    = stage.querySelector('.hero-img');
 
-      if(!stage || !text || !img || !cta) return;
+        if(!stage || !text || !img) return;
 
-      const stageRect = stage.getBoundingClientRect();
-      const textRect  = text.getBoundingClientRect();
+        const stageRect = stage.getBoundingClientRect();
+        const textRect  = text.getBoundingClientRect();
 
-      const gap      = Math.max(12, Math.round(stageRect.height * 0.02)); // відступ під лідом
-      const imgTop   = Math.round(textRect.bottom - stageRect.top + gap);
+        // маленький фіксований відступ під лідом (щоб було "впритул")
+        const GAP = 8;
 
-      // тимчасово виставимо top, щоб отримати актуальну висоту з урахуванням ширини
-      img.style.top = imgTop+'px';
-      img.style.bottom = 'auto';
+        // бажана позиція фото — одразу під лідом
+        const desiredImgTop = Math.max(0, Math.round(textRect.bottom - stageRect.top + GAP));
 
-      // після того як браузер перерахує, беремо висоту фото
-      const imgRect  = img.getBoundingClientRect();
-      const stageH   = stageRect.height;
+        // встановлюємо, міряємо актуальну висоту фото
+        img.style.top = desiredImgTop + 'px';
+        const imgRect  = img.getBoundingClientRect();
 
-      // якщо фото не влазить — збиваємо трохи вище
-      const maxImgTop = Math.max(0, stageH - imgRect.height - 8);
-      const finalImgTop = Math.min(imgTop, maxImgTop);
+        // якщо фото не влазить у сцену — не даємо йому вийти за низ
+        const maxImgTop = Math.max(0, Math.round(stageRect.height - imgRect.height - 8));
+        const finalImgTop = Math.min(desiredImgTop, maxImgTop);
 
-      // Кнопка: на нижній третині фото
-      const ctaTop = Math.round(finalImgTop + imgRect.height * 0.72);
+        // Розташування кнопки/плашки/свічення відносно фото
+        const ctaTop    = Math.round(finalImgTop + imgRect.height * 0.70); // нижня третина фото
+        const bubbleTop = Math.round(finalImgTop + imgRect.height * 0.36);
+        const glowTop   = Math.round(finalImgTop + imgRect.height * 0.55) - 220;
 
-      // Плашка: ближче до середини фото
-      const bubbleTop = Math.round(finalImgTop + imgRect.height * 0.38);
-
-      // Свічення: біля центру фото
-      const glowTop = Math.round(finalImgTop + imgRect.height * 0.55) - 220; // дрібний зсув вгору
-
-      // застосовуємо змінні на сцені
-      stage.style.setProperty('--img-top', finalImgTop + 'px');
-      stage.style.setProperty('--cta-top', ctaTop + 'px');
-      stage.style.setProperty('--bubble-top', bubbleTop + 'px');
-      stage.style.setProperty('--glow-top', Math.max(0, glowTop) + 'px');
+        stage.style.setProperty('--img-top', finalImgTop + 'px');
+        stage.style.setProperty('--cta-top', ctaTop + 'px');
+        stage.style.setProperty('--bubble-top', bubbleTop + 'px');
+        stage.style.setProperty('--glow-top', Math.max(0, glowTop) + 'px');
+      }catch(e){ /* no-op */ }
     }
-
-    // Виклик розкладки у різні моменти життя сторінки
     function layoutHeroSafe(){
       layoutHero();
-      // повтор через кадр — на випадок, якщо шрифти/панелі Safari змінили метрики
       requestAnimationFrame(layoutHero);
-      setTimeout(layoutHero, 150);
+      setTimeout(layoutHero, 120);
     }
 
-    // Події
+    // Події для стабільної адаптації
     window.addEventListener('DOMContentLoaded', ()=>{
       const img = document.querySelector('.hero-img');
       if(img && !img.complete){
@@ -388,11 +382,10 @@
     window.addEventListener('orientationchange', layoutHeroSafe);
     window.addEventListener('pageshow', layoutHeroSafe);
 
-    // ===== Таймер/ціни
+    /* ===== Таймер і ціни ===== */
     const COUNT = $("#countdown");
     const key = "promoEndsAt-v1";
     const now = Date.now();
-    const PROMO_HOURS = 5;
     let ends = parseInt(localStorage.getItem(key)||"0",10);
     if(!ends || ends<now){ ends = now + PROMO_HOURS*60*60*1000; localStorage.setItem(key,String(ends)); }
 
@@ -400,11 +393,11 @@
       const left = Math.max(0, ends - Date.now());
       if(left<=0){
         if (COUNT) COUNT.style.display = "none";
-        renderPrices(10000, null);
+        renderPrices(BASE_PRICE, null);
         return;
       }
       if (COUNT) COUNT.style.display = "flex";
-      renderPrices(7800, 10000);
+      renderPrices(DISCOUNT_PRICE, BASE_PRICE);
 
       const h=Math.floor(left/3600000),
             m=Math.floor((left%3600000)/60000),
@@ -419,7 +412,7 @@
     }
     tick();
 
-    // Floating CTA
+    /* ===== Плаваюча кнопка ===== */
     (function(){
       const hero = $("#hero");
       const floater = $("#floatCta");
