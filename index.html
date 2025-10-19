@@ -13,7 +13,12 @@
       --accent:#12d18e; --accent-2:#8ef3c7;
       --radius:18px; --maxw:1140px;
       --shadow:0 10px 30px rgba(18,209,142,.18);
+
+      /* Позиции по умолчанию (десктоп/андроид) */
+      --img-bottom: 10%;
+      --cta-bottom: 16%;
     }
+
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif}
@@ -24,9 +29,19 @@
     /* ===== HERO (full-bleed) ===== */
     .hero-stage{
       position:relative;
+      /* высота с учётом динамических панелей Safari */
       min-height:min(96vh, 820px);
       overflow:hidden; margin:0 -20px; background:var(--bg);
+      isolation:isolate; /* стабильные слои на iOS */
     }
+    @supports (height: 100dvh){
+      .hero-stage{ min-height:min(96dvh, 820px); }
+    }
+    @supports (height: 100svh){
+      .hero-stage{ min-height:min(96svh, 820px); }
+    }
+
+    /* ЯСКРАВОЕ свечение вокруг фото (с мягким краем) */
     .hero-stage::after{
       content:""; position:absolute; right:9%; bottom:0%;
       width:min(120vmin, 820px); height:min(120vmin, 820px); border-radius:50%;
@@ -42,16 +57,21 @@
       z-index:0; pointer-events:none;
       transform:translate(25%, -12%);
     }
+
+    /* Фото: под лидом, без налезания на текст */
     .hero-img{
-      position:absolute; right:10%; bottom:10%;
+      position:absolute; right:10%; bottom:var(--img-bottom);
       width:min(640px, 54vw); max-height:96%; object-fit:contain;
       filter:drop-shadow(0 16px 28px rgba(0,0,0,.35)); z-index:1; pointer-events:none;
     }
+
+    /* Верхний текст — ближе к верху, без лишних зазоров */
     .hero-text{
-      position:absolute; top:3%; left:50%; transform:translateX(-50%);
+      position:absolute; top:2%; left:50%; transform:translateX(-50%);
       max-width:min(760px, calc(100vw - 48px)); width:100%;
       text-align:center; text-shadow:0 1px 0 rgba(0,0,0,.2); z-index:2;
     }
+    .hero-text > *{ margin-top:0 } /* обнуляем случайные верхние отступы */
     .eyebrow{font-size:13px; letter-spacing:.06em; color:var(--muted)}
     .chips{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:8px}
     .chip{padding:8px 14px; border-radius:999px; border:1px solid var(--line); background:#0f1713}
@@ -59,8 +79,9 @@
     .hl{font-size:clamp(28px,5vw,48px); line-height:1.18; font-weight:900; margin:10px 0 8px}
     .lead{color:var(--muted); margin:0 0 10px}
 
+    /* Скляна плашка — вузька і правіше (частково на фото) */
     .hero-bubble{
-      position:absolute; right:10%; bottom:28%;
+      position:absolute; right:10%; bottom:calc(var(--img-bottom) + 18%);
       max-width:260px; color:#fff; background:rgba(12,16,14,.55);
       border:1px solid rgba(142,243,199,.22);
       padding:12px 14px; border-radius:28px; backdrop-filter:blur(8px);
@@ -68,9 +89,10 @@
       z-index:2;
     }
 
+    /* Кнопка — на фото */
     .hero-cta{
       position:absolute; left:50%; transform:translateX(-50%);
-      bottom:16%; display:grid; gap:10px; width:auto; text-align:center; z-index:3;
+      bottom:var(--cta-bottom); display:grid; gap:10px; width:auto; text-align:center; z-index:3;
     }
     .cta{
       display:inline-flex; align-items:center; justify-content:center; gap:10px;
@@ -89,9 +111,8 @@
     h2{font-size:clamp(22px,2.4vw,30px); margin:0 0 12px}
     .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:22px}
 
-    /* Приклеиваем таймер к hero */
-    #promo{ margin-top:0 }                 /* вместо 40px от .section */
-    /* на всякий случай, если коллапс марджинов случится — задаём тонкую прокладку */
+    /* Приклеить таймер к hero */
+    #promo{ margin-top:0 }
     #promo::before{ content:""; display:block; height:0 }
 
     .steps{display:grid; gap:12px}
@@ -131,6 +152,7 @@
     .countbox .n{font-size:clamp(22px,8vw,40px); font-weight:900; line-height:1; white-space:nowrap}
     .countbox .t{color:var(--muted); margin-top:6px; font-size:clamp(12px,3.6vw,16px); white-space:nowrap}
 
+    /* Floating CTA */
     .floater{position:fixed; left:0; right:0; bottom:12px; z-index:50;
       opacity:0; transform:translateY(16px); pointer-events:none;
       transition:opacity .28s ease, transform .28s ease}
@@ -138,21 +160,41 @@
     .floater-inner{max-width:var(--maxw); margin:0 auto; padding:0 20px}
     .floater .cta{width:100%}
 
+    /* ===== Адаптив ===== */
     @media (max-width:1200px){
-      .hero-img{right:10%; bottom:10%; width:min(600px, 56vw)}
+      .hero-img{right:10%; width:min(600px, 56vw)}
     }
     @media (max-width:820px){
       .hero-stage{min-height:92vh}
-      .hero-text{top:2.2%}
-      .hero-img{right:50%; transform:translateX(44%); bottom:12%; width:min(620px, 112vw)}
+      @supports (height: 100dvh){ .hero-stage{ min-height:92dvh } }
+      @supports (height: 100svh){ .hero-stage{ min-height:92svh } }
+
+      /* На узких экранах фото чуть ниже, кнопка — на фото */
+      :root{ --img-bottom: 12%; --cta-bottom: 14%; }
+
+      .hero-text{top:2%}
+      .hero-img{right:50%; transform:translateX(44%); width:min(620px, 112vw)}
       .hero-stage::after{
         right:50%; width:min(120vmin, 680px); height:min(120vmin, 680px);
         transform:translate(50%, -18%); filter:blur(14px);
       }
-      .hero-bubble{right:8%; bottom:26%; max-width:60vw}
-      .hero-cta{bottom:14%}
+      .hero-bubble{right:8%; bottom:calc(var(--img-bottom) + 16%); max-width:60vw}
       .slider{grid-auto-columns:88%}
-      #promo{ margin-top:0 } /* тоже без отступа на мобилке */
+      #promo{ margin-top:0 }
+    }
+
+    /* Точная подстройка для iOS Safari */
+    @supports (-webkit-touch-callout: none){
+      :root{
+        --img-bottom: 6%;
+        --cta-bottom: 18%;
+      }
+      @media (max-width:820px){
+        :root{
+          --img-bottom: 8%;
+          --cta-bottom: 16%;
+        }
+      }
     }
   </style>
 </head>
