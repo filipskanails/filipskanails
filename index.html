@@ -26,28 +26,35 @@
       position:relative; min-height:min(92vh, 760px);
       overflow:hidden; margin:0 -20px; background:var(--bg);
     }
-    /* кругове яскраве свічення тільки навколо фото */
+    /* ЯСКРАВЕ СВІЧЕННЯ тільки навколо фото, зсунуте на ~1/4 вправо і вгору */
     .hero-stage::after{
-      content:""; position:absolute; right:9%; bottom:2%;
-      width:min(120vmin, 820px); height:min(120vmin, 820px); border-radius:50%;
-      background:radial-gradient(circle,
-        rgba(18,209,142,.70) 0%,
-        rgba(18,209,142,.45) 28%,
-        rgba(18,209,142,.22) 52%,
-        rgba(18,209,142,.10) 68%,
-        transparent 78%);
-      filter:blur(2px); z-index:0; pointer-events:none;
-      transform:translate(10%,15%); /* трохи зсунуто під фото */
+      content:"";
+      position:absolute;
+      right:9%; bottom:2%;
+      width:min(120vmin, 820px);
+      height:min(120vmin, 820px);
+      border-radius:50%;
+      background:radial-gradient(circle at 50% 50%,
+        rgba(18,209,142,.92) 0%,
+        rgba(18,209,142,.75) 20%,
+        rgba(18,209,142,.45) 42%,
+        rgba(18,209,142,.22) 62%,
+        rgba(18,209,142,.10) 78%,
+        rgba(18,209,142,.04) 88%,
+        transparent 100%);
+      filter:blur(12px);                 /* м’який край */
+      z-index:0; pointer-events:none;
+      transform:translate(25%, -25%);    /* чверть правіше і вище */
     }
 
-    /* Фото: правіше і вище — ближче до ліда */
+    /* Фото — правіше і ВИЩЕ (майже під лідом) */
     .hero-img{
-      position:absolute; right:10%; bottom:12%;
+      position:absolute; right:10%; bottom:22%;
       width:min(640px, 54vw); max-height:96%; object-fit:contain;
       filter:drop-shadow(0 16px 28px rgba(0,0,0,.35)); z-index:1; pointer-events:none;
     }
 
-    /* Верхній текст — по центру з полями 24px */
+    /* Верхній текст — центр + поля 24px, щоб рядки не ламались без потреби */
     .hero-text{
       position:absolute; top:7%; left:50%; transform:translateX(-50%);
       max-width:min(760px, calc(100vw - 48px)); width:100%;
@@ -80,8 +87,8 @@
       padding:16px 26px; border-radius:999px;
       background:linear-gradient(135deg,var(--accent),#36e6a7);
       color:#fff; font-weight:900;
-      font-size:clamp(18px,5vw,22px); /* щоб в одну строку на мобільних */
-      letter-spacing:.3px; text-transform:uppercase; white-space:nowrap;
+      font-size:clamp(18px,5vw,22px); letter-spacing:.3px;
+      text-transform:uppercase; white-space:nowrap; /* В ОДИН РЯДОК */
       box-shadow:var(--shadow); text-shadow:0 1px 0 rgba(0,0,0,.12);
     }
     .priceLine{
@@ -89,7 +96,7 @@
     }
     .priceLine .oldline{color:#95a49b; text-decoration:line-through; margin-left:10px}
 
-    /* ===== Sections (нижче без змін) ===== */
+    /* ===== Sections ===== */
     .section{margin:40px 0}
     h2{font-size:clamp(22px,2.4vw,30px); margin:0 0 12px}
     .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:22px}
@@ -142,15 +149,17 @@
 
     /* ===== Адаптив ===== */
     @media (max-width:1200px){
-      .hero-img{right:10%; bottom:12%; width:min(600px, 56vw)}
-      .hero-stage::after{right:9%; bottom:0%;}
+      .hero-img{right:10%; bottom:22%; width:min(600px, 56vw)}
     }
     @media (max-width:820px){
       .hero-stage{min-height:88vh}
-      .hero-img{right:50%; transform:translateX(44%); bottom:12%; width:min(620px, 112vw)}
+      .hero-img{right:50%; transform:translateX(44%); bottom:20%; width:min(620px, 112vw)}
       .hero-stage::after{
-        right:50%; transform:translate(38%,20%);
-        width:min(120vmin, 680px); height:min(120vmin, 680px); bottom:6%;
+        right:50%;
+        width:min(120vmin, 680px);
+        height:min(120vmin, 680px);
+        transform:translate(50%, -28%); /* більше зміщення на мобілці */
+        filter:blur(14px);
       }
       .hero-bubble{right:8%; bottom:30%; max-width:60vw}
       .hero-cta{bottom:8%}
@@ -282,6 +291,7 @@
     const $ = s=>document.querySelector(s);
     const fmt = n=>new Intl.NumberFormat("uk-UA").format(n);
 
+    // дата в чипі
     (function(){
       const chip = $("#chipDate");
       if(chip){
@@ -344,7 +354,7 @@
     }
     tick();
 
-    // Floating CTA
+    // Floating CTA (показ вне hero)
     (function(){
       const hero = $("#hero");
       const floater = $("#floatCta");
