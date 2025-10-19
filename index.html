@@ -89,8 +89,10 @@
     h2{font-size:clamp(22px,2.4vw,30px); margin:0 0 12px}
     .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:22px}
 
-    /* — Подтянули промо к hero */
-    #promo{ margin-top:12px; } /* было 40px от .section */
+    /* Приклеиваем таймер к hero */
+    #promo{ margin-top:0 }                 /* вместо 40px от .section */
+    /* на всякий случай, если коллапс марджинов случится — задаём тонкую прокладку */
+    #promo::before{ content:""; display:block; height:0 }
 
     .steps{display:grid; gap:12px}
     .step{display:grid; grid-template-columns:38px 1fr; gap:12px; align-items:start; background:#101713; border:1px solid var(--line); border-radius:14px; padding:12px}
@@ -120,7 +122,6 @@
     .priceNum{font-size:clamp(22px,3.2vw,30px); font-weight:900}
     .old{color:#95a49b; text-decoration:line-through; font-size:18px; display:none}
 
-    /* PROMO timer */
     .bonusList{list-style:none; padding:0; margin:16px 0 12px; display:grid; gap:10px}
     .bonusList li{display:flex; align-items:center; gap:10px}
     .bonusList li::before{content:""; width:24px; height:24px; border-radius:999px;
@@ -130,7 +131,6 @@
     .countbox .n{font-size:clamp(22px,8vw,40px); font-weight:900; line-height:1; white-space:nowrap}
     .countbox .t{color:var(--muted); margin-top:6px; font-size:clamp(12px,3.6vw,16px); white-space:nowrap}
 
-    /* Floating CTA */
     .floater{position:fixed; left:0; right:0; bottom:12px; z-index:50;
       opacity:0; transform:translateY(16px); pointer-events:none;
       transition:opacity .28s ease, transform .28s ease}
@@ -152,7 +152,7 @@
       .hero-bubble{right:8%; bottom:26%; max-width:60vw}
       .hero-cta{bottom:14%}
       .slider{grid-auto-columns:88%}
-      #promo{ margin-top:10px; } /* ещё ближе на мобилках */
+      #promo{ margin-top:0 } /* тоже без отступа на мобилке */
     }
   </style>
 </head>
@@ -204,8 +204,6 @@
         <div class="pricePill"><small class="muted" style="color:#083a27">лише</small> <span id="pricePromo" class="priceNum">— грн</span></div>
         <div id="oldPromo" class="old">— грн</div>
       </div>
-
-      <!-- Кнопки в этом блоке по просьбе удалены -->
     </section>
 
     <!-- HOW -->
