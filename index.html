@@ -13,12 +13,12 @@
       --accent:#12d18e; --accent-2:#8ef3c7;
       --radius:18px; --shadow:0 10px 30px rgba(18,209,142,.18);
 
-      /* runtime vars от JS */
-      --img-top: 320px;       /* верх фото */
-      --cta-top: 560px;       /* верх кнопки */
-      --bubble-top: 440px;    /* верх скляной плашки */
-      --glow-top: 380px;      /* верх свечения */
-      --hero-h: 760px;        /* итоговая высота hero */
+      /* runtime vars (заповнює JS) */
+      --img-top: 320px;
+      --cta-top: 560px;
+      --bubble-top: 440px;
+      --glow-top: 380px;
+      --hero-h: 760px;
     }
 
     *{box-sizing:border-box}
@@ -31,16 +31,14 @@
 
     .wrap{max-width:720px;margin:0 auto;padding:16px}
 
-    /* ===== HERO (mobile only) ===== */
+    /* ===== HERO (mobile) ===== */
     .hero-stage{
       position:relative;
-      /* фиксируем высоту пикселями, чтобы следующий блок не прыгал на скролле */
-      height:var(--hero-h);
+      height:var(--hero-h);     /* фіксована висота в px, щоб сусідні секції не «їздили» */
       overflow:hidden;
       isolation:isolate;
     }
 
-    /* свечение вокруг фото */
     .hero-stage::after{
       content:""; position:absolute; right:50%; top:var(--glow-top);
       width:min(120vmin, 680px); height:min(120vmin, 680px); border-radius:50%;
@@ -57,7 +55,6 @@
       pointer-events:none; z-index:0;
     }
 
-    /* верхний текст */
     .hero-text{
       position:absolute; top:2%; left:50%; transform:translateX(-50%);
       width:calc(100% - 32px); max-width:640px; text-align:center;
@@ -71,7 +68,6 @@
     .hl{font-size:clamp(28px,7vw,38px); line-height:1.18; font-weight:900; margin:10px 0 8px}
     .lead{color:var(--muted); margin:0 0 10px}
 
-    /* фото */
     .hero-img{
       position:absolute; right:50%; transform:translateX(44%);
       top:var(--img-top); width:min(620px, 112vw);
@@ -79,7 +75,6 @@
       z-index:1; pointer-events:none; will-change:top;
     }
 
-    /* скляная плашка (справа, частично на фото) */
     .hero-bubble{
       position:absolute; right:8%; top:var(--bubble-top);
       max-width:60vw; color:#fff; background:rgba(12,16,14,.55);
@@ -89,7 +84,6 @@
       font-size:14px; line-height:1.35; z-index:2; will-change:top;
     }
 
-    /* CTA на фото */
     .hero-cta{
       position:absolute; left:50%; transform:translateX(-50%);
       top:var(--cta-top); display:grid; gap:10px; text-align:center; z-index:3; will-change:top;
@@ -110,7 +104,6 @@
     h2{font-size:clamp(22px,6vw,28px); margin:0 0 12px}
     .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:18px}
 
-    /* бонусы + таймер */
     .bonusList{list-style:none; padding:0; margin:12px 0 10px; display:grid; gap:10px}
     .bonusList li{display:flex; align-items:center; gap:10px}
     .bonusList li::before{content:""; width:24px; height:24px; border-radius:999px;
@@ -126,16 +119,6 @@
     .priceNum{font-size:clamp(20px,6vw,26px); font-weight:900}
     .old{color:#95a49b; text-decoration:line-through; font-size:16px; display:none}
 
-    /* слайдер */
-    .slider{display:grid; grid-auto-flow:column; grid-auto-columns:88%; gap:12px; overflow-x:auto; padding:4px; scroll-snap-type:x mandatory}
-    .slide{scroll-snap-align:center; border-radius:14px; overflow:hidden; border:1px solid var(--line); background:#0b0f0d}
-    .slide img{aspect-ratio:1/1; object-fit:cover}
-
-    .bubbleWrap{position:relative}
-    .bubble{background:#e8efe9; color:#0c100e; border-radius:20px; padding:16px 14px 18px; max-width:740px; margin:0 auto}
-    .bubbleWrap::before{content:""; position:absolute; left:16px; bottom:-10px; width:18px; height:18px; background:#e8efe9; transform:rotate(45deg)}
-
-    /* плавающая кнопка */
     .floater{position:fixed; left:0; right:0; bottom:12px; z-index:50;
       opacity:0; transform:translateY(16px); pointer-events:none;
       transition:opacity .28s ease, transform .28s ease}
@@ -193,8 +176,6 @@
         <div id="oldPromo" class="old">— грн</div>
       </div>
     </section>
-
-    <!-- Прочие секции опущены для краткости ... -->
   </div>
 
   <!-- Floating CTA -->
@@ -205,7 +186,7 @@
   </div>
 
   <script>
-    /* ===== КОНФИГ ===== */
+    /* ===== КОНФІГ ===== */
     const WORKER = "https://filipskanails-pay.timanov-business.workers.dev";
     const THANK  = "https://filipskanails.github.io/filipskanails/thankyou.html";
     const TITLE  = "Доступ до курсу Next Level";
@@ -216,6 +197,7 @@
     const $ = s=>document.querySelector(s);
     const fmt = n=>new Intl.NumberFormat("uk-UA").format(n);
 
+    // дата в чипі
     (function(){
       const chip = $("#chipDate");
       if(chip){
@@ -247,7 +229,9 @@
       setPayHref($("#buyFloat"), active);
     }
 
-    /* ===== СТАБИЛЬНАЯ РАСКЛАДКА HERO (mobile) ===== */
+    /* ===== СТАБІЛЬНА РОЗКЛАДКА HERO (mobile) =====
+       ГОЛОВНЕ: використовуємо offsetTop/offsetHeight — без прив'язки до viewport.
+    */
     function layoutHero(){
       const stage  = document.getElementById('hero');
       const text   = stage.querySelector('.hero-text');
@@ -255,24 +239,23 @@
       const cta    = stage.querySelector('.hero-cta');
       if(!stage || !text || !img || !cta) return;
 
-      const stageRect = stage.getBoundingClientRect();
-      const textRect  = text.getBoundingClientRect();
-
-      const GAP = 8; // расстояние от лида до фото
-      const desiredImgTop = Math.max(0, Math.round(textRect.bottom - stageRect.top + GAP));
+      // Нижня межа текстового блоку В МЕЖАХ HERO
+      const textBottom = text.offsetTop + text.offsetHeight;
+      const GAP = 8;                           // відступ під ліда
+      const desiredImgTop = textBottom + GAP;  // топ фото від верхнього краю hero
 
       img.style.top = desiredImgTop + 'px';
-      const imgRect = img.getBoundingClientRect();
+      const imgRect = img.getBoundingClientRect(); // для висоти фото
 
-      // Офсеты (мобайл). ТВОЯ ПРОСЬБА: ОПУСТИТЬ НА 10px
-      const BUBBLE_OFFSET = 200; 
+      // Твої налаштування:
+      const BUBBLE_OFFSET = 200; // px від верху фото
       const CTA_RATIO     = 0.68;
-      const CTA_EXTRA     = 40;  
+      const CTA_EXTRA     = 40;  // додатковий піксельний офсет
 
       const finalImgTop = desiredImgTop;
 
       const ctaTop      = Math.round(finalImgTop + imgRect.height * CTA_RATIO) + CTA_EXTRA;
-      const bubbleTop   = Math.round(finalImgTop + BUBBLE_OFFSET); // уже ниже на 10
+      const bubbleTop   = Math.round(finalImgTop + BUBBLE_OFFSET);
       const glowTop     = Math.round(finalImgTop + imgRect.height * 0.52) - 220;
 
       stage.style.setProperty('--img-top', finalImgTop + 'px');
@@ -280,12 +263,19 @@
       stage.style.setProperty('--bubble-top', bubbleTop + 'px');
       stage.style.setProperty('--glow-top', Math.max(0, glowTop) + 'px');
 
-      // Фиксируем высоту hero пикселями: ниже кнопки + 24px — чтобы #promo не ползал
-      const ctaRect = cta.getBoundingClientRect();
-      const neededH = Math.round((ctaTop - stageRect.top) + ctaRect.height + 24);
+      // Фіксована висота hero в px — від верху hero до низу кнопки + запас
+      const neededH = Math.round(ctaTop + cta.offsetHeight + 24);
       stage.style.setProperty('--hero-h', neededH + 'px');
       stage.style.height = neededH + 'px';
     }
+
+    // Ігноруємо «resize» від адресного рядка iOS: перераховуємо тільки коли змінюється ширина
+    let lastW = window.innerWidth;
+    function onResizeSmart(){
+      const w = window.innerWidth;
+      if (Math.abs(w - lastW) > 2){ lastW = w; layoutHeroSafe(); }
+    }
+
     function layoutHeroSafe(){
       layoutHero();
       requestAnimationFrame(layoutHero);
@@ -298,11 +288,10 @@
       layoutHeroSafe();
     });
     window.addEventListener('load', layoutHeroSafe);
-    window.addEventListener('resize', layoutHeroSafe);
+    window.addEventListener('resize', onResizeSmart);          // тільки ширина
     window.addEventListener('orientationchange', layoutHeroSafe);
-    window.addEventListener('pageshow', layoutHeroSafe);
 
-    /* ===== Таймер и цены ===== */
+    /* ===== Таймер і ціни ===== */
     const COUNT = $("#countdown");
     const key = "promoEndsAt-v1";
     const now = Date.now();
@@ -330,7 +319,7 @@
     }
     tick();
 
-    /* ===== Плавающая кнопка ===== */
+    /* ===== Плаваюча кнопка ===== */
     (function(){
       const hero = $("#hero");
       const floater = $("#floatCta");
