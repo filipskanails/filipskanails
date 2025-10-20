@@ -13,7 +13,7 @@
       --accent:#12d18e; --accent-2:#8ef3c7;
       --radius:18px; --shadow:0 10px 30px rgba(18,209,142,.18);
 
-      /* runtime vars (заповнює JS) */
+      /* runtime vars (JS) */
       --img-top: 320px;
       --cta-top: 560px;
       --bubble-top: 440px;
@@ -107,7 +107,7 @@
     .priceLine{font-weight:800; text-align:center; font-size:16px; color:var(--text); opacity:.95}
     .priceLine .oldline{color:#95a49b; text-decoration:line-through; margin-left:10px}
 
-    /* ===== PROMO (таймер) — «впритык» до HERO ===== */
+    /* ===== PROMO (впритык, без бокових/верхньої границі) ===== */
     .section{margin:28px 0}
     h2{font-size:clamp(22px,6vw,28px); margin:0 0 12px}
     .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:18px}
@@ -117,8 +117,15 @@
       padding-top: calc(18px + var(--promoOverlap));
       border-top-left-radius: 0;
       border-top-right-radius: 0;
+      /* убираем видимые «границы» по бокам и сверху */
+      border-left: none;
+      border-right: none;
+      border-top: none;
+      box-shadow: none;
       position: relative;
-      z-index: 5; /* поверх нижнього краю hero */
+      z-index: 5;
+      /* полностью перекрываем шов по ширине контейнера */
+      margin-left:-16px; margin-right:-16px; width:calc(100% + 32px);
     }
 
     /* бонуси + таймер */
@@ -184,7 +191,7 @@
 
       <div class="countdown" id="countdown">
         <div class="countbox"><div class="n" id="cd-h">00</div><div class="t">Годин</div></div>
-        <div class="countbox"><div class="n" id="cd-m">00</div><div class="т">Хвилин</div></div>
+        <div class="countbox"><div class="n" id="cd-m">00</div><div class="t">Хвилин</div></div>
         <div class="countbox"><div class="n" id="cd-s">00</div><div class="t">Секунд</div></div>
       </div>
 
@@ -248,7 +255,7 @@
       setPayHref($("#buyFloat"), active);
     }
 
-    /* ===== СТАБІЛЬНА РОЗКЛАДКА HERO (mobile, без прив'язки до viewport) ===== */
+    /* ===== СТАБІЛЬНА РОЗКЛАДКА HERO (offset-координати, без viewport) ===== */
     function layoutHero(){
       const stage  = document.getElementById('hero');
       const text   = stage.querySelector('.hero-text');
@@ -263,7 +270,7 @@
 
       img.style.top = desiredImgTop + 'px';
 
-      // висота фото в пікселях (можна читати з naturalHeight/width, але тут достатньо layout-розміру)
+      // розмір фото після layout
       const imgRect = img.getBoundingClientRect();
 
       // твої налаштування
@@ -287,7 +294,7 @@
       stage.style.height = neededH + 'px';
     }
 
-    // розумний перерахунок: реагуємо тільки на зміну ширини/орієнтації (iOS address bar не тригерить)
+    // перерахунок тільки при зміні ширини/орієнтації
     let lastW = window.innerWidth;
     function onResizeSmart(){
       const w = window.innerWidth;
