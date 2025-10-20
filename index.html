@@ -60,14 +60,25 @@
       pointer-events:none; z-index:0;
     }
 
-    .hero-text{position:absolute;top:2%;left:50%;transform:translateX(-50%);
-      width:calc(100% - 32px);max-width:640px;text-align:left;text-shadow:0 1px 0 rgba(0,0,0,.2);z-index:2}
+    .hero-text{
+      position:absolute;top:2%;left:50%;transform:translateX(-50%);
+      width:calc(100% - 32px);max-width:640px;
+      text-align:center; /* центрируем весь верхний блок */
+      text-shadow:0 1px 0 rgba(0,0,0,.2);z-index:2
+    }
     .eyebrow{font-size:13px;letter-spacing:.06em;color:var(--muted)}
     .chips{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px}
     .chip{padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:#0f1713}
     .chip.outline{background:transparent}
+
     .hl{font-size:clamp(28px,7vw,38px);line-height:1.18;font-weight:900;margin:10px 0 8px}
-    .lead{color:var(--muted);margin:0 0 10px}
+    /* Микс-выравнивание строк заголовка */
+    .hl.hl-mix{display:grid;gap:2px}
+    .hl.hl-mix .line{display:block}
+    .hl.hl-mix .line.r{text-align:right}
+    .hl.hl-mix .line.l{text-align:left}
+
+    .lead{color:var(--muted);margin:0 0 10px;text-align:center}
 
     .hero-img{
       position:absolute;right:50%;transform:translateX(44%);
@@ -202,7 +213,16 @@
           ОНЛАЙН КУРС ВІД ІНСТРУКТОРА МАНІКЮРУ&nbsp;
           <span class="accent nowrap">АННИ ФІЛІПСЬКОЇ</span>
         </div>
-        <h1 class="hl">ІНСТАКВАДРАТИ.<br>ІДЕАЛЬНИЙ КОМБІ.<br>ІДЕАЛЬНИЙ ФРЕНЧ.<br>ТВІЙ NEXT LEVEL.</h1>
+
+        <!-- Заголовок: строки с разным выравниванием -->
+        <h1 class="hl hl-mix">
+          <span class="line r">ІНСТАКВАДРАТИ.</span>
+          <span class="line l">ІДЕАЛЬНИЙ КОМБІ.</span>
+          <span class="line r">ІДЕАЛЬНИЙ ФРЕНЧ.</span>
+          <span class="line l">ТВІЙ NEXT LEVEL.</span>
+        </h1>
+
+        <!-- Лид по центру -->
         <p class="lead">Цей курс - твоя можливість перейти з "майстра базовика" у впевнену, сильну майстриню з власним стилем і високим прайсом.<br>Next Level - коли твої роботи говорять самі за себе.</p>
       </div>
 
