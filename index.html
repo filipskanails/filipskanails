@@ -11,10 +11,10 @@
       --bg:#0c100e; --card:#121614; --line:#223129;
       --text:#e7f0ea; --muted:#a1b3ab;
 
-      /* БРЕНД-АКЦЕНТ (оновлено) */
-      --accent:#004a25;           /* твій новий відтінок */
-      --accent-2:#004a25;         /* той самий, щоб градієнти стали суцільними */
-      --accent-rgb:0,74,37;       /* той самий колір у форматі r,g,b для прозорих сяйв */
+      /* бренд */
+      --accent:#004a25;
+      --accent-2:#004a25;
+      --accent-rgb:0,74,37;
 
       --radius:18px; --shadow:0 10px 30px rgba(0,0,0,.18);
       --img-top:320px; --cta-top:560px; --bubble-top:440px; --glow-top:380px; --hero-h:760px;
@@ -29,26 +29,28 @@
 
     .wrap{max-width:720px;margin:0 auto;padding:16px}
 
-    /* утиліти */
-    .accent{color:var(--accent-2);font-weight:900}
+    /* утилиты */
+    .accent{color:var(--accent-2);font-weight:900;text-shadow:0 0 10px rgba(var(--accent-rgb),.35)}
     .nowrap{white-space:nowrap}
 
-    /* ===== HERO (mobile full-bleed) ===== */
+    /* ===== HERO ===== */
     #hero{margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);position:relative;z-index:1}
     .hero-stage{position:relative;height:var(--hero-h);overflow:hidden;isolation:isolate;background:transparent}
     .hero-stage::after{
-      content:"";position:absolute;right:50%;top:var(--glow-top);
-      width:min(120vmin,680px);height:min(120vmin,680px);border-radius:50%;
-      /* Сяйво переведене на новий колір */
-      background:radial-gradient(circle at 50% 50%,
-        rgba(var(--accent-rgb),.95) 0%,
-        rgba(var(--accent-rgb),.78) 20%,
-        rgba(var(--accent-rgb),.48) 42%,
-        rgba(var(--accent-rgb),.24) 62%,
-        rgba(var(--accent-rgb),.12) 78%,
-        rgba(var(--accent-rgb),.05) 88%,
-        transparent 100%);
-      filter:blur(14px);transform:translate(50%,-28%);pointer-events:none;z-index:0
+      content:""; position:absolute; right:50%; top:var(--glow-top);
+      width:min(120vmin,680px); height:min(120vmin,680px); border-radius:50%;
+      background:
+        radial-gradient(circle at 50% 50%,
+          rgba(var(--accent-rgb),.98) 0%,
+          rgba(var(--accent-rgb),.65) 30%,
+          rgba(var(--accent-rgb),.34) 60%,
+          rgba(var(--accent-rgb),.14) 80%,
+          rgba(var(--accent-rgb),.06) 90%,
+          transparent 100%),
+        radial-gradient(60% 40% at 50% 0%, rgba(255,255,255,.10), transparent 55%);
+      filter:blur(18px);
+      transform:translate(50%,-28%);
+      pointer-events:none; z-index:0;
     }
     .hero-text{position:absolute;top:2%;left:50%;transform:translateX(-50%);
       width:calc(100% - 32px);max-width:640px;text-align:center;text-shadow:0 1px 0 rgba(0,0,0,.2);z-index:2}
@@ -63,25 +65,28 @@
       z-index:1;pointer-events:none;will-change:top}
     .hero-bubble{
       position:absolute;right:8%;top:var(--bubble-top);max-width:60vw;color:#fff;
-      background:rgba(12,16,14,.55);
-      border:1px solid rgba(var(--accent-rgb),.22); /* було мʼятне rgba(...) */
+      background:rgba(12,16,14,.58);
+      border:1px solid rgba(var(--accent-rgb),.28);
       padding:12px 14px;border-radius:28px;backdrop-filter:blur(8px);
-      box-shadow:0 10px 30px rgba(0,0,0,.25);font-size:14px;line-height:1.35;z-index:2;will-change:top
+      box-shadow:0 10px 30px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.10);
+      font-size:14px;line-height:1.35;z-index:2;will-change:top
     }
     .hero-cta{position:absolute;left:50%;transform:translateX(-50%);top:var(--cta-top);display:grid;gap:10px;text-align:center;z-index:3;will-change:top}
     .cta{
       display:inline-flex;align-items:center;justify-content:center;gap:10px;
       padding:16px 26px;border-radius:999px;
-      /* Кнопка тепер однотонна #004a25 (градієнт з однакових значень) */
-      background:linear-gradient(135deg,var(--accent),var(--accent));
+      background:
+        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.18), rgba(255,255,255,0) 55%),
+        linear-gradient(135deg,var(--accent),var(--accent));
       color:#fff;font-weight:900;text-transform:uppercase;
       font-size:clamp(18px,5vw,22px);letter-spacing:.3px;white-space:nowrap;
-      box-shadow:0 10px 30px rgba(0,0,0,.18);text-shadow:0 1px 0 rgba(0,0,0,.12)
+      box-shadow:0 10px 28px rgba(0,0,0,.28), 0 0 0 1px rgba(255,255,255,.06) inset;
+      text-shadow:0 1px 0 rgba(0,0,0,.18)
     }
     .priceLine{font-weight:800;text-align:center;font-size:16px;color:var(--text);opacity:.95}
     .priceLine .oldline{color:#95a49b;text-decoration:line-through;margin-left:10px}
 
-    /* ===== PROMO (впритык full-bleed) ===== */
+    /* ===== PROMO ===== */
     .section{margin:28px 0}
     h2{font-size:clamp(22px,6vw,28px);margin:0 0 12px}
     .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
@@ -92,18 +97,25 @@
     .bonusList li{display:flex;align-items:center;gap:10px}
     .bonusList li::before{
       content:"";width:24px;height:24px;border-radius:999px;
-      background:linear-gradient(135deg,var(--accent),var(--accent)); /* маркер у новому кольорі */
-      box-shadow:0 0 0 2px rgba(var(--accent-rgb),.25) inset;display:inline-block
+      background:
+        radial-gradient(120% 150% at 50% 20%, rgba(255,255,255,.22), rgba(255,255,255,0) 40%),
+        linear-gradient(135deg,var(--accent),var(--accent));
+      box-shadow:0 0 0 2px rgba(var(--accent-rgb),.25) inset;
+      display:inline-block
     }
     .countdown{display:flex;gap:10px;justify-content:space-between;margin:14px 0 6px}
-    .countbox{flex:1 1 0;border:1px solid #2b4136;border-radius:14px;background:#0f1713;padding:14px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .countbox{flex:1 1 0;border:1px solid #2b4136;border-radius:14px;background:#0f1713;padding:14px 8px;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
     .countbox .n{font-size:clamp(22px,8vw,36px);font-weight:900;line-height:1;white-space:nowrap}
     .countbox .t{color:var(--muted);margin-top:6px;font-size:clamp(12px,3.6vw,15px);white-space:nowrap}
     .priceRow{display:flex;align-items:center;gap:14px;margin:10px 0}
     .pricePill{
       display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;
-      background:linear-gradient(135deg,var(--accent),var(--accent)); /* був мʼятний градієнт */
-      color:#d8f0e3;font-weight:900;box-shadow:0 10px 30px rgba(0,0,0,.18)
+      background:
+        radial-gradient(130% 180% at 50% 0%, rgba(255,255,255,.18), rgba(255,255,255,0) 55%),
+        linear-gradient(135deg,var(--accent),var(--accent));
+      color:#e6fff3;font-weight:900;box-shadow:0 10px 28px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12)
     }
     .priceNum{font-size:clamp(20px,6vw,26px);font-weight:900}
     .old{color:#95a49b;text-decoration:line-through;font-size:16px;display:none}
@@ -122,23 +134,24 @@
     }
     .aboutList{list-style:none;padding:0;margin:0;display:grid;gap:14px}
 
-    /* Вирівнювання іконок по центру відносно тексту */
+    /* Фикс: иконка + текст в один ряд, ничего не разваливается */
     .aboutItem{
-      display:grid;grid-template-columns:40px 1fr;gap:12px;
-      align-items:center;line-height:1.45;border-radius:16px;padding:6px 0
+      display:flex; align-items:center; gap:12px;
+      line-height:1.45; border-radius:16px; padding:6px 0;
     }
     .aboutItem .icon{
-      position:relative;width:32px;height:32px;border-radius:50%;
+      position:relative; width:32px; height:32px; border-radius:50%;
+      flex:0 0 32px;
       background:conic-gradient(from 210deg,
         rgba(var(--accent-rgb),.9), rgba(var(--accent-rgb),.85), rgba(var(--accent-rgb),.9));
       box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 4px rgba(var(--accent-rgb),.12);
-      border:1px solid #2b4136;overflow:hidden
+      border:1px solid #2b4136; overflow:hidden;
     }
     .aboutItem .icon::before{content:"";position:absolute;inset:2px;border-radius:50%;
       background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.45), rgba(255,255,255,.06));mix-blend:screen}
     .aboutItem .icon::after{content:"";position:absolute;left:9px;top:10px;width:11px;height:6px;
       border-left:3px solid #052d21;border-bottom:3px solid #052d21;transform:rotate(-45deg)}
-    .aboutItem .accent{color:var(--accent-2);font-weight:900}
+    .aboutItem .accent{color:var(--accent-2);font-weight:900;text-shadow:0 0 8px rgba(var(--accent-rgb),.35)}
 
     /* ===== FOOTER ===== */
     footer.footer{margin-top:26px;padding:22px 16px 96px;text-align:center;color:var(--muted);border-top:1px solid var(--line)}
@@ -148,7 +161,7 @@
     .footer .links a{color:var(--muted);text-decoration:underline dotted;margin:0 8px}
     .footer small.copy{display:block;margin-top:12px;opacity:.7}
 
-    /* плаваюча кнопка */
+    /* плавающая кнопка */
     .floater{position:fixed;left:0;right:0;bottom:12px;z-index:50;opacity:0;transform:translateY(16px);pointer-events:none;
       transition:opacity .28s ease,transform .28s ease}
     .floater.show{opacity:1;transform:translateY(0);pointer-events:auto}
@@ -204,10 +217,7 @@
       <div class="buy-note">Встигни записатися та навчайся за найвигіднішою ціною</div>
 
       <div class="priceRow">
-        <div class="pricePill">
-          <small class="muted" style="color:#bcd5c9">лише</small>
-          <span id="pricePromo" class="priceNum">— грн</span>
-        </div>
+        <div class="pricePill"><small class="muted" style="color:#cfe6dc">лише</small> <span id="pricePromo" class="priceNum">— грн</span></div>
         <div id="oldPromo" class="old">— грн</div>
       </div>
     </section>
@@ -253,7 +263,6 @@
   </div>
 
   <script>
-    /* CONFIG / логіка без змін */
     const WORKER="https://filipskanails-pay.timanov-business.workers.dev";
     const THANK ="https://filipskanails.github.io/filipskanails/thankyou.html";
     const TITLE ="Доступ до курсу Next Level";
