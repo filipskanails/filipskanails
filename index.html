@@ -11,36 +11,44 @@
       --bg:#0c100e; --card:#121614; --line:#223129;
       --text:#e7f0ea; --muted:#a1b3ab;
       --accent:#12d18e; --accent-2:#8ef3c7;
-      --radius:18px; --maxw:1140px;
-      --shadow:0 10px 30px rgba(18,209,142,.18);
+      --radius:18px; --shadow:0 10px 30px rgba(18,209,142,.18);
+
+      /* runtime-змінні, які виставляє JS */
+      --img-top: 320px;       /* верх фото */
+      --cta-top: 560px;       /* верх кнопки */
+      --bubble-top: 440px;    /* верх скляної плашки */
+      --glow-top: 380px;      /* верх свічення */
+      --hero-h: 0px;          /* мінімальна висота hero */
     }
+
     *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--text);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif}
+    html,body{
+      margin:0; background:var(--bg); color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif
+    }
     a{color:inherit;text-decoration:none}
     img{max-width:100%;display:block}
-    .wrap{max-width:var(--maxw);margin:0 auto;padding:20px}
 
-    /* ===== HERO (full-bleed, стабільна адаптація) ===== */
+    /* Контейнер під мобільний */
+    .wrap{max-width:720px;margin:0 auto;padding:16px}
+
+    /* ===== HERO (mobile only) ===== */
     .hero-stage{
       position:relative;
-      /* базова висота + резерв на випадок маленьких екранів; JS додає var(--hero-h) більше за потреби */
-      min-height:max(min(96vh, 820px), var(--hero-h, 0px));
-      overflow:hidden; margin:0 -20px; background:var(--bg);
-      isolation:isolate;
-      /* значення JS ставить динамічно */
-      --img-top: 320px;     /* верх фото */
-      --cta-top: 560px;     /* верх кнопки */
-      --bubble-top: 420px;  /* верх скляної плашки */
-      --glow-top: 360px;    /* верх свічення */
+      min-height:max(min(92vh, 740px), var(--hero-h)); /* JS підніме за потреби */
+      /* на iOS коректно обробити динамічну висоту */
     }
-    @supports (height: 100dvh){ .hero-stage{ min-height:max(min(96dvh, 820px), var(--hero-h, 0px)) } }
-    @supports (height: 100svh){ .hero-stage{ min-height:max(min(96svh, 820px), var(--hero-h, 0px)) } }
+    @supports (height: 100svh){
+      .hero-stage{ min-height:max(min(92svh, 740px), var(--hero-h)) }
+    }
+    @supports (height: 100dvh){
+      .hero-stage{ min-height:max(min(92dvh, 740px), var(--hero-h)) }
+    }
 
-    /* Свічення: прив’язане до фото, м’який край */
+    /* фонове сяйво навколо фото */
     .hero-stage::after{
-      content:""; position:absolute; right:9%; top:var(--glow-top);
-      width:min(120vmin, 820px); height:min(120vmin, 820px); border-radius:50%;
+      content:""; position:absolute; right:50%; top:var(--glow-top);
+      width:min(120vmin, 680px); height:min(120vmin, 680px); border-radius:50%;
       background:radial-gradient(circle at 50% 50%,
         rgba(18,209,142,.95) 0%,
         rgba(18,209,142,.78) 20%,
@@ -49,85 +57,82 @@
         rgba(18,209,142,.12) 78%,
         rgba(18,209,142,.05) 88%,
         transparent 100%);
-      filter:blur(12px);
-      z-index:0; pointer-events:none;
-      transform:translate(25%, -25%);
+      filter:blur(14px);
+      transform:translate(50%, -28%);
+      pointer-events:none; z-index:0;
     }
 
-    /* Фото: ЗАВЖДИ відразу під лідом */
-    .hero-img{
-      position:absolute; right:10%; top:var(--img-top);
-      width:min(640px, 54vw); max-height:96%; object-fit:contain;
-      filter:drop-shadow(0 16px 28px rgba(0,0,0,.35)); z-index:1; pointer-events:none;
-      will-change: top;
-    }
-
-    /* Верхній текст */
+    /* текст у верхній частині, по центру */
     .hero-text{
       position:absolute; top:2%; left:50%; transform:translateX(-50%);
-      max-width:min(760px, calc(100vw - 48px)); width:100%;
-      text-align:center; text-shadow:0 1px 0 rgba(0,0,0,.2); z-index:2;
+      width:calc(100% - 32px); max-width:640px; text-align:center;
+      text-shadow:0 1px 0 rgba(0,0,0,.2); z-index:2;
     }
-    .hero-text > *{ margin-top:0 }
+    .hero-text>*{margin-top:0}
     .eyebrow{font-size:13px; letter-spacing:.06em; color:var(--muted)}
     .chips{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:8px}
     .chip{padding:8px 14px; border-radius:999px; border:1px solid var(--line); background:#0f1713}
     .chip.outline{background:transparent}
-    .hl{font-size:clamp(28px,5vw,48px); line-height:1.18; font-weight:900; margin:10px 0 8px}
+    .hl{font-size:clamp(28px,7vw,38px); line-height:1.18; font-weight:900; margin:10px 0 8px}
     .lead{color:var(--muted); margin:0 0 10px}
 
-    /* Скляна плашка — праворуч, стабільний фіксований відступ від верху фото */
-    .hero-bubble{
-      position:absolute; right:10%; top:var(--bubble-top);
-      max-width:260px; color:#fff; background:rgba(12,16,14,.55);
-      border:1px solid rgba(142,243,199,.22);
-      padding:12px 14px; border-radius:28px; backdrop-filter:blur(8px);
-      box-shadow:0 10px 30px rgba(0,0,0,.25); font-size:14px; line-height:1.35;
-      z-index:2; will-change: top;
+    /* фото правіше центру, мобільне */
+    .hero-img{
+      position:absolute; right:50%; transform:translateX(44%);
+      top:var(--img-top); width:min(620px, 112vw);
+      object-fit:contain; filter:drop-shadow(0 16px 28px rgba(0,0,0,.35));
+      z-index:1; pointer-events:none; will-change:top;
     }
 
-    /* Кнопка — НА ФОТО */
+    /* скляна плашка — праворуч, частково на фото */
+    .hero-bubble{
+      position:absolute; right:8%; top:var(--bubble-top);
+      max-width:60vw; color:#fff; background:rgba(12,16,14,.55);
+      border:1px solid rgba(142,243,199,.22); padding:12px 14px;
+      border-radius:28px; backdrop-filter:blur(8px);
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      font-size:14px; line-height:1.35; z-index:2; will-change:top;
+    }
+
+    /* CTA на фото */
     .hero-cta{
       position:absolute; left:50%; transform:translateX(-50%);
-      top:var(--cta-top); display:grid; gap:10px; width:auto; text-align:center; z-index:3;
-      will-change: top;
+      top:var(--cta-top); display:grid; gap:10px; text-align:center; z-index:3; will-change:top;
     }
     .cta{
       display:inline-flex; align-items:center; justify-content:center; gap:10px;
       padding:16px 26px; border-radius:999px;
       background:linear-gradient(135deg,var(--accent),#36e6a7);
-      color:#fff; font-weight:900;
-      font-size:clamp(18px,5vw,22px); letter-spacing:.3px;
-      text-transform:uppercase; white-space:nowrap;
+      color:#fff; font-weight:900; text-transform:uppercase;
+      font-size:clamp(18px,5vw,22px); letter-spacing:.3px; white-space:nowrap;
       box-shadow:var(--shadow); text-shadow:0 1px 0 rgba(0,0,0,.12);
     }
     .priceLine{font-weight:800; text-align:center; font-size:16px; color:var(--text); opacity:.95}
     .priceLine .oldline{color:#95a49b; text-decoration:line-through; margin-left:10px}
 
-    /* ===== Sections ===== */
-    .section{margin:40px 0}
-    h2{font-size:clamp(22px,2.4vw,30px); margin:0 0 12px}
-    .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:22px}
+    /* ===== Секції (mobile) ===== */
+    .section{margin:28px 0}
+    h2{font-size:clamp(22px,6vw,28px); margin:0 0 12px}
+    .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:18px}
 
-    /* Таймер «вплотную» до HERO, без наповзання */
-    #promo{ margin-top:0 } 
-    #promo::before{ content:""; display:block; height:0 }
+    /* бонуси + таймер */
+    .bonusList{list-style:none; padding:0; margin:12px 0 10px; display:grid; gap:10px}
+    .bonusList li{display:flex; align-items:center; gap:10px}
+    .bonusList li::before{content:""; width:24px; height:24px; border-radius:999px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow:0 0 0 2px #103c2d inset; display:inline-block}
+    .countdown{display:flex; gap:10px; justify-content:space-between; margin:14px 0 6px}
+    .countbox{flex:1 1 0; border:1px solid #2b4136; border-radius:14px; background:#0f1713; padding:14px 8px; display:flex; flex-direction:column; align-items:center; justify-content:center}
+    .countbox .n{font-size:clamp(22px,8vw,36px); font-weight:900; line-height:1; white-space:nowrap}
+    .countbox .t{color:var(--muted); margin-top:6px; font-size:clamp(12px,3.6vw,15px); white-space:nowrap}
 
-    .steps{display:grid; gap:12px}
-    .step{display:grid; grid-template-columns:38px 1fr; gap:12px; align-items:start; background:#101713; border:1px solid var(--line); border-radius:14px; padding:12px}
-    .step .n{display:grid; place-items:center; width:38px; height:38px; border-radius:12px; background:#14211b; border:1px solid #2b4136; color:var(--accent); font-weight:900}
+    .priceRow{display:flex; align-items:center; gap:14px; margin:10px 0}
+    .pricePill{display:flex; align-items:center; gap:8px; padding:10px 16px; border-radius:999px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#062217; font-weight:900; box-shadow:var(--shadow)}
+    .priceNum{font-size:clamp(20px,6vw,26px); font-weight:900}
+    .old{color:#95a49b; text-decoration:line-through; font-size:16px; display:none}
 
-    .listNum{display:grid; gap:10px}
-    .numItem{display:grid; grid-template-columns:56px 1fr; gap:12px; align-items:start}
-    .num{font-family:ui-monospace,Menlo,Consolas,monospace; color:var(--muted); font-size:28px; opacity:.9}
-
-    .pill{display:inline-block; padding:8px 12px; border-radius:999px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#062217; font-weight:900; border:1px solid #54e0a9}
-    .checklist{display:grid; gap:10px; margin-top:12px}
-    .li{position:relative; padding:12px 12px 12px 46px; background:#101713; border:1px solid var(--line); border-radius:14px}
-    .li::before{content:""; position:absolute; left:12px; top:12px; width:22px; height:22px; border-radius:999px; border:2px solid var(--accent); box-shadow:0 0 0 3px rgba(18,209,142,.15) inset}
-    .li::after{content:""; position:absolute; left:18px; top:18px; width:10px; height:5px; border-left:2px solid var(--accent); border-bottom:2px solid var(--accent); transform:rotate(-45deg)}
-
-    .slider{display:grid; grid-auto-flow:column; grid-auto-columns:86%; gap:12px; overflow-x:auto; padding:4px; scroll-snap-type:x mandatory}
+    /* слайдер робіт */
+    .slider{display:grid; grid-auto-flow:column; grid-auto-columns:88%; gap:12px; overflow-x:auto; padding:4px; scroll-snap-type:x mandatory}
     .slide{scroll-snap-align:center; border-radius:14px; overflow:hidden; border:1px solid var(--line); background:#0b0f0d}
     .slide img{aspect-ratio:1/1; object-fit:cover}
 
@@ -135,47 +140,13 @@
     .bubble{background:#e8efe9; color:#0c100e; border-radius:20px; padding:16px 14px 18px; max-width:740px; margin:0 auto}
     .bubbleWrap::before{content:""; position:absolute; left:16px; bottom:-10px; width:18px; height:18px; background:#e8efe9; transform:rotate(45deg)}
 
-    .priceRow{display:flex; align-items:center; gap:18px; margin:12px 0}
-    .pricePill{display:flex; align-items:center; gap:8px; padding:12px 18px; border-radius:999px;
-      background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#062217; font-weight:900; box-shadow:var(--shadow)}
-    .priceNum{font-size:clamp(22px,3.2vw,30px); font-weight:900}
-    .old{color:#95a49b; text-decoration:line-through; font-size:18px; display:none}
-
-    .bonusList{list-style:none; padding:0; margin:16px 0 12px; display:grid; gap:10px}
-    .bonusList li{display:flex; align-items:center; gap:10px}
-    .bonusList li::before{content:""; width:24px; height:24px; border-radius:999px;
-      background:linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow:0 0 0 2px #103c2d inset; display:inline-block}
-    .countdown{display:flex; gap:12px; flex-wrap:nowrap; justify-content:space-between; margin:18px 0 8px; width:100%}
-    .countbox{flex:1 1 0; min-width:0; border:1px solid #2b4136; border-radius:14px; background:#0f1713; padding:16px 10px; display:flex; flex-direction:column; align-items:center; justify-content:center}
-    .countbox .n{font-size:clamp(22px,8vw,40px); font-weight:900; line-height:1; white-space:nowrap}
-    .countbox .t{color:var(--muted); margin-top:6px; font-size:clamp(12px,3.6vw,16px); white-space:nowrap}
-
-    /* Floating CTA */
+    /* Плаваюча кнопка (mobile) */
     .floater{position:fixed; left:0; right:0; bottom:12px; z-index:50;
       opacity:0; transform:translateY(16px); pointer-events:none;
       transition:opacity .28s ease, transform .28s ease}
     .floater.show{opacity:1; transform:translateY(0); pointer-events:auto}
-    .floater-inner{max-width:var(--maxw); margin:0 auto; padding:0 20px}
+    .floater-inner{max-width:720px; margin:0 auto; padding:0 16px}
     .floater .cta{width:100%}
-
-    @media (max-width:1200px){
-      .hero-img{right:10%; width:min(600px, 56vw)}
-    }
-    @media (max-width:820px){
-      .hero-stage{min-height:max(min(92vh, 740px), var(--hero-h, 0px))}
-      @supports (height: 100dvh){ .hero-stage{ min-height:max(min(92dvh, 740px), var(--hero-h, 0px)) } }
-      @supports (height: 100svh){ .hero-stage{ min-height:max(min(92svh, 740px), var(--hero-h, 0px)) } }
-
-      .hero-text{top:2%}
-      .hero-img{right:50%; transform:translateX(44%); width:min(620px, 112vw)}
-      .hero-stage::after{
-        right:50%; width:min(120vmin, 680px); height:min(120vmin, 680px);
-        transform:translate(50%, -28%); filter:blur(14px);
-      }
-      .hero-bubble{right:8%; max-width:60vw}
-      .slider{grid-auto-columns:88%}
-      #promo{ margin-top:0 }
-    }
   </style>
 </head>
 <body>
@@ -231,35 +202,33 @@
     <!-- HOW -->
     <section id="how" class="section">
       <h2>Як буде проходити курс</h2>
-      <div class="card steps">
-        <div class="step"><div class="n">1</div><div><strong>Доступ у Telegram</strong><br><span class="muted">Після оплати одразу отримуєш доступ до платформи з уроками.</span></div></div>
-        <div class="step"><div class="n">2</div><div><strong>Сфокусовані уроки</strong><br><span class="muted">Відео й конспекти з чіткими покроковими поясненнями.</span></div></div>
-        <div class="step"><div class="n">3</div><div><strong>Чат підтримки</strong><br><span class="muted">Закрита група, де можна ставити запитання.</span></div></div>
+      <div class="card">
+        <div class="bubbleWrap">
+          <div class="bubble">Після оплати одразу отримуєш доступ до платформи з уроками та чат підтримки.</div>
+        </div>
       </div>
     </section>
 
     <!-- WHAT -->
     <section class="section">
       <h2>Що ви отримаєте на моєму курсі</h2>
-      <div class="card listNum">
-        <div class="numItem"><div class="num">/01</div><div>Миттєвий результат — після опрацювання курсу зможете якісно нарощувати нігті та заробляти.</div></div>
-        <div class="numItem"><div class="num">/02</div><div>30+ відеоуроків з якісною картинкою та чіткими поетапними поясненнями.</div></div>
-        <div class="numItem"><div class="num">/03</div><div>Вміння обирати матеріали і поєднувати їх із декором у техніці верхніх форм.</div></div>
-        <div class="numItem"><div class="num">/04</div><div>Ефективні способи нарощення, що економлять час і зберігають якість.</div></div>
-        <div class="numItem"><div class="num">/05</div><div>Нові техніки, зростання доходу та рух до ТОП-майстра.</div></div>
-        <div class="numItem"><div class="num">/06</div><div>Закритий канал з уроками, чат із колегами, електронний сертифікат.</div></div>
+      <div class="card">
+        <ul class="bonusList">
+          <li>Миттєвий результат і можливість заробляти</li>
+          <li>30+ чітких відеоуроків</li>
+          <li>Ефективні способи, що економлять час</li>
+          <li>Електронний сертифікат</li>
+        </ul>
       </div>
     </section>
 
     <!-- GALLERY -->
     <section class="section" id="gallery">
-      <h2>Відпрацювання учнів курсу</h2>
+      <h2>Відпрацювання учнів</h2>
       <div class="slider" aria-label="Горизонтальний слайдер робіт">
         <figure class="slide"><img src="img/work-1.jpg" alt="Робота 1" loading="lazy"></figure>
         <figure class="slide"><img src="img/work-2.jpg" alt="Робота 2" loading="lazy"></figure>
         <figure class="slide"><img src="img/work-3.jpg" alt="Робота 3" loading="lazy"></figure>
-        <figure class="slide"><img src="img/work-4.jpg" alt="Робота 4" loading="lazy"></figure>
-        <figure class="slide"><img src="img/work-5.jpg" alt="Робота 5" loading="lazy"></figure>
       </div>
     </section>
 
@@ -322,59 +291,45 @@
       const pP=$("#pricePromo"), oP=$("#oldPromo");
       if(pP) pP.textContent = fmt(active)+" грн";
       if(oP){ if(old&&old>active){oP.style.display="inline"; oP.textContent=fmt(old)+" грн"} else oP.style.display="none" }
-
       setPayHref($("#buyTop"),   active);
       setPayHref($("#buyFloat"), active);
     }
 
-    /* ===== СТАБІЛЬНЕ ПІДЛОШТУВАННЯ HERO =====
-       - Фото ставимо одразу під лідом (+8px)
-       - Плашка: фіксований відступ від верху фото (px), щоб не перекривала обличчя
-       - Кнопка: на нижній частині фото
-       - Висоту hero робимо не меншою за низ кнопки + 24px, щоб промо не наповзало
-    */
+    /* ===== СТАБІЛЬНА РОЗКЛАДКА HERO (mobile) ===== */
     function layoutHero(){
       const stage  = document.getElementById('hero');
       const text   = stage.querySelector('.hero-text');
       const img    = stage.querySelector('.hero-img');
       const cta    = stage.querySelector('.hero-cta');
-
       if(!stage || !text || !img || !cta) return;
 
       const stageRect = stage.getBoundingClientRect();
       const textRect  = text.getBoundingClientRect();
 
-      const GAP_UNDER_LEAD = 8; // «впритул» до ліда
-      const desiredImgTop  = Math.max(0, Math.round(textRect.bottom - stageRect.top + GAP_UNDER_LEAD));
+      const GAP = 8; // «впритул» під лідом
+      const desiredImgTop = Math.max(0, Math.round(textRect.bottom - stageRect.top + GAP));
 
-      // попередньо ставимо top, щоб отримати актуальну висоту фото
       img.style.top = desiredImgTop + 'px';
-      const imgRect  = img.getBoundingClientRect();
+      const imgRect = img.getBoundingClientRect();
 
-      // гарантія, що фото не вийде за низ сцени
-      const maxImgTop = Math.max(0, Math.round(stageRect.height - imgRect.height - 8));
-      const finalImgTop = Math.min(desiredImgTop, maxImgTop);
+      // Фіксоване розташування елементів відносно фото (мобільний)
+      const BUBBLE_OFFSET = 120;      // px від верху фото
+      const CTA_RATIO     = 0.68;     // частка висоти фото
 
-      // офсети (px) для стабільної плашки на різних екранах
-      const isMobile = window.matchMedia("(max-width: 820px)").matches;
-      const BUBBLE_OFFSET = isMobile ? 120 : 160;   // ВІД ВЕРХУ ФОТО — фіксовано
-      const CTA_RATIO     = isMobile ? 0.68 : 0.70; // Кнопка — по відсотку від висоти фото
-
-      const ctaTop    = Math.round(finalImgTop + imgRect.height * CTA_RATIO);
-      const bubbleTop = Math.round(finalImgTop + BUBBLE_OFFSET);
-
-      // свічення: біля центру фото з невеликим зсувом догори
-      const glowTop   = Math.round(finalImgTop + imgRect.height * 0.52) - 220;
+      const finalImgTop = desiredImgTop; // мобільний: не обмежуємо вниз — висоту додамо
+      const ctaTop      = Math.round(finalImgTop + imgRect.height * CTA_RATIO);
+      const bubbleTop   = Math.round(finalImgTop + BUBBLE_OFFSET);
+      const glowTop     = Math.round(finalImgTop + imgRect.height * 0.52) - 220;
 
       stage.style.setProperty('--img-top', finalImgTop + 'px');
       stage.style.setProperty('--cta-top', ctaTop + 'px');
       stage.style.setProperty('--bubble-top', bubbleTop + 'px');
       stage.style.setProperty('--glow-top', Math.max(0, glowTop) + 'px');
 
-      // збільшуємо мінімальну висоту hero, щоб промо не перекривало фото/кнопку
-      const ctaRect   = cta.getBoundingClientRect();
-      const neededH   = Math.round((ctaTop - stageRect.top) + ctaRect.height + 24);
-      stage.style.setProperty('--hero-h', Math.max(0, neededH) + 'px');
+      // Мінімальна висота hero, щоб #promo не наїжджав
+      const ctaRect = cta.getBoundingClientRect();
+      const neededH = Math.round((ctaTop - stageRect.top) + ctaRect.height + 24);
+      stage.style.setProperty('--hero-h', neededH + 'px');
     }
     function layoutHeroSafe(){
       layoutHero();
@@ -384,9 +339,7 @@
 
     window.addEventListener('DOMContentLoaded', ()=>{
       const img = document.querySelector('.hero-img');
-      if(img && !img.complete){
-        img.addEventListener('load', layoutHeroSafe, {once:true});
-      }
+      if(img && !img.complete){ img.addEventListener('load', layoutHeroSafe, {once:true}); }
       layoutHeroSafe();
     });
     window.addEventListener('load', layoutHeroSafe);
@@ -415,11 +368,9 @@
             m=Math.floor((left%3600000)/60000),
             s=Math.floor((left%60000)/1000),
             pad=n=>String(n).padStart(2,"0");
-
       $("#cd-h").textContent = pad(h);
       $("#cd-m").textContent = pad(m);
       $("#cd-s").textContent = pad(s);
-
       setTimeout(tick,1000);
     }
     tick();
