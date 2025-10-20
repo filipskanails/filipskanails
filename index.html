@@ -19,6 +19,9 @@
       --bubble-top: 440px;
       --glow-top: 380px;
       --hero-h: 760px;
+
+      /* наскільки promo перекриває hero зверху */
+      --promoOverlap: 18px;
     }
 
     *{box-sizing:border-box}
@@ -34,11 +37,12 @@
     /* ===== HERO (mobile) ===== */
     .hero-stage{
       position:relative;
-      height:var(--hero-h);     /* фіксована висота в px, щоб сусідні секції не «їздили» */
+      height:var(--hero-h);           /* фіксована у px, щоб нижні секції не «їздили» */
       overflow:hidden;
       isolation:isolate;
     }
 
+    /* світіння навколо фото */
     .hero-stage::after{
       content:""; position:absolute; right:50%; top:var(--glow-top);
       width:min(120vmin, 680px); height:min(120vmin, 680px); border-radius:50%;
@@ -55,6 +59,7 @@
       pointer-events:none; z-index:0;
     }
 
+    /* верхній текст */
     .hero-text{
       position:absolute; top:2%; left:50%; transform:translateX(-50%);
       width:calc(100% - 32px); max-width:640px; text-align:center;
@@ -68,6 +73,7 @@
     .hl{font-size:clamp(28px,7vw,38px); line-height:1.18; font-weight:900; margin:10px 0 8px}
     .lead{color:var(--muted); margin:0 0 10px}
 
+    /* фото */
     .hero-img{
       position:absolute; right:50%; transform:translateX(44%);
       top:var(--img-top); width:min(620px, 112vw);
@@ -75,6 +81,7 @@
       z-index:1; pointer-events:none; will-change:top;
     }
 
+    /* скляна плашка */
     .hero-bubble{
       position:absolute; right:8%; top:var(--bubble-top);
       max-width:60vw; color:#fff; background:rgba(12,16,14,.55);
@@ -84,6 +91,7 @@
       font-size:14px; line-height:1.35; z-index:2; will-change:top;
     }
 
+    /* CTA на фото */
     .hero-cta{
       position:absolute; left:50%; transform:translateX(-50%);
       top:var(--cta-top); display:grid; gap:10px; text-align:center; z-index:3; will-change:top;
@@ -99,11 +107,21 @@
     .priceLine{font-weight:800; text-align:center; font-size:16px; color:var(--text); opacity:.95}
     .priceLine .oldline{color:#95a49b; text-decoration:line-through; margin-left:10px}
 
-    /* ===== Секции ===== */
+    /* ===== PROMO (таймер) — «впритык» до HERO ===== */
     .section{margin:28px 0}
     h2{font-size:clamp(22px,6vw,28px); margin:0 0 12px}
     .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:18px}
 
+    #promo{
+      margin-top: calc(-1 * var(--promoOverlap));
+      padding-top: calc(18px + var(--promoOverlap));
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      position: relative;
+      z-index: 5; /* поверх нижнього краю hero */
+    }
+
+    /* бонуси + таймер */
     .bonusList{list-style:none; padding:0; margin:12px 0 10px; display:grid; gap:10px}
     .bonusList li{display:flex; align-items:center; gap:10px}
     .bonusList li::before{content:""; width:24px; height:24px; border-radius:999px;
@@ -119,6 +137,7 @@
     .priceNum{font-size:clamp(20px,6vw,26px); font-weight:900}
     .old{color:#95a49b; text-decoration:line-through; font-size:16px; display:none}
 
+    /* плаваюча кнопка */
     .floater{position:fixed; left:0; right:0; bottom:12px; z-index:50;
       opacity:0; transform:translateY(16px); pointer-events:none;
       transition:opacity .28s ease, transform .28s ease}
@@ -165,7 +184,7 @@
 
       <div class="countdown" id="countdown">
         <div class="countbox"><div class="n" id="cd-h">00</div><div class="t">Годин</div></div>
-        <div class="countbox"><div class="n" id="cd-m">00</div><div class="t">Хвилин</div></div>
+        <div class="countbox"><div class="n" id="cd-m">00</div><div class="т">Хвилин</div></div>
         <div class="countbox"><div class="n" id="cd-s">00</div><div class="t">Секунд</div></div>
       </div>
 
@@ -229,9 +248,7 @@
       setPayHref($("#buyFloat"), active);
     }
 
-    /* ===== СТАБІЛЬНА РОЗКЛАДКА HERO (mobile) =====
-       ГОЛОВНЕ: використовуємо offsetTop/offsetHeight — без прив'язки до viewport.
-    */
+    /* ===== СТАБІЛЬНА РОЗКЛАДКА HERO (mobile, без прив'язки до viewport) ===== */
     function layoutHero(){
       const stage  = document.getElementById('hero');
       const text   = stage.querySelector('.hero-text');
@@ -239,21 +256,22 @@
       const cta    = stage.querySelector('.hero-cta');
       if(!stage || !text || !img || !cta) return;
 
-      // Нижня межа текстового блоку В МЕЖАХ HERO
+      // нижня межа тексту В СИСТЕМІ КООРДИНАТ HERO
       const textBottom = text.offsetTop + text.offsetHeight;
-      const GAP = 8;                           // відступ під ліда
-      const desiredImgTop = textBottom + GAP;  // топ фото від верхнього краю hero
+      const GAP = 8;                           // відступ під лідом
+      const desiredImgTop = textBottom + GAP;  // top фото від верху hero
 
       img.style.top = desiredImgTop + 'px';
-      const imgRect = img.getBoundingClientRect(); // для висоти фото
 
-      // Твої налаштування:
+      // висота фото в пікселях (можна читати з naturalHeight/width, але тут достатньо layout-розміру)
+      const imgRect = img.getBoundingClientRect();
+
+      // твої налаштування
       const BUBBLE_OFFSET = 200; // px від верху фото
       const CTA_RATIO     = 0.68;
-      const CTA_EXTRA     = 40;  // додатковий піксельний офсет
+      const CTA_EXTRA     = 40;  // додатковий зсув для кнопки вниз
 
       const finalImgTop = desiredImgTop;
-
       const ctaTop      = Math.round(finalImgTop + imgRect.height * CTA_RATIO) + CTA_EXTRA;
       const bubbleTop   = Math.round(finalImgTop + BUBBLE_OFFSET);
       const glowTop     = Math.round(finalImgTop + imgRect.height * 0.52) - 220;
@@ -263,13 +281,13 @@
       stage.style.setProperty('--bubble-top', bubbleTop + 'px');
       stage.style.setProperty('--glow-top', Math.max(0, glowTop) + 'px');
 
-      // Фіксована висота hero в px — від верху hero до низу кнопки + запас
+      // фіксуємо висоту hero пікселями, щоб #promo не «гуляв»
       const neededH = Math.round(ctaTop + cta.offsetHeight + 24);
       stage.style.setProperty('--hero-h', neededH + 'px');
       stage.style.height = neededH + 'px';
     }
 
-    // Ігноруємо «resize» від адресного рядка iOS: перераховуємо тільки коли змінюється ширина
+    // розумний перерахунок: реагуємо тільки на зміну ширини/орієнтації (iOS address bar не тригерить)
     let lastW = window.innerWidth;
     function onResizeSmart(){
       const w = window.innerWidth;
@@ -288,7 +306,7 @@
       layoutHeroSafe();
     });
     window.addEventListener('load', layoutHeroSafe);
-    window.addEventListener('resize', onResizeSmart);          // тільки ширина
+    window.addEventListener('resize', onResizeSmart);
     window.addEventListener('orientationchange', layoutHeroSafe);
 
     /* ===== Таймер і ціни ===== */
