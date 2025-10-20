@@ -24,6 +24,10 @@
 
     .wrap{max-width:720px;margin:0 auto;padding:16px}
 
+    /* утиліти */
+    .accent{color:var(--accent-2);font-weight:900}
+    .nowrap{white-space:nowrap}
+
     /* ===== HERO (mobile full-bleed) ===== */
     #hero{margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);position:relative;z-index:1}
     .hero-stage{position:relative;height:var(--hero-h);overflow:hidden;isolation:isolate;background:transparent}
@@ -87,8 +91,7 @@
       filter:blur(10px);pointer-events:none;border-radius:24px 24px 0 0}
     .aboutList{list-style:none;padding:0;margin:0;display:grid;gap:14px}
     .aboutItem{position:relative;padding-left:56px;line-height:1.45;border-radius:16px}
-    /* новая интересная иконка */
-    .aboutItem .icon{position:absolute;left:10px;top:1px;width:32px;height:32px;border-radius:50%;
+    .aboutItem .icon{position:absolute;left:10px;top:2px;width:32px;height:32px;border-radius:50%;
       background:conic-gradient(from 210deg, rgba(18,209,142,.9), rgba(142,243,199,.85), rgba(18,209,142,.9));
       box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 4px rgba(18,209,142,.12);
       border:1px solid #2b4136;overflow:hidden}
@@ -96,7 +99,6 @@
       background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.45), rgba(255,255,255,.06));mix-blend:screen}
     .aboutItem .icon::after{content:"";position:absolute;left:9px;top:10px;width:11px;height:6px;
       border-left:3px solid #052d21;border-bottom:3px solid #052d21;transform:rotate(-45deg)}
-    /* акцент — без подложки */
     .aboutItem .accent{color:var(--accent-2);font-weight:900}
 
     /* ===== FOOTER ===== */
@@ -123,7 +125,10 @@
       <img class="hero-img" src="img/main.png" alt="Інструктор курсу">
 
       <div class="hero-text">
-        <div class="eyebrow">ОНЛАЙН КУРС ВІД ІНСТРУКТОРА МАНІКЮРУ <span class="accent">АННИ ФІЛІПСЬКОЇ</span></div>
+        <div class="eyebrow">
+          ОНЛАЙН КУРС ВІД ІНСТРУКТОРА МАНІКЮРУ&nbsp;
+          <span class="accent nowrap">АННИ ФІЛІПСЬКОЇ</span>
+        </div>
         <div class="chips">
           <span class="chip">Доступ назавжди</span>
           <span class="chip outline" id="chipDate">Сьогодні</span>
@@ -206,7 +211,6 @@
   </div>
 
   <script>
-    /* ===== CONFIG ===== */
     const WORKER="https://filipskanails-pay.timanov-business.workers.dev";
     const THANK ="https://filipskanails.github.io/filipskanails/thankyou.html";
     const TITLE ="Доступ до курсу Next Level";
@@ -246,7 +250,6 @@
       setPayHref($("#buyFloat"),active);
     }
 
-    /* стабильная раскладка hero */
     function layoutHero(){
       const stage=document.getElementById('hero');
       const text=stage.querySelector('.hero-text');
@@ -287,7 +290,6 @@
     window.addEventListener('resize',onResizeSmart);
     window.addEventListener('orientationchange',layoutHeroSafe);
 
-    /* таймер + цены */
     const COUNT=$("#countdown");
     const key="promoEndsAt-v1";
     const now=Date.now();
@@ -309,7 +311,6 @@
     }
     tick();
 
-    /* плавающая кнопка */
     (function(){
       const hero=$("#hero"), floater=$("#floatCta");
       if(!hero||!floater) return;
