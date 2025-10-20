@@ -11,51 +11,55 @@
       --bg:#0c100e; --card:#121614; --line:#223129;
       --text:#e7f0ea; --muted:#a1b3ab;
 
-      /* Брендова палітра (на базі #004a25) */
+      /* бренд: на базі #004a25 */
       --accent:#004a25;
       --accent-2:#0b7d47;
       --accent-rgb:0,74,37;
       --accent2-rgb:11,125,71;
 
-      --radius:18px; --shadow:0 10px 30px rgba(0,0,0,.18);
+      --radius:24px; --shadow:0 10px 28px rgba(0,0,0,.24);
+
+      /* управляемые из JS */
       --img-top:320px; --cta-top:560px; --bubble-top:440px; --glow-top:380px; --hero-h:760px;
       --promoOverlap:18px;
     }
 
+    /* базовое */
     *{box-sizing:border-box}
     html,body{
       margin:0;background:var(--bg);color:var(--text);
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif;
-      /* прибираємо горизонтальний скролл на мобілках */
-      overflow-x:hidden;
+      overflow-x:hidden;  /* убираем горизонтальный скролл */
     }
     a{color:inherit;text-decoration:none}
     img{max-width:100%;display:block}
 
     .wrap{max-width:720px;margin:0 auto;padding:16px}
 
-    .accent{color:var(--accent-2);font-weight:900;text-shadow:0 0 10px rgba(var(--accent2-rgb),.35)}
+    .accent{color:var(--accent-2);font-weight:900;text-shadow:0 0 8px rgba(var(--accent2-rgb),.32)}
     .nowrap{white-space:nowrap}
 
     /* ===== HERO (full-bleed) ===== */
     #hero{margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);position:relative;z-index:1}
     .hero-stage{position:relative;height:var(--hero-h);overflow:hidden;isolation:isolate;background:transparent}
+    /* мягкое свечение, аккуратнее по производительности */
     .hero-stage::after{
       content:""; position:absolute; right:50%; top:var(--glow-top);
       width:min(120vmin,680px); height:min(120vmin,680px); border-radius:50%;
       background:
         radial-gradient(circle at 50% 50%,
-          rgba(var(--accent2-rgb),.98) 0%,
-          rgba(var(--accent2-rgb),.70) 28%,
-          rgba(var(--accent-rgb),.40) 60%,
-          rgba(var(--accent-rgb),.16) 78%,
-          rgba(var(--accent-rgb),.07) 90%,
+          rgba(var(--accent2-rgb),.96) 0%,
+          rgba(var(--accent2-rgb),.64) 28%,
+          rgba(var(--accent-rgb),.34) 60%,
+          rgba(var(--accent-rgb),.14) 78%,
+          rgba(var(--accent-rgb),.06) 90%,
           transparent 100%),
         radial-gradient(60% 40% at 50% 0%, rgba(255,255,255,.10), transparent 55%);
-      filter:blur(18px);
+      filter:blur(16px);
       transform:translate(50%,-28%);
       pointer-events:none; z-index:0;
     }
+
     .hero-text{position:absolute;top:2%;left:50%;transform:translateX(-50%);
       width:calc(100% - 32px);max-width:640px;text-align:center;text-shadow:0 1px 0 rgba(0,0,0,.2);z-index:2}
     .eyebrow{font-size:13px;letter-spacing:.06em;color:var(--muted)}
@@ -64,18 +68,24 @@
     .chip.outline{background:transparent}
     .hl{font-size:clamp(28px,7vw,38px);line-height:1.18;font-weight:900;margin:10px 0 8px}
     .lead{color:var(--muted);margin:0 0 10px}
-    .hero-img{position:absolute;right:50%;transform:translateX(44%);top:var(--img-top);
-      width:min(620px,112vw);object-fit:contain;filter:drop-shadow(0 16px 28px rgba(0,0,0,.35));
-      z-index:1;pointer-events:none;will-change:top}
+
+    .hero-img{
+      position:absolute;right:50%;transform:translateX(44%);
+      top:var(--img-top); width:min(620px,112vw);
+      object-fit:contain; filter:drop-shadow(0 16px 28px rgba(0,0,0,.35));
+      z-index:1; pointer-events:none;
+    }
+
     .hero-bubble{
-      position:absolute;right:8%;top:var(--bubble-top);max-width:60vw;color:#fff;
+      position:absolute; right:8%; top:var(--bubble-top); max-width:60vw; color:#fff;
       background:rgba(12,16,14,.58);
       border:1px solid rgba(var(--accent2-rgb),.28);
-      padding:12px 14px;border-radius:28px;backdrop-filter:blur(8px);
-      box-shadow:0 10px 30px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.10);
-      font-size:14px;line-height:1.35;z-index:2;will-change:top
+      padding:12px 14px; border-radius:28px; backdrop-filter:blur(8px);
+      box-shadow:0 10px 26px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.10);
+      font-size:14px; line-height:1.35; z-index:2;
     }
-    .hero-cta{position:absolute;left:50%;transform:translateX(-50%);top:var(--cta-top);display:grid;gap:10px;text-align:center;z-index:3;will-change:top}
+
+    .hero-cta{position:absolute;left:50%;transform:translateX(-50%);top:var(--cta-top);display:grid;gap:10px;text-align:center;z-index:3}
     .cta{
       display:inline-flex;align-items:center;justify-content:center;gap:10px;
       padding:16px 26px;border-radius:999px;
@@ -84,24 +94,21 @@
         linear-gradient(135deg,var(--accent-2),var(--accent));
       color:#fff;font-weight:900;text-transform:uppercase;
       font-size:clamp(18px,5vw,22px);letter-spacing:.3px;white-space:nowrap;
-      box-shadow:0 10px 28px rgba(0,0,0,.28), 0 0 0 1px rgba(255,255,255,.06) inset;
-      text-shadow:0 1px 0 rgba(0,0,0,.18)
+      box-shadow:var(--shadow), 0 0 0 1px rgba(255,255,255,.06) inset;
+      text-shadow:0 1px 0 rgba(0,0,0,.18);
     }
     .priceLine{font-weight:800;text-align:center;font-size:16px;color:var(--text);opacity:.95}
     .priceLine .oldline{color:#95a49b;text-decoration:line-through;margin-left:10px}
 
-    /* ===== PROMO (full-bleed контейнер + карта з рамкою як в about) ===== */
+    /* ===== PROMO & ABOUT общая геометрия секции ===== */
     .section{margin:28px 0}
     h2{font-size:clamp(22px,6vw,28px);margin:0 0 12px}
 
-    #promo{
-      margin-top:calc(-1 * var(--promoOverlap));
-      padding-top:var(--promoOverlap);
-      margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);
-      position:relative;z-index:5;
-    }
+    /* promo — full-bleed контейнер, карта как в about */
+    #promo{margin-top:calc(-1 * var(--promoOverlap));padding-top:var(--promoOverlap);
+      margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);position:relative;z-index:5}
     .promoCard{
-      border-radius:24px; padding:18px; background:var(--card);
+      border-radius:var(--radius); padding:18px; background:var(--card);
       border:1px solid var(--line); backdrop-filter:blur(6px);
       box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22);
     }
@@ -111,17 +118,21 @@
     .bonusList li::before{
       content:"";width:24px;height:24px;border-radius:999px;
       background:
-        radial-gradient(120% 150% at 50% 20%, rgba(255,255,255,.22), rgba(255,255,255,0) 40%),
+        radial-gradient(130% 160% at 50% 18%, rgba(255,255,255,.22), rgba(255,255,255,0) 40%),
         linear-gradient(135deg,var(--accent-2),var(--accent));
       box-shadow:0 0 0 2px rgba(var(--accent2-rgb),.25) inset;
-      display:inline-block
+      display:inline-block;
     }
+
     .countdown{display:flex;gap:10px;justify-content:space-between;margin:14px 0 6px}
-    .countbox{flex:1 1 0;border:1px solid #2b4136;border-radius:14px;background:#0f1713;padding:14px 8px;
+    .countbox{
+      flex:1 1 0;border:1px solid #2b4136;border-radius:14px;background:#0f1713;padding:14px 8px;
       display:flex;flex-direction:column;align-items:center;justify-content:center;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.06)
+    }
     .countbox .n{font-size:clamp(22px,8vw,36px);font-weight:900;line-height:1;white-space:nowrap}
     .countbox .t{color:var(--muted);margin-top:6px;font-size:clamp(12px,3.6vw,15px);white-space:nowrap}
+
     .priceRow{display:flex;align-items:center;gap:14px;margin:10px 0}
     .pricePill{
       display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;
@@ -133,22 +144,23 @@
     .priceNum{font-size:clamp(20px,6vw,26px);font-weight:900}
     .old{color:#95a49b;text-decoration:line-through;font-size:16px;display:none}
 
-    /* ===== ABOUT (Про мене) — як еталон бокових рамок ===== */
+    /* about */
     #about{margin-top:20px;margin-left:-16px;margin-right:-16px;width:calc(100% + 32px)}
     #about h2{text-align:center;margin-bottom:10px}
     .aboutLead{text-align:center;color:var(--muted);margin:0 0 18px}
-    .aboutCard{position:relative;border-radius:24px;padding:18px 14px;background:var(--card);
+    .aboutCard{position:relative;border-radius:var(--radius);padding:18px 14px;background:var(--card);
       border:1px solid var(--line);backdrop-filter:blur(6px);
       box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22)}
     .aboutCard::before{
       content:"";position:absolute;inset:-10% -8% auto -8%;height:44%;
       background:radial-gradient(60% 100% at 50% 0%, rgba(var(--accent2-rgb),.18), transparent 70%);
-      filter:blur(10px);pointer-events:none;border-radius:24px 24px 0 0
+      filter:blur(10px);pointer-events:none;border-radius:var(--radius) var(--radius) 0 0;
     }
+
     .aboutList{list-style:none;padding:0;margin:0;display:grid;gap:14px}
-    .aboutItem{display:flex;align-items:flex-start;gap:12px;line-height:1.45;border-radius:16px;padding:8px 0}
+    .aboutItem{display:flex;align-items:flex-start;gap:12px;line-height:1.45;border-radius:16px;padding:6px 0}
     .aboutItem .icon{
-      position:relative;width:32px;height:32px;border-radius:50%;flex:0 0 32px;
+      position:relative;width:32px;height:32px;border-radius:50%;flex:0 0 32px; margin-top:2px;
       background:conic-gradient(from 210deg, rgba(var(--accent2-rgb),.95), rgba(var(--accent2-rgb),.85), rgba(var(--accent-rgb),.95));
       box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 4px rgba(var(--accent2-rgb),.12);
       border:1px solid #2b4136;overflow:hidden
@@ -156,10 +168,9 @@
     .aboutItem .icon::before{content:"";position:absolute;inset:2px;border-radius:50%;
       background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.45), rgba(255,255,255,.06));mix-blend:screen}
     .aboutItem .icon::after{content:"";position:absolute;left:9px;top:10px;width:11px;height:6px;border-left:3px solid #052d21;border-bottom:3px solid #052d21;transform:rotate(-45deg)}
-    .aboutItem .txt{flex:1;min-width:0}
-    .aboutItem .accent{color:var(--accent-2);font-weight:900;text-shadow:0 0 8px rgba(var(--accent2-rgb),.35)}
+    .aboutItem .txt{flex:1;min-width:0;word-break:normal;overflow-wrap:anywhere}
 
-    /* ===== FOOTER ===== */
+    /* footer */
     footer.footer{margin-top:26px;padding:22px 16px 96px;text-align:center;color:var(--muted);border-top:1px solid var(--line)}
     .footer .brand{font-size:22px;color:var(--text);margin:0 0 6px;font-weight:700}
     .footer .legal{font-size:14px;line-height:1.5;max-width:720px;margin:10px auto 0;opacity:.95}
@@ -167,12 +178,16 @@
     .footer .links a{color:var(--muted);text-decoration:underline dotted;margin:0 8px}
     .footer small.copy{display:block;margin-top:12px;opacity:.7}
 
-    /* плаваюча кнопка */
+    /* плавающая кнопка */
     .floater{position:fixed;left:0;right:0;bottom:12px;z-index:50;opacity:0;transform:translateY(16px);pointer-events:none;
       transition:opacity .28s ease,transform .28s ease}
     .floater.show{opacity:1;transform:translateY(0);pointer-events:auto}
     .floater-inner{max-width:720px;margin:0 auto;padding:0 16px}
     .floater .cta{width:100%}
+
+    @media (prefers-reduced-motion:reduce){
+      .floater{transition:none}
+    }
   </style>
 </head>
 <body>
@@ -206,7 +221,7 @@
       </div>
     </section>
 
-    <!-- ===== PROMO (full-bleed + карта з рамкою як у ABOUT) ===== -->
+    <!-- ===== PROMO ===== -->
     <section id="promo" class="section">
       <div class="promoCard">
         <h2>Приєднуйся зараз та отримай бонуси</h2>
@@ -271,6 +286,7 @@
   </div>
 
   <script>
+    /* ===== CONFIG ===== */
     const WORKER="https://filipskanails-pay.timanov-business.workers.dev";
     const THANK ="https://filipskanails.github.io/filipskanails/thankyou.html";
     const TITLE ="Доступ до курсу Next Level";
@@ -279,14 +295,15 @@
     const $=s=>document.querySelector(s);
     const fmt=n=>new Intl.NumberFormat("uk-UA").format(n);
 
+    /* дата в чипе */
     (function(){
       const chip=$("#chipDate");
-      if(chip){
-        const dt=new Date();
-        chip.textContent=`${dt.getDate()} ${dt.toLocaleString("uk-UA",{month:"long"})}`;
-      }
+      if(!chip) return;
+      const dt=new Date();
+      chip.textContent=`${dt.getDate()} ${dt.toLocaleString("uk-UA",{month:"long"})}`;
     })();
 
+    /* ссылки на оплату + цены */
     function setPayHref(el,amount){
       if(!el) return;
       const u=new URL(WORKER);
@@ -295,7 +312,6 @@
       u.searchParams.set("thank",THANK);
       el.href=u.toString(); el.target="_blank"; el.rel="noopener";
     }
-
     function renderPrices(active,old){
       const line=$("#priceLine");
       if(line){
@@ -310,46 +326,55 @@
       setPayHref($("#buyFloat"),active);
     }
 
-    function layoutHero(){
-      const stage=document.getElementById('hero');
-      const text=stage.querySelector('.hero-text');
-      const img=stage.querySelector('.hero-img');
-      const cta=stage.querySelector('.hero-cta');
+    /* ===== СТАБИЛЬНЫЙ layout HERO (без лишних пересчётов) ===== */
+    function computeHeroLayout(){
+      const stage=$("#hero"), text=stage?.querySelector('.hero-text'), img=stage?.querySelector('.hero-img'), cta=stage?.querySelector('.hero-cta');
       if(!stage||!text||!img||!cta) return;
 
-      const textBottom=text.offsetTop+text.offsetHeight;
-      const desiredImgTop=textBottom+8;
+      // 1) позиция изображения под текстом
+      const textBottom = text.offsetTop + text.offsetHeight;
+      const GAP = 8;
+      const imgTop = textBottom + GAP;
+      img.style.top = imgTop + "px";
 
-      img.style.top=desiredImgTop+'px';
-      const imgRect=img.getBoundingClientRect();
+      // 2) далее измеряем высоту изображения (уже после установки top)
+      const imgH = img.getBoundingClientRect().height || 420; // запас
 
-      const BUBBLE_OFFSET=200, CTA_RATIO=.68, CTA_EXTRA=40;
-      const finalImgTop=desiredImgTop;
-      const ctaTop=Math.round(finalImgTop+imgRect.height*CTA_RATIO)+CTA_EXTRA;
-      const bubbleTop=Math.round(finalImgTop+BUBBLE_OFFSET);
-      const glowTop=Math.round(finalImgTop+imgRect.height*.52)-220;
+      // 3) вычисляем остальные элементы
+      const BUBBLE_OFFSET = 200;
+      const CTA_RATIO = 0.68;
+      const CTA_EXTRA = 40;
 
-      stage.style.setProperty('--img-top',finalImgTop+'px');
-      stage.style.setProperty('--cta-top',ctaTop+'px');
-      stage.style.setProperty('--bubble-top',bubbleTop+'px');
-      stage.style.setProperty('--glow-top',Math.max(0,glowTop)+'px');
+      const ctaTop    = Math.round(imgTop + imgH*CTA_RATIO) + CTA_EXTRA;
+      const bubbleTop = Math.round(imgTop + BUBBLE_OFFSET);
+      const glowTop   = Math.round(imgTop + imgH*0.52) - 220;
 
-      const neededH=Math.round(ctaTop+cta.offsetHeight+24);
-      stage.style.setProperty('--hero-h',neededH+'px');
-      stage.style.height=neededH+'px';
+      stage.style.setProperty('--img-top', imgTop+'px');
+      stage.style.setProperty('--cta-top', ctaTop+'px');
+      stage.style.setProperty('--bubble-top', bubbleTop+'px');
+      stage.style.setProperty('--glow-top', Math.max(0,glowTop)+'px');
+
+      // 4) фиксируем высоту секции пикселями, чтобы не было "прыжков" при скролле
+      const ctaH = cta.offsetHeight;
+      const needH = Math.round(ctaTop + ctaH + 24);
+      stage.style.setProperty('--hero-h', needH+'px');
+      stage.style.height = needH+'px';
     }
-    let lastW=window.innerWidth;
-    function onResizeSmart(){const w=window.innerWidth; if(Math.abs(w-lastW)>2){lastW=w; layoutHeroSafe();}}
-    function layoutHeroSafe(){layoutHero(); requestAnimationFrame(layoutHero); setTimeout(layoutHero,120);}
-    window.addEventListener('DOMContentLoaded',()=>{
-      const img=document.querySelector('.hero-img');
-      if(img && !img.complete){ img.addEventListener('load',layoutHeroSafe,{once:true}); }
-      layoutHeroSafe();
-    });
-    window.addEventListener('load',layoutHeroSafe);
-    window.addEventListener('resize',onResizeSmart);
-    window.addEventListener('orientationchange',layoutHeroSafe);
 
+    // Вызываем layout: при загрузке, повороте, а также когда меняется размер hero-текста/картинки.
+    const ro = new ResizeObserver(()=>computeHeroLayout());
+    window.addEventListener('DOMContentLoaded', ()=>{
+      const img = document.querySelector('.hero-img');
+      const text= document.querySelector('.hero-text');
+      if(img) ro.observe(img);
+      if(text) ro.observe(text);
+      if(img && !img.complete){ img.addEventListener('load', computeHeroLayout, {once:true}); }
+      computeHeroLayout();
+    });
+    window.addEventListener('orientationchange', computeHeroLayout);
+    window.addEventListener('load', computeHeroLayout);
+
+    /* ===== Таймер (localStorage, 1 тик/сек) ===== */
     const COUNT=$("#countdown");
     const key="promoEndsAt-v1";
     const now=Date.now();
@@ -357,13 +382,20 @@
     if(!ends||ends<now){ ends=now+PROMO_HOURS*60*60*1000; localStorage.setItem(key,String(ends)); }
 
     function tick(){
-      const left=Math.max(0,ends-Date.now());
-      if(left<=0){ if(COUNT) COUNT.style.display="none"; renderPrices(BASE_PRICE,null); return; }
-      if(COUNT) COUNT.style.display="flex"; renderPrices(DISCOUNT_PRICE,BASE_PRICE);
+      const left=Math.max(0, ends - Date.now());
+      if(left<=0){
+        if (COUNT) COUNT.style.display="none";
+        renderPrices(BASE_PRICE, null);
+        return;
+      }
+      if (COUNT) COUNT.style.display="flex";
+      renderPrices(DISCOUNT_PRICE, BASE_PRICE);
+
       const h=Math.floor(left/3600000),
             m=Math.floor((left%3600000)/60000),
             s=Math.floor((left%60000)/1000),
             pad=n=>String(n).padStart(2,"0");
+
       $("#cd-h").textContent=pad(h);
       $("#cd-m").textContent=pad(m);
       $("#cd-s").textContent=pad(s);
@@ -371,6 +403,7 @@
     }
     tick();
 
+    /* ===== Плавающая кнопка, когда hero вне экрана ===== */
     (function(){
       const hero=$("#hero"), floater=$("#floatCta");
       if(!hero||!floater) return;
