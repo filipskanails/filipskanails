@@ -130,25 +130,50 @@
     .priceNum{font-size:clamp(20px,6vw,26px); font-weight:900}
     .old{color:#95a49b; text-decoration:line-through; font-size:16px; display:none}
 
-    /* ===== FIT (новий розділ) ===== */
-    #fit{margin-top:30px}
-    #fit h2{text-align:center; margin-bottom:30px}
-    .fitGrid{display:grid; gap:29px}
-    .fitCard{
-      position:relative; padding:18px 16px; border-radius:24px;
-      background:linear-gradient(180deg,#101713 0%, #0e1511 100%);
-      border:1px solid var(--line);
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), 0 8px 22px rgba(0,0,0,.20);
+    /* ===== ABOUT (Про мене) ===== */
+    #about{margin-top:20px}
+    #about h2{
+      text-align:center;
+      margin-bottom:10px;
     }
-    .fitCard .txt{padding-right:116px}
-    .fitCard b{display:block; margin-bottom:6px}
-    .fitPic{
-      position:absolute; right:14px; top:-22px; width:92px; height:92px;
-      border-radius:22px; overflow:hidden; border:1px solid #2b4136;
-      box-shadow:0 12px 28px rgba(0,0,0,.35);
-      background:#0b0f0d;
+    .aboutLead{
+      text-align:center;
+      color:var(--muted);
+      margin:0 0 18px;
     }
-    .fitPic img{width:100%; height:100%; object-fit:cover; display:block; filter:saturate(1.05)}
+    .aboutCard{
+      position:relative; border-radius:24px;
+      padding:18px 14px; background:rgba(16,23,19,.65);
+      border:1px solid var(--line); backdrop-filter:blur(6px);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), 0 10px 26px rgba(0,0,0,.22);
+    }
+    .aboutCard::before{
+      /* мʼякий «ореол» всередині картки */
+      content:""; position:absolute; inset:-10% -8% auto -8%; height:44%;
+      background:radial-gradient(60% 100% at 50% 0%, rgba(18,209,142,.18), transparent 70%);
+      filter:blur(10px); pointer-events:none; border-radius:24px 24px 0 0;
+    }
+    .aboutList{list-style:none; padding:0; margin:0; display:grid; gap:14px}
+    .aboutItem{
+      position:relative; padding-left:48px; line-height:1.4;
+      background:transparent; border-radius:16px;
+    }
+    .aboutItem::before{
+      content:""; position:absolute; left:8px; top:2px; width:26px; height:26px; border-radius:999px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      box-shadow:0 0 0 3px rgba(18,209,142,.15);
+    }
+    .aboutItem::after{
+      /* галочка всередині */
+      content:""; position:absolute; left:16px; top:12px; width:10px; height:6px;
+      border-left:3px solid #0a3a2a; border-bottom:3px solid #0a3a2a; transform:rotate(-45deg);
+    }
+    .aboutItem b{font-weight:900}
+    .aboutItem mark{
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      color:#06311f; font-weight:900; padding:2px 6px; border-radius:10px;
+      box-shadow:0 0 0 2px rgba(18,209,142,.15) inset;
+    }
 
     /* плаваюча кнопка */
     .floater{position:fixed; left:0; right:0; bottom:12px; z-index:50;
@@ -209,33 +234,21 @@
       </div>
     </section>
 
-    <!-- ===== FIT (новий розділ) ===== -->
-    <section id="fit" class="section">
-      <h2>Курс підходить якщо ти:</h2>
-      <div class="fitGrid">
-        <article class="fitCard">
-          <div class="fitPic"><img src="img/fit/box_1.jpg" alt="Практика нарощення" loading="lazy"></div>
-          <div class="txt">
-            <b>Майстер-початківець</b>
-            Хочеш швидко опанувати верхні форми, стабільно робити якісні роботи та отримати щільний запис.
-          </div>
-        </article>
+    <!-- ===== ABOUT / ПРО МЕНЕ ===== -->
+    <section id="about" class="section">
+      <h2>Про мене</h2>
+      <p class="aboutLead">Привіт, я Басюк Наталія</p>
 
-        <article class="fitCard">
-          <div class="fitPic"><img src="img/fit/box_2.png" alt="Зростання в доході" loading="lazy"></div>
-          <div class="txt">
-            <b>Працюючий майстер</b>
-            Прагнеш підняти чек і швидкість без втрати якості, додати чіткий квадрат і викладний френч у свій прайс.
-          </div>
-        </article>
-
-        <article class="fitCard">
-          <div class="fitPic"><img src="img/fit/box_3.jpg" alt="Чисті відбитки" loading="lazy"></div>
-          <div class="txt">
-            <b>Любиш чистоту та структуру</b>
-            Хочеш відбитки без затікань, мінімальний опил і зрозумілі схеми підстановки форм.
-          </div>
-        </article>
+      <div class="aboutCard">
+        <ul class="aboutList">
+          <li class="aboutItem">За <mark>6 років</mark> зробила понад <mark>5000 манікюрів</mark>.</li>
+          <li class="aboutItem"><mark>90%</mark> моїх учениць почали заробляти вже <b>після бази</b>.</li>
+          <li class="aboutItem">Допомогла майстриням підняти чек у <mark>2–3 рази</mark>.</li>
+          <li class="aboutItem">Мої учениці вже відкрили <b>власні кабінети</b>.</li>
+          <li class="aboutItem">Знаю, як перетворити хобі на <mark>прибуткову справу</mark>.</li>
+          <li class="aboutItem">Створила курс <b>Next Level</b> — для майстрів, які хочуть вийти на <mark>новий рівень</mark>.</li>
+          <li class="aboutItem">Допомагаю скоротити час роботи з <mark>4 годин</mark> до <mark>1.5</mark> — <b>без втрати якості</b>.</li>
+        </ul>
       </div>
     </section>
 
@@ -324,7 +337,6 @@
       stage.style.setProperty('--hero-h', neededH + 'px');
       stage.style.height = neededH + 'px';
     }
-
     let lastW = window.innerWidth;
     function onResizeSmart(){
       const w = window.innerWidth;
