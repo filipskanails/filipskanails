@@ -34,8 +34,7 @@
 
     .wrap{max-width:720px;margin:0 auto;padding:16px}
 
-    /* ===== HERO (mobile) ===== */
-    /* full-bleed: убираем «границы» слева/справа, расширяя секцию на паддинги контейнера */
+    /* ===== HERO (mobile, full-bleed) ===== */
     #hero{
       margin-left:-16px; margin-right:-16px; width:calc(100% + 32px);
       border-left:none; border-right:none; box-shadow:none;
@@ -43,13 +42,11 @@
     }
     .hero-stage{
       position:relative;
-      height:var(--hero-h);           /* фиксируем в px, чтобы нижние секции не «ездили» */
+      height:var(--hero-h);
       overflow:hidden;
       isolation:isolate;
       background:transparent;
     }
-
-    /* свечение вокруг фото */
     .hero-stage::after{
       content:""; position:absolute; right:50%; top:var(--glow-top);
       width:min(120vmin, 680px); height:min(120vmin, 680px); border-radius:50%;
@@ -65,8 +62,6 @@
       transform:translate(50%, -28%);
       pointer-events:none; z-index:0;
     }
-
-    /* верхний текст */
     .hero-text{
       position:absolute; top:2%; left:50%; transform:translateX(-50%);
       width:calc(100% - 32px); max-width:640px; text-align:center;
@@ -79,16 +74,12 @@
     .chip.outline{background:transparent}
     .hl{font-size:clamp(28px,7vw,38px); line-height:1.18; font-weight:900; margin:10px 0 8px}
     .lead{color:var(--muted); margin:0 0 10px}
-
-    /* фото */
     .hero-img{
       position:absolute; right:50%; transform:translateX(44%);
       top:var(--img-top); width:min(620px, 112vw);
       object-fit:contain; filter:drop-shadow(0 16px 28px rgba(0,0,0,.35));
       z-index:1; pointer-events:none; will-change:top;
     }
-
-    /* скляна плашка */
     .hero-bubble{
       position:absolute; right:8%; top:var(--bubble-top);
       max-width:60vw; color:#fff; background:rgba(12,16,14,.55);
@@ -97,8 +88,6 @@
       box-shadow:0 10px 30px rgba(0,0,0,.25);
       font-size:14px; line-height:1.35; z-index:2; will-change:top;
     }
-
-    /* CTA на фото */
     .hero-cta{
       position:absolute; left:50%; transform:translateX(-50%);
       top:var(--cta-top); display:grid; gap:10px; text-align:center; z-index:3; will-change:top;
@@ -114,7 +103,7 @@
     .priceLine{font-weight:800; text-align:center; font-size:16px; color:var(--text); opacity:.95}
     .priceLine .oldline{color:#95a49b; text-decoration:line-through; margin-left:10px}
 
-    /* ===== PROMO (впритык, без боковых/верхней границы) ===== */
+    /* ===== PROMO (впритык, full-bleed) ===== */
     .section{margin:28px 0}
     h2{font-size:clamp(22px,6vw,28px); margin:0 0 12px}
     .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:18px}
@@ -122,17 +111,11 @@
     #promo{
       margin-top: calc(-1 * var(--promoOverlap));
       padding-top: calc(18px + var(--promoOverlap));
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-
-      /* убираем видимые «границы» и расширяем в full-bleed */
-      border-left: none; border-right: none; border-top: none; box-shadow:none;
-      position: relative; z-index: 5;
-
+      border-top-left-radius: 0; border-top-right-radius: 0;
+      border-left:none; border-right:none; border-top:none; box-shadow:none;
+      position: relative; z-index:5;
       margin-left:-16px; margin-right:-16px; width:calc(100% + 32px);
     }
-
-    /* бонусы + таймер */
     .bonusList{list-style:none; padding:0; margin:12px 0 10px; display:grid; gap:10px}
     .bonusList li{display:flex; align-items:center; gap:10px}
     .bonusList li::before{content:""; width:24px; height:24px; border-radius:999px;
@@ -141,14 +124,33 @@
     .countbox{flex:1 1 0; border:1px solid #2b4136; border-radius:14px; background:#0f1713; padding:14px 8px; display:flex; flex-direction:column; align-items:center; justify-content:center}
     .countbox .n{font-size:clamp(22px,8vw,36px); font-weight:900; line-height:1; white-space:nowrap}
     .countbox .t{color:var(--muted); margin-top:6px; font-size:clamp(12px,3.6vw,15px); white-space:nowrap}
-
     .priceRow{display:flex; align-items:center; gap:14px; margin:10px 0}
     .pricePill{display:flex; align-items:center; gap:8px; padding:10px 16px; border-radius:999px;
       background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#062217; font-weight:900; box-shadow:var(--shadow)}
     .priceNum{font-size:clamp(20px,6vw,26px); font-weight:900}
     .old{color:#95a49b; text-decoration:line-through; font-size:16px; display:none}
 
-    /* плавающая кнопка */
+    /* ===== FIT (новий розділ) ===== */
+    #fit{margin-top:20px}
+    #fit h2{text-align:center}
+    .fitGrid{display:grid; gap:14px}
+    .fitCard{
+      position:relative; padding:18px 16px; border-radius:24px;
+      background:linear-gradient(180deg,#101713 0%, #0e1511 100%);
+      border:1px solid var(--line);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), 0 8px 22px rgba(0,0,0,.20);
+    }
+    .fitCard .txt{padding-right:116px}
+    .fitCard b{display:block; margin-bottom:6px}
+    .fitPic{
+      position:absolute; right:14px; top:-22px; width:92px; height:92px;
+      border-radius:22px; overflow:hidden; border:1px solid #2b4136;
+      box-shadow:0 12px 28px rgba(0,0,0,.35);
+      background:#0b0f0d;
+    }
+    .fitPic img{width:100%; height:100%; object-fit:cover; display:block; filter:saturate(1.05)}
+
+    /* плаваюча кнопка */
     .floater{position:fixed; left:0; right:0; bottom:12px; z-index:50;
       opacity:0; transform:translateY(16px); pointer-events:none;
       transition:opacity .28s ease, transform .28s ease}
@@ -206,6 +208,37 @@
         <div id="oldPromo" class="old">— грн</div>
       </div>
     </section>
+
+    <!-- ===== FIT (новий розділ) ===== -->
+    <section id="fit" class="section">
+      <h2>Курс підходить якщо ти:</h2>
+      <div class="fitGrid">
+        <article class="fitCard">
+          <div class="fitPic"><img src="img/work-1.jpg" alt="Практика нарощення" loading="lazy"></div>
+          <div class="txt">
+            <b>Майстер-початківець</b>
+            Хочеш швидко опанувати верхні форми, стабільно робити якісні роботи та отримати щільний запис.
+          </div>
+        </article>
+
+        <article class="fitCard">
+          <div class="fitPic"><img src="img/work-2.jpg" alt="Зростання в доході" loading="lazy"></div>
+          <div class="txt">
+            <b>Працюючий майстер</b>
+            Прагнеш підняти чек і швидкість без втрати якості, додати чіткий квадрат і викладний френч у свій прайс.
+          </div>
+        </article>
+
+        <article class="fitCard">
+          <div class="fitPic"><img src="img/work-3.jpg" alt="Чисті відбитки" loading="lazy"></div>
+          <div class="txt">
+            <b>Любиш чистоту та структуру</b>
+            Хочеш відбитки без затікань, мінімальний опил і зрозумілі схеми підстановки форм.
+          </div>
+        </article>
+      </div>
+    </section>
+
   </div>
 
   <!-- Floating CTA -->
@@ -227,7 +260,6 @@
     const $ = s=>document.querySelector(s);
     const fmt = n=>new Intl.NumberFormat("uk-UA").format(n);
 
-    // дата в чипі
     (function(){
       const chip = $("#chipDate");
       if(chip){
@@ -259,7 +291,7 @@
       setPayHref($("#buyFloat"), active);
     }
 
-    /* ===== СТАБІЛЬНА РОЗКЛАДКА HERO (offset-координати, без viewport) ===== */
+    /* ===== Стабільна розкладка HERO ===== */
     function layoutHero(){
       const stage  = document.getElementById('hero');
       const text   = stage.querySelector('.hero-text');
@@ -267,16 +299,13 @@
       const cta    = stage.querySelector('.hero-cta');
       if(!stage || !text || !img || !cta) return;
 
-      // нижня межа тексту в координатах HERO
       const textBottom = text.offsetTop + text.offsetHeight;
-      const GAP = 8;                           // відступ під лідом
+      const GAP = 8;
       const desiredImgTop = textBottom + GAP;
 
       img.style.top = desiredImgTop + 'px';
-
       const imgRect = img.getBoundingClientRect();
 
-      // налаштування
       const BUBBLE_OFFSET = 200;
       const CTA_RATIO     = 0.68;
       const CTA_EXTRA     = 40;
@@ -291,25 +320,21 @@
       stage.style.setProperty('--bubble-top', bubbleTop + 'px');
       stage.style.setProperty('--glow-top', Math.max(0, glowTop) + 'px');
 
-      // фіксуємо висоту hero, щоб #promo был «впритык» и не прыгал
       const neededH = Math.round(ctaTop + cta.offsetHeight + 24);
       stage.style.setProperty('--hero-h', neededH + 'px');
       stage.style.height = neededH + 'px';
     }
 
-    // пересчитываем только при изменении ширины/ориентации
     let lastW = window.innerWidth;
     function onResizeSmart(){
       const w = window.innerWidth;
       if (Math.abs(w - lastW) > 2){ lastW = w; layoutHeroSafe(); }
     }
-
     function layoutHeroSafe(){
       layoutHero();
       requestAnimationFrame(layoutHero);
       setTimeout(layoutHero, 120);
     }
-
     window.addEventListener('DOMContentLoaded', ()=>{
       const img = document.querySelector('.hero-img');
       if(img && !img.complete){ img.addEventListener('load', layoutHeroSafe, {once:true}); }
