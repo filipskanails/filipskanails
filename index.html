@@ -10,8 +10,13 @@
     :root{
       --bg:#0c100e; --card:#121614; --line:#223129;
       --text:#e7f0ea; --muted:#a1b3ab;
-      --accent:#12d18e; --accent-2:#8ef3c7;
-      --radius:18px; --shadow:0 10px 30px rgba(18,209,142,.18);
+
+      /* БРЕНД-АКЦЕНТ (оновлено) */
+      --accent:#004a25;           /* твій новий відтінок */
+      --accent-2:#004a25;         /* той самий, щоб градієнти стали суцільними */
+      --accent-rgb:0,74,37;       /* той самий колір у форматі r,g,b для прозорих сяйв */
+
+      --radius:18px; --shadow:0 10px 30px rgba(0,0,0,.18);
       --img-top:320px; --cta-top:560px; --bubble-top:440px; --glow-top:380px; --hero-h:760px;
       --promoOverlap:18px;
     }
@@ -31,12 +36,20 @@
     /* ===== HERO (mobile full-bleed) ===== */
     #hero{margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);position:relative;z-index:1}
     .hero-stage{position:relative;height:var(--hero-h);overflow:hidden;isolation:isolate;background:transparent}
-    .hero-stage::after{content:"";position:absolute;right:50%;top:var(--glow-top);
+    .hero-stage::after{
+      content:"";position:absolute;right:50%;top:var(--glow-top);
       width:min(120vmin,680px);height:min(120vmin,680px);border-radius:50%;
+      /* Сяйво переведене на новий колір */
       background:radial-gradient(circle at 50% 50%,
-        rgba(18,209,142,.95) 0%,rgba(18,209,142,.78) 20%,rgba(18,209,142,.48) 42%,
-        rgba(18,209,142,.24) 62%,rgba(18,209,142,.12) 78%,rgba(18,209,142,.05) 88%,transparent 100%);
-      filter:blur(14px);transform:translate(50%,-28%);pointer-events:none;z-index:0}
+        rgba(var(--accent-rgb),.95) 0%,
+        rgba(var(--accent-rgb),.78) 20%,
+        rgba(var(--accent-rgb),.48) 42%,
+        rgba(var(--accent-rgb),.24) 62%,
+        rgba(var(--accent-rgb),.12) 78%,
+        rgba(var(--accent-rgb),.05) 88%,
+        transparent 100%);
+      filter:blur(14px);transform:translate(50%,-28%);pointer-events:none;z-index:0
+    }
     .hero-text{position:absolute;top:2%;left:50%;transform:translateX(-50%);
       width:calc(100% - 32px);max-width:640px;text-align:center;text-shadow:0 1px 0 rgba(0,0,0,.2);z-index:2}
     .eyebrow{font-size:13px;letter-spacing:.06em;color:var(--muted)}
@@ -48,13 +61,23 @@
     .hero-img{position:absolute;right:50%;transform:translateX(44%);top:var(--img-top);
       width:min(620px,112vw);object-fit:contain;filter:drop-shadow(0 16px 28px rgba(0,0,0,.35));
       z-index:1;pointer-events:none;will-change:top}
-    .hero-bubble{position:absolute;right:8%;top:var(--bubble-top);max-width:60vw;color:#fff;
-      background:rgba(12,16,14,.55);border:1px solid rgba(142,243,199,.22);padding:12px 14px;border-radius:28px;
-      backdrop-filter:blur(8px);box-shadow:0 10px 30px rgba(0,0,0,.25);font-size:14px;line-height:1.35;z-index:2;will-change:top}
+    .hero-bubble{
+      position:absolute;right:8%;top:var(--bubble-top);max-width:60vw;color:#fff;
+      background:rgba(12,16,14,.55);
+      border:1px solid rgba(var(--accent-rgb),.22); /* було мʼятне rgba(...) */
+      padding:12px 14px;border-radius:28px;backdrop-filter:blur(8px);
+      box-shadow:0 10px 30px rgba(0,0,0,.25);font-size:14px;line-height:1.35;z-index:2;will-change:top
+    }
     .hero-cta{position:absolute;left:50%;transform:translateX(-50%);top:var(--cta-top);display:grid;gap:10px;text-align:center;z-index:3;will-change:top}
-    .cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 26px;border-radius:999px;
-      background:linear-gradient(135deg,var(--accent),#36e6a7);color:#fff;font-weight:900;text-transform:uppercase;
-      font-size:clamp(18px,5vw,22px);letter-spacing:.3px;white-space:nowrap;box-shadow:var(--shadow);text-shadow:0 1px 0 rgba(0,0,0,.12)}
+    .cta{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      padding:16px 26px;border-radius:999px;
+      /* Кнопка тепер однотонна #004a25 (градієнт з однакових значень) */
+      background:linear-gradient(135deg,var(--accent),var(--accent));
+      color:#fff;font-weight:900;text-transform:uppercase;
+      font-size:clamp(18px,5vw,22px);letter-spacing:.3px;white-space:nowrap;
+      box-shadow:0 10px 30px rgba(0,0,0,.18);text-shadow:0 1px 0 rgba(0,0,0,.12)
+    }
     .priceLine{font-weight:800;text-align:center;font-size:16px;color:var(--text);opacity:.95}
     .priceLine .oldline{color:#95a49b;text-decoration:line-through;margin-left:10px}
 
@@ -67,15 +90,21 @@
       position:relative;z-index:5;margin-left:-16px;margin-right:-16px;width:calc(100% + 32px)}
     .bonusList{list-style:none;padding:0;margin:12px 0 10px;display:grid;gap:10px}
     .bonusList li{display:flex;align-items:center;gap:10px}
-    .bonusList li::before{content:"";width:24px;height:24px;border-radius:999px;
-      background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 0 0 2px #103c2d inset;display:inline-block}
+    .bonusList li::before{
+      content:"";width:24px;height:24px;border-radius:999px;
+      background:linear-gradient(135deg,var(--accent),var(--accent)); /* маркер у новому кольорі */
+      box-shadow:0 0 0 2px rgba(var(--accent-rgb),.25) inset;display:inline-block
+    }
     .countdown{display:flex;gap:10px;justify-content:space-between;margin:14px 0 6px}
     .countbox{flex:1 1 0;border:1px solid #2b4136;border-radius:14px;background:#0f1713;padding:14px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center}
     .countbox .n{font-size:clamp(22px,8vw,36px);font-weight:900;line-height:1;white-space:nowrap}
     .countbox .t{color:var(--muted);margin-top:6px;font-size:clamp(12px,3.6vw,15px);white-space:nowrap}
     .priceRow{display:flex;align-items:center;gap:14px;margin:10px 0}
-    .pricePill{display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;
-      background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#062217;font-weight:900;box-shadow:var(--shadow)}
+    .pricePill{
+      display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;
+      background:linear-gradient(135deg,var(--accent),var(--accent)); /* був мʼятний градієнт */
+      color:#d8f0e3;font-weight:900;box-shadow:0 10px 30px rgba(0,0,0,.18)
+    }
     .priceNum{font-size:clamp(20px,6vw,26px);font-weight:900}
     .old{color:#95a49b;text-decoration:line-through;font-size:16px;display:none}
 
@@ -86,42 +115,31 @@
     .aboutCard{position:relative;border-radius:24px;padding:18px 14px;background:rgba(16,23,19,.65);
       border:1px solid var(--line);backdrop-filter:blur(6px);
       box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22)}
-    .aboutCard::before{content:"";position:absolute;inset:-10% -8% auto -8%;height:44%;
-      background:radial-gradient(60% 100% at 50% 0%, rgba(18,209,142,.18), transparent 70%);
-      filter:blur(10px);pointer-events:none;border-radius:24px 24px 0 0}
+    .aboutCard::before{
+      content:"";position:absolute;inset:-10% -8% auto -8%;height:44%;
+      background:radial-gradient(60% 100% at 50% 0%, rgba(var(--accent-rgb),.18), transparent 70%);
+      filter:blur(10px);pointer-events:none;border-radius:24px 24px 0 0
+    }
     .aboutList{list-style:none;padding:0;margin:0;display:grid;gap:14px}
-    /* Элемент списка с иконкой: аккуратное выравнивание по вертикали */
+
+    /* Вирівнювання іконок по центру відносно тексту */
     .aboutItem{
-      display:grid;
-      grid-template-columns:40px 1fr; /* колонка под иконку + текст */
-      gap:12px;
-      align-items:center;            /* центрируем иконку по высоте текста */
-      line-height:1.45;
-      border-radius:16px;
-      padding:6px 0;                 /* небольшой вертикальный внутренний отступ */
+      display:grid;grid-template-columns:40px 1fr;gap:12px;
+      align-items:center;line-height:1.45;border-radius:16px;padding:6px 0
     }
-    
-    /* Иконка теперь обычный блок в первой колонке */
     .aboutItem .icon{
-      position:relative;             /* больше не absolute */
-      width:32px;height:32px;border-radius:50%;
+      position:relative;width:32px;height:32px;border-radius:50%;
       background:conic-gradient(from 210deg,
-                  rgba(18,209,142,.9), rgba(142,243,199,.85), rgba(18,209,142,.9));
-      box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 4px rgba(18,209,142,.12);
-      border:1px solid #2b4136;overflow:hidden;
+        rgba(var(--accent-rgb),.9), rgba(var(--accent-rgb),.85), rgba(var(--accent-rgb),.9));
+      box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 4px rgba(var(--accent-rgb),.12);
+      border:1px solid #2b4136;overflow:hidden
     }
-    .aboutItem .icon::before{
-      content:"";position:absolute;inset:2px;border-radius:50%;
-      background:radial-gradient(circle at 30% 30%,
-                  rgba(255,255,255,.45), rgba(255,255,255,.06));
-      mix-blend:screen;
-    }
-    .aboutItem .icon::after{
-      content:"";position:absolute;left:9px;top:10px;width:11px;height:6px;
-      border-left:3px solid #052d21;border-bottom:3px solid #052d21;transform:rotate(-45deg);
-    }
+    .aboutItem .icon::before{content:"";position:absolute;inset:2px;border-radius:50%;
+      background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.45), rgba(255,255,255,.06));mix-blend:screen}
+    .aboutItem .icon::after{content:"";position:absolute;left:9px;top:10px;width:11px;height:6px;
+      border-left:3px solid #052d21;border-bottom:3px solid #052d21;transform:rotate(-45deg)}
     .aboutItem .accent{color:var(--accent-2);font-weight:900}
-    
+
     /* ===== FOOTER ===== */
     footer.footer{margin-top:26px;padding:22px 16px 96px;text-align:center;color:var(--muted);border-top:1px solid var(--line)}
     .footer .brand{font-size:22px;color:var(--text);margin:0 0 6px;font-weight:700}
@@ -130,7 +148,7 @@
     .footer .links a{color:var(--muted);text-decoration:underline dotted;margin:0 8px}
     .footer small.copy{display:block;margin-top:12px;opacity:.7}
 
-    /* плавающая кнопка */
+    /* плаваюча кнопка */
     .floater{position:fixed;left:0;right:0;bottom:12px;z-index:50;opacity:0;transform:translateY(16px);pointer-events:none;
       transition:opacity .28s ease,transform .28s ease}
     .floater.show{opacity:1;transform:translateY(0);pointer-events:auto}
@@ -186,7 +204,10 @@
       <div class="buy-note">Встигни записатися та навчайся за найвигіднішою ціною</div>
 
       <div class="priceRow">
-        <div class="pricePill"><small class="muted" style="color:#083a27">лише</small> <span id="pricePromo" class="priceNum">— грн</span></div>
+        <div class="pricePill">
+          <small class="muted" style="color:#bcd5c9">лише</small>
+          <span id="pricePromo" class="priceNum">— грн</span>
+        </div>
         <div id="oldPromo" class="old">— грн</div>
       </div>
     </section>
@@ -232,6 +253,7 @@
   </div>
 
   <script>
+    /* CONFIG / логіка без змін */
     const WORKER="https://filipskanails-pay.timanov-business.workers.dev";
     const THANK ="https://filipskanails.github.io/filipskanails/thankyou.html";
     const TITLE ="Доступ до курсу Next Level";
