@@ -4,47 +4,72 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Дякуємо за оплату — Next Level</title>
-  <meta name="robots" content="noindex,nofollow">
+  <meta name="color-scheme" content="dark">
   <style>
-    :root{--bg:#0f0f12; --card:#15161a; --muted:#9aa0a6; --text:#e8eaed; --accent:#7c5cff; --radius:16px; --maxw:680px;}
-    *{box-sizing:border-box}
-    body{margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, sans-serif; color:var(--text); background:var(--bg);}
-    .wrap{max-width:var(--maxw); margin:0 auto; padding:28px}
-    .card{background:var(--card); border:1px solid #23242a; border-radius:var(--radius); padding:26px; margin-top:28px}
-    h1{margin:0 0 6px; font-size:clamp(26px,3.2vw,34px)}
-    p{color:var(--muted)}
-    .cta{display:inline-block; padding:14px 18px; border-radius:12px; background:linear-gradient(135deg, var(--accent), #b388ff); color:#0b0b0e; font-weight:800; text-decoration:none; margin:14px 0}
-    code{background:#1e2027; padding:2px 6px; border-radius:6px}
-    .row{display:flex; gap:14px; flex-wrap:wrap; align-items:center}
-    .small{font-size:14px; color:var(--muted)}
-    button.copy{padding:10px 12px; border-radius:10px; border:1px solid #2a2b35; background:#23242a; color:var(--text); cursor:pointer}
+    :root{ --bg:#0c100e; --card:#121614; --line:#223129; --text:#e7f0ea; --muted:#a1b3ab; --accent:#004a25; --accent-2:#0b7d47; }
+    *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif}
+    .wrap{max-width:720px;margin:0 auto;padding:24px 16px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22)}
+    h1{font-size:24px;margin:0 0 8px}
+    .muted{color:var(--muted)}
+    .ok{color:#c7f5d2}
+    .wait{color:#ffe3a3}
+    .err{color:#ffb4b4}
+    .cta{display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border-radius:999px;background:linear-gradient(135deg,var(--accent-2),var(--accent));color:#062217;font-weight:900;text-transform:uppercase;box-shadow:0 10px 28px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12);text-decoration:none}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
-      <h1>Оплата пройшла успішно!</h1>
-      <p>Натисніть кнопку нижче, щоб увійти до закритого Telegram‑каналу курсу.</p>
-      <!-- TODO: ЗАМІНІТЬ href НА ВАШУ інвайт‑силку каналу Telegram -->
-      <a class="cta" id="tgBtn" target="_blank" rel="noopener noreferrer" href="https://t.me/TELEGRAM_CHANNEL_PLACEHOLDER">Перейти в Telegram‑канал</a>
-      <div class="row">
-        <code id="tgLink">https://t.me/TELEGRAM_CHANNEL_PLACEHOLDER</code>
-        <button class="copy" onclick="copyLink()">Скопіювати</button>
+      <h1>Дякуємо! <span id="statusBadge" class="wait">Очікуємо підтвердження…</span></h1>
+      <p class="muted">Номер замовлення: <b id="ref">—</b></p>
+      <p class="muted">Статус оплати: <b id="status">очікується</b></p>
+      <div id="nextSteps" style="margin-top:12px">
+        <p class="muted">Після підтвердження оплати надішлемо інструкції на email і в Telegram.</p>
       </div>
-      <p class="small">Якщо Telegram відкрився у браузері, натисніть «Open in Telegram». Якщо кнопка не спрацювала — скопіюйте посилання вручну.</p>
-      <p class="small">Питання? Напишіть нам: <a href="mailto:you@example.com">you@example.com</a></p>
     </div>
   </div>
-<script>
-  function copyLink(){
-    const el = document.createElement('textarea');
-    el.value = document.getElementById('tgLink').textContent;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    alert('Посилання скопійовано.');
-  }
-</script>
+
+  <script>
+  (function(){
+    const $ = s => document.querySelector(s);
+    const params = new URLSearchParams(location.search);
+    const invoiceId = params.get('invoiceId');
+    const ref = params.get('ref');
+    $('#ref').textContent = ref || '—';
+
+    const WORKER = 'https://filipskanails-pay.timanov-business.workers.dev';
+
+    function setStatus(txt, cls){
+      $('#status').textContent = txt;
+      const badge = $('#statusBadge');
+      badge.textContent = (cls==='ok') ? 'Оплачено' : (cls==='err') ? 'Помилка' : 'Очікуємо…';
+      badge.className = cls;
+    }
+
+    async function check(){
+      try{
+        if(!invoiceId){ setStatus('очікується (без invoiceId)', 'wait'); setTimeout(check, 5000); return; }
+        const r = await fetch(`${WORKER}/mono/status?invoiceId=${encodeURIComponent(invoiceId)}`);
+        const data = await r.json();
+        const st = String(data.status || '').toLowerCase();
+        if(st === 'success' || st === 'paid'){
+          setStatus('успішно', 'ok');
+          return;
+        }
+        if(st === 'failure' || st === 'expired' || st === 'reversed'){
+          setStatus(st, 'err');
+          return;
+        }
+        setStatus(st || 'очікується', 'wait');
+        setTimeout(check, 5000);
+      }catch(e){
+        setStatus('тимчасова помилка мережі', 'wait');
+        setTimeout(check, 5000);
+      }
+    }
+    check();
+  })();
+  </script>
 </body>
 </html>
