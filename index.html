@@ -72,21 +72,42 @@
     .countbox .t{color:var(--muted);margin-top:6px;font-size:clamp(12px,3.6vw,15px)}
     .tariffsGrid{display:grid;gap:14px;margin-top:10px}
     @media (min-width:720px){ .tariffsGrid{grid-template-columns:1fr 1fr} }
-    .tariff{position:relative;border:1px solid var(--line);border-radius:22px;background:rgba(16,23,19,.7);padding:16px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 18px 40px rgba(0,0,0,.28)}
-    .tariff::after{content:"";position:absolute;inset:-1px;border-radius:22px;pointer-events:none;background:radial-gradient(140% 120% at 100% 0%, rgba(11,125,71,.22), transparent 60%),radial-gradient(140% 120% at 0% 100%, rgba(0,74,37,.16), transparent 60%);mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);-webkit-mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);padding:1px}
+    .tariff{
+      position:relative;border:1px solid var(--line);border-radius:22px;background:rgba(16,23,19,.7);
+      padding:16px;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 18px 40px rgba(0,0,0,.28);
+    }
+    .tariff::after{
+      content:"";position:absolute;inset:-1px;border-radius:22px;pointer-events:none;
+      background:radial-gradient(140% 120% at 100% 0%, rgba(11,125,71,.22), transparent 60%),
+                 radial-gradient(140% 120% at 0% 100%, rgba(0,74,37,.16), transparent 60%);
+      mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);
+      -webkit-mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);
+      padding:1px
+    }
     .tariffHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
     .tariffName{font-weight:900;font-size:18px}
     .ribbon{font-size:11px;padding:6px 10px;border-radius:999px;background:rgba(12,16,14,.55);border:1px solid rgba(142,243,199,.18);backdrop-filter:blur(6px);color:#cfe6dc}
     .featList{list-style:none;margin:10px 0 12px;padding:0;display:grid;gap:8px}
     .featList li{display:flex;gap:8px;align-items:flex-start}
-    .featList li::before{content:"";width:18px;height:18px;border-radius:50%;margin-top:2px;flex:0 0 18px;background:radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.20), transparent 55%),linear-gradient(135deg,var(--accent-2),var(--accent));box-shadow:0 0 0 2px rgba(11,125,71,.18)}
+    .featList li::before{
+      content:"";width:18px;height:18px;border-radius:50%;margin-top:2px;flex:0 0 18px;
+      background:radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.20), transparent 55%),
+                 linear-gradient(135deg,var(--accent-2),var(--accent));
+      box-shadow:0 0 0 2px rgba(11,125,71,.18)
+    }
     .priceWrap{display:flex;align-items:center;justify-content:space-between;gap:10px}
     .priceNow{font-size:clamp(20px,5.4vw,26px);font-weight:900}
     .priceOld{color:#95a49b;text-decoration:line-through;font-size:14px;opacity:.9}
     .tariff .cta{width:100%;margin-top:12px}
     .bonusList{list-style:none;padding:0;margin:16px 0 4px;display:grid;gap:10px}
     .bonusList li{display:flex;align-items:center;gap:10px}
-    .bonusList li::before{content:"";width:24px;height:24px;border-radius:999px;background:radial-gradient(130% 160% at 50% 18%, rgba(255,255,255,.22), rgba(255,255,255,0) 40%),linear-gradient(135deg,var(--accent-2),var(--accent));box-shadow:0 0 0 2px rgba(var(--accent2-rgb),.25) inset;display:inline-block}
+    .bonusList li::before{
+      content:"";width:24px;height:24px;border-radius:999px;
+      background:radial-gradient(130% 160% at 50% 18%, rgba(255,255,255,.22), rgba(255,255,255,0) 40%),
+                 linear-gradient(135deg,var(--accent-2),var(--accent));
+      box-shadow:0 0 0 2px rgba(var(--accent2-rgb),.25) inset;display:inline-block
+    }
 
     /* ===== ABOUT ===== */
     #about{margin-top:20px;margin-left:-16px;margin-right:-16px;width:calc(100% + 32px)}
@@ -96,9 +117,17 @@
     .aboutCard::before{content:"";position:absolute;inset:-10% -8% auto -8%;height:44%;background:radial-gradient(60% 100% at 50% 0%, rgba(var(--accent2-rgb),.18), transparent 70%);filter:blur(10px);pointer-events:none;border-radius:var(--radius) var(--radius) 0 0}
     .aboutList{list-style:none;padding:0;margin:0;display:grid;gap:14px}
     .aboutItem{display:flex;align-items:flex-start;gap:12px;line-height:1.45;border-radius:16px;padding:6px 0}
-    .aboutItem .icon{position:relative;width:32px;height:32px;border-radius:50%;flex:0 0 32px;margin-top:2px;background:conic-gradient(from 210deg, rgba(var(--accent2-rgb),.95), rgba(var(--accent2-rgb),.85), rgba(var(--accent-rgb),.95));box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 4px rgba(var(--accent2-rgb),.12);border:1px solid #2b4136;overflow:hidden}
+    .aboutItem .icon{
+      position:relative;width:32px;height:32px;border-radius:50%;flex:0 0 32px;margin-top:2px;
+      background:conic-gradient(from 210deg, rgba(var(--accent2-rgb),.95), rgba(var(--accent2-rgb),.85), rgba(var(--accent-rgb),.95));
+      box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 4px rgba(var(--accent2-rgb),.12);
+      border:1px solid #2b4136;overflow:hidden
+    }
     .aboutItem .icon::before{content:"";position:absolute;inset:2px;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.45), rgba(255,255,255,.06));mix-blend:screen}
-    .aboutItem .icon::after{content:"";position:absolute;left:9px;top:10px;width:11px;height:6px;border-left:3px solid #052d21;border-bottom:3px solid #052d21;transform:rotate(-45deg)}
+    .aboutItem .icon::after{
+      content:"";position:absolute;left:9px;top:10px;width:11px;height:6px;
+      border-left:3px solid #052d21;border-bottom:3px solid #052d21;transform:rotate(-45deg)
+    }
     .aboutItem .txt{flex:1;min-width:0;overflow-wrap:anywhere}
 
     /* ===== REVIEWS (chat-bubble style) ===== */
@@ -114,12 +143,7 @@
       scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
       mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
     }
-    .slide{
-      scroll-snap-align:center;
-      position:relative;
-      background:transparent; border:none; box-shadow:none;
-      padding:8px 2px;
-    }
+    .slide{ scroll-snap-align:center; position:relative; background:transparent; border:none; box-shadow:none; padding:8px 2px }
     .slide::before{ content:none }
 
     .msg .row{ display:flex; align-items:flex-start; gap:10px }
@@ -151,14 +175,10 @@
     }
     .msg.right .bubble{ border-radius:18px 18px 18px 6px }
     .msg .bubble::after{
-      content:"";
-      position:absolute; bottom:10px; left:-7px;   /* завжди зліва */
-      width:12px; height:12px;
-      background:inherit;
-      border-left:1px solid var(--line);
-      border-bottom:1px solid var(--line);
-      transform:rotate(45deg);
-      filter:drop-shadow(0 6px 14px rgba(0,0,0,.28));
+      content:""; position:absolute; bottom:10px; left:-7px;   /* завжди зліва */
+      width:12px; height:12px; background:inherit;
+      border-left:1px solid var(--line); border-bottom:1px solid var(--line);
+      transform:rotate(45deg); filter:drop-shadow(0 6px 14px rgba(0,0,0,.28));
     }
     .msg.right .bubble::after{ left:-7px; right:auto; border-right:none; border-top:none }
 
@@ -179,41 +199,28 @@
     .reviewsArrows .prev{ left:22px } .reviewsArrows .next{ right:22px }
     .reviewsArrows .arrow:active{ transform:scale(.98) }
 
-    /* ===== REVIEWS: базово — ВСЕ скрыто; показываем и анимируем только активный ===== */
-    @keyframes bubbleIn {
-      from { opacity:0; transform: translateY(8px) scale(.98); filter: blur(2px); }
-      to   { opacity:1; transform: translateY(0)  scale(1);   filter: none; }
-    }
-    @keyframes fadeUp {
-      from { opacity:0; transform: translateY(4px); }
-      to   { opacity:1; transform: none; }
-    }
+    /* ===== REVIEWS: показуємо лише активний (анімація входу) ===== */
+    @keyframes bubbleIn { from { opacity:0; transform: translateY(8px) scale(.98); filter: blur(2px); } to { opacity:1; transform: translateY(0) scale(1); filter:none; } }
+    @keyframes fadeUp   { from { opacity:0; transform: translateY(4px); } to { opacity:1; transform:none; } }
 
-    /* базовое состояние НЕактивных: прячем контент (сохраняя место) */
-    #reviews .slide .bubble,
-    #reviews .slide .meta,
-    #reviews .slide .stars{
-      opacity:0; visibility:hidden; pointer-events:none;
-    }
+    #reviews .slide .bubble, #reviews .slide .meta, #reviews .slide .stars{ opacity:0; visibility:hidden; pointer-events:none }
+    #reviews .slide.is-active .bubble{ visibility:visible; pointer-events:auto; animation: bubbleIn .6s cubic-bezier(.2,.65,.3,1) both }
+    #reviews .slide.is-active .meta{   visibility:visible; pointer-events:auto; animation: fadeUp .4s ease .05s both }
+    #reviews .slide.is-active .stars{  visibility:visible; pointer-events:auto; animation: fadeUp .4s ease .1s both }
 
-    /* активный: делаем видимым и проигрываем вход */
-    #reviews .slide.is-active .bubble{
-      visibility:visible; pointer-events:auto;
-      animation: bubbleIn .6s cubic-bezier(.2,.65,.3,1) both;
+    /* ===== Tariff pulse (підсвітка при автоскроллі) ===== */
+    @keyframes cardPulse {
+      0%   { transform: translateY(0) scale(1);     box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 18px 40px rgba(0,0,0,.28), 0 0 0 0 rgba(var(--accent2-rgb),.35) }
+      40%  { transform: translateY(-2px) scale(1.015); box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 22px 46px rgba(0,0,0,.3), 0 0 0 8px rgba(var(--accent2-rgb),.18) }
+      100% { transform: translateY(0) scale(1);     box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 18px 40px rgba(0,0,0,.28), 0 0 0 0 rgba(var(--accent2-rgb),0) }
     }
-    #reviews .slide.is-active .meta{
-      visibility:visible; pointer-events:auto;
-      animation: fadeUp .4s ease .05s both;
-    }
-    #reviews .slide.is-active .stars{
-      visibility:visible; pointer-events:auto;
-      animation: fadeUp .4s ease .1s both;
-    }
+    .tariff.pulse{ animation: cardPulse .9s ease-out }
 
     @media (prefers-reduced-motion: reduce){
       #reviews .slide.is-active .bubble,
       #reviews .slide.is-active .meta,
-      #reviews .slide.is-active .stars{ animation:none!important; opacity:1; visibility:visible }
+      #reviews .slide.is-active .stars,
+      .tariff.pulse{ animation:none!important }
     }
 
     /* footer + floater */
@@ -249,7 +256,8 @@
       </div>
       <div class="hero-bubble" id="heroBubble" role="note">Клієнти шукають сучасних і професійних майстрів. Не втрачай свій шанс бути серед кращих!</div>
       <div class="hero-cta">
-        <a id="buyTop" class="cta">Придбати курс</a>
+        <!-- ця кнопка тепер скролить до тарифів і підсвічує їх -->
+        <a id="buyTop" class="cta" href="#promo" aria-label="Перейти до тарифів">Придбати курс</a>
         <div id="priceLine" class="priceLine">лише — грн <span class="oldline">— грн</span></div>
       </div>
     </section>
@@ -415,7 +423,9 @@
 
   <!-- Floating CTA -->
   <div class="floater" id="floatCta" aria-hidden="true">
-    <div class="floater-inner"><a id="buyFloat" class="cta">Отримати доступ</a></div>
+    <div class="floater-inner">
+      <a id="buyFloat" class="cta" href="#promo" aria-label="Перейти до тарифів">Отримати доступ до курсу</a>
+    </div>
   </div>
 
   <script>
@@ -424,7 +434,7 @@
     const THANK ="https://filipskanails.github.io/filipskanails/thankyou.html";
     const TITLE ="Доступ до курсу Next Level";
 
-    // ЦІНИ (зміни за потреби)
+    // ЦІНИ
     const PROMO_HOURS   = 5;
     const GROUP_BASE    = 10000;
     const GROUP_DISC    = 7800;
@@ -434,6 +444,7 @@
     const $=s=>document.querySelector(s);
     const fmt=n=>new Intl.NumberFormat("uk-UA").format(n);
 
+    /* лінки на оплату — лише на тарифних кнопках */
     function setPayHref(el,amount,label){
       if(!el) return;
       const u=new URL(WORKER);
@@ -443,6 +454,7 @@
       el.href=u.toString(); el.target="_blank"; el.rel="noopener";
     }
 
+    /* hero: лише відображення ціни, без лінку на оплату */
     function renderHeroPrice(active, old){
       const line=$("#priceLine");
       if(line){
@@ -450,8 +462,7 @@
           ? `лише ${fmt(active)} грн <span class="oldline">${fmt(old)} грн</span>`
           : `ціна ${fmt(active)} грн`;
       }
-      setPayHref($("#buyTop"), active, "Груповий");
-      setPayHref($("#buyFloat"), active, "Груповий");
+      // ВАЖЛИВО: не чіпаємо #buyTop — він скролить до тарифів
     }
 
     function setTariff(cardIds, active, old, label){
@@ -521,7 +532,7 @@
     }
     tick();
 
-    /* ===== REVIEWS slider (IO-активація, 30s, wrap arrows, «показывать только активный») ===== */
+    /* ===== REVIEWS slider (IO-активація, 30s, wrap arrows, показ лише активного) ===== */
     (function(){
       const reel = document.getElementById('reviewsReel');
       if(!reel) return;
@@ -542,7 +553,7 @@
 
       const stepW = ()=> (reel.clientWidth*0.86 + 14);
 
-      let active = 0;     // реально активний (видимий ~повністю)
+      let active = 0;     // реально активний
       let dir = 1;        // напрям автоскролу
       let timer = null;
 
@@ -555,8 +566,8 @@
 
       function setActive(i){
         if(i===active) return;
-        slides[active]?.classList.remove('is-active'); // старый скрывается (без анимации выхода)
-        slides[i]?.classList.add('is-active');         // новый появится с анимацией входа
+        slides[active]?.classList.remove('is-active');
+        slides[i]?.classList.add('is-active');
         active = i;
         updateDots(i);
       }
@@ -564,7 +575,6 @@
       function goTo(i){
         const clamped = Math.max(0, Math.min(slides.length-1, i));
         reel.scrollTo({ left: clamped*stepW(), behavior:'smooth' });
-        // Актив обновим по IO, чтобы появление было строго в момент «слой в центре»
       }
 
       function autoStep(){
@@ -576,8 +586,7 @@
       function start(){ if(timer) return; timer = setInterval(autoStep, AUTOSCROLL_MS); }
       function stop(){ clearInterval(timer); timer=null; }
 
-      // IntersectionObserver: активуємо слайд тільки коли він практично повністю у в’юпорті
-      const thresholds = Array.from({length: 41}, (_,i)=> i/40); // крок 0.025 для стабільності
+      const thresholds = Array.from({length: 41}, (_,i)=> i/40);
       const ratios = new Array(slides.length).fill(0);
 
       const io = new IntersectionObserver((entries)=>{
@@ -585,7 +594,6 @@
           const i = slides.indexOf(e.target);
           if(i>=0) ratios[i] = e.intersectionRatio;
         }
-        // обираємо найвидиміший; активуємо лише якщо >= 0.98
         let bestIdx = active, bestRatio = ratios[active];
         for(let i=0;i<ratios.length;i++){
           if(ratios[i] > bestRatio){ bestRatio = ratios[i]; bestIdx = i; }
@@ -595,7 +603,6 @@
 
       slides.forEach(sl => io.observe(sl));
 
-      // стрелки с «обгортанням»
       const prevBtn = document.querySelector('#reviews .prev');
       const nextBtn = document.querySelector('#reviews .next');
       if(prevBtn) prevBtn.addEventListener('click', ()=>{
@@ -613,7 +620,6 @@
         start();
       });
 
-      // пауза/продовження при взаємодії користувача
       ['pointerdown','touchstart','wheel','keydown','focusin','mouseenter'].forEach(ev=>{
         reel.addEventListener(ev, stop, {passive:true});
       });
@@ -621,17 +627,51 @@
         reel.addEventListener(ev, start, {passive:true});
       });
 
-      // init: показываем только первый (остальные скрыты базово)
       slides[0]?.classList.add('is-active');
       updateDots(0);
       start();
     })();
 
-    /* ===== плаваюча кнопка ===== */
+    /* ===== промо: скрол і мікропульс карток тарифів ===== */
+    function pulseTariffs(){
+      document.querySelectorAll('.tariff').forEach(card=>{
+        card.classList.add('pulse');
+        card.addEventListener('animationend', ()=>card.classList.remove('pulse'), {once:true});
+      });
+    }
+    function scrollToPromoAndPulse(){
+      const promo = $("#promo");
+      if(!promo) return;
+      // запускаємо pulse коли промо реально у вікні
+      const observer = new IntersectionObserver((entries, obs)=>{
+        const e = entries[0];
+        if(e && e.isIntersecting){
+          pulseTariffs();
+          obs.disconnect();
+        }
+      }, {threshold:0.4});
+      observer.observe(promo);
+      promo.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+
+    /* ===== плаваюча кнопка + Hero CTA: скрол до тарифів з підсвіткою ===== */
     (function(){
-      const hero=$("#hero"), floater=$("#floatCta"); if(!hero||!floater) return;
-      const io=new IntersectionObserver((entries)=>{ const e=entries[0]; if(e && e.isIntersecting){ floater.classList.remove("show"); } else { floater.classList.add("show"); } },{threshold:.15});
-      io.observe(hero);
+      const hero=$("#hero"), floater=$("#floatCta"), floatBtn=$("#buyFloat"), topBtn=$("#buyTop");
+      if(floatBtn){
+        floatBtn.textContent = "Отримати доступ до курсу";
+        floatBtn.addEventListener('click', (e)=>{ e.preventDefault(); scrollToPromoAndPulse(); });
+      }
+      if(topBtn){
+        topBtn.addEventListener('click', (e)=>{ e.preventDefault(); scrollToPromoAndPulse(); });
+      }
+      if(hero&&floater){
+        const io=new IntersectionObserver((entries)=>{
+          const e=entries[0];
+          if(e && e.isIntersecting){ floater.classList.remove("show"); }
+          else{ floater.classList.add("show"); }
+        },{threshold:.15});
+        io.observe(hero);
+      }
     })();
   </script>
 </body>
