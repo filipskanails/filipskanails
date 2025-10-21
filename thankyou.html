@@ -24,6 +24,12 @@
       <h1>Дякуємо! <span id="statusBadge" class="wait">Очікуємо підтвердження…</span></h1>
       <p class="muted">Номер замовлення: <b id="ref">—</b></p>
       <p class="muted">Статус оплати: <b id="status">очікується</b></p>
+
+      <div id="payBlock" style="margin:14px 0; display:none;">
+        <a id="openPay" class="cta" target="_blank" rel="noopener">Відкрити оплату</a>
+        <p class="muted" style="margin-top:8px">Якщо вікно оплати не відкрилося автоматично, натисніть кнопку вище.</p>
+      </div>
+
       <div id="nextSteps" style="margin-top:12px">
         <p class="muted">Після підтвердження оплати надішлемо інструкції на email і в Telegram.</p>
       </div>
@@ -36,7 +42,14 @@
     const params = new URLSearchParams(location.search);
     const invoiceId = params.get('invoiceId');
     const ref = params.get('ref');
+    const pay = params.get('pay'); // посилання на платіжку (на випадок блокування попапу)
     $('#ref').textContent = ref || '—';
+
+    if (pay) {
+      const a = $('#openPay');
+      a.href = pay;
+      $('#payBlock').style.display = 'block';
+    }
 
     const WORKER = 'https://filipskanails-pay.timanov-business.workers.dev';
 
