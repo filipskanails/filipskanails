@@ -181,6 +181,87 @@
     .aboutItem .icon::after{content:"";position:absolute;left:9px;top:10px;width:11px;height:6px;border-left:3px solid #052d21;border-bottom:3px solid #052d21;transform:rotate(-45deg)}
     .aboutItem .txt{flex:1;min-width:0;word-break:normal;overflow-wrap:anywhere}
 
+    /* ===== REVIEWS ===== */
+    #reviews{ margin:28px 0; margin-left:-16px; margin-right:-16px; width:calc(100% + 32px); }
+    #reviews .head{ text-align:center; margin-bottom:12px; }
+    #reviews .muted{ color:var(--muted); }
+    
+    .reel{
+      position:relative;
+      overflow-x:auto; overflow-y:visible;
+      display:grid; grid-auto-flow:column; grid-auto-columns:86%;
+      gap:14px; padding:6px 16px 12px;
+      scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling:touch;
+      mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+    }
+    .slide{
+      scroll-snap-align:center;
+      position:relative;
+      border-radius:22px;
+      background:rgba(16,23,19,.7);
+      border:1px solid var(--line);
+      backdrop-filter: blur(8px);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.03),
+        0 18px 40px rgba(0,0,0,.28);
+      padding:18px 16px 16px;
+    }
+    .slide::before{ /* тонка акцентна кайма */
+      content:""; position:absolute; inset:-1px;
+      border-radius:22px;
+      pointer-events:none;
+      background:
+        radial-gradient(140% 120% at 100% 0%, rgba(11,125,71,.22), transparent 60%),
+        radial-gradient(140% 120% at 0% 100%, rgba(0,74,37,.16), transparent 60%);
+      mask: linear-gradient(#000,#000) content-box, linear-gradient(#000,#000);
+      -webkit-mask: linear-gradient(#000,#000) content-box, linear-gradient(#000,#000);
+      padding:1px;
+    }
+    .quote{
+      font-size:16px; line-height:1.5;
+    }
+    .qtop{
+      display:flex; align-items:center; gap:8px; margin-bottom:10px;
+    }
+    .qtop .qmark{
+      width:26px; height:26px; border-radius:50%;
+      background:
+        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.20), transparent 55%),
+        linear-gradient(135deg, var(--accent-2), var(--accent));
+      box-shadow: 0 0 0 3px rgba(11,125,71,.18);
+      display:grid; place-items:center; color:#062217; font-weight:900;
+    }
+    .qbot{
+      display:flex; align-items:center; justify-content:space-between;
+      margin-top:12px; gap:10px;
+    }
+    .badge{
+      font-size:12px; color:#cfe6dc; padding:6px 10px; border-radius:999px;
+      background:rgba(12,16,14,.55); border:1px solid rgba(142,243,199,.18);
+      backdrop-filter:blur(6px);
+    }
+    .stars{ font-size:14px; letter-spacing:1px; opacity:.9 }
+    
+    .navDots{display:flex; justify-content:center; gap:8px; margin-top:10px}
+    .navDots button{
+      width:8px; height:8px; border-radius:999px; border:none; padding:0;
+      background:#2a3a34; opacity:.7;
+    }
+    .navDots button[aria-current="true"]{ background:var(--accent-2); opacity:1; }
+    
+    .reviewsArrows{position:relative; height:0}
+    .reviewsArrows .arrow{
+      position:absolute; top:-86px; z-index:2;
+      width:34px; height:34px; border-radius:999px; border:1px solid var(--line);
+      background:rgba(12,16,14,.7);
+      display:grid; place-items:center;
+      box-shadow: 0 8px 22px rgba(0,0,0,.25);
+    }
+    .reviewsArrows .prev{ left:22px }
+    .reviewsArrows .next{ right:22px }
+    .reviewsArrows .arrow:active{ transform:scale(.98) }
+
     /* footer */
     footer.footer{margin-top:26px;padding:22px 16px 96px;text-align:center;color:var(--muted);border-top:1px solid var(--line)}
     .footer .brand{font-size:22px;color:var(--text);margin:0 0 6px;font-weight:700}
@@ -277,6 +358,72 @@
           <li class="aboutItem"><span class="icon"></span><span class="txt">Допомагаю скоротити час роботи з <span class="accent">4 годин</span> до <span class="accent">1.5</span> — <b>без втрати якості</b>.</span></li>
         </ul>
       </div>
+    </section>
+
+    <!-- ===== REVIEWS ===== -->
+    <section id="reviews" class="section">
+      <div class="head">
+        <h2>Відгуки учениць</h2>
+        <div class="muted">Результати та враження після Next Level</div>
+      </div>
+    
+      <div class="reviewsArrows">
+        <button class="arrow prev" type="button" aria-label="Попередній">‹</button>
+        <button class="arrow next" type="button" aria-label="Наступний">›</button>
+      </div>
+    
+      <div class="reel" id="reviewsReel" aria-label="Слайдер відгуків">
+        <!-- 1 -->
+        <article class="slide">
+          <div class="qtop">
+            <div class="qmark">“</div>
+            <span class="badge">випускниця курсу</span>
+          </div>
+          <div class="quote">
+            Привіт, хочу поділитися враженнями про курс підвищення —
+            це було дуже круто ✨ Теорія і практика сприймалися легко ❤️
+            Результат перевищив очікування 🙌 Безмежно вдячна за твій вклад!
+            Швидкість і якість зросли моментально: час роботи з однією
+            клієнткою скоротився щонайменше на пів години 👏
+            Дуже рекомендую всім майстрам пройти цей курс!
+          </div>
+          <div class="qbot">
+            <div class="stars">★★★★★</div>
+          </div>
+        </article>
+    
+        <!-- 2 -->
+        <article class="slide">
+          <div class="qtop">
+            <div class="qmark">“</div>
+            <span class="badge">результати після модулів</span>
+          </div>
+          <div class="quote">
+            Сьогодні було максимально круто! Бачу великі зміни у вирівнюванні
+            та манікюрі — взагалі, це пушка! З твоєю допомогою розібрала всі
+            нюанси квадрату: як пиляти й на що звертати увагу. Емоції переповнюють,
+            я щаслива і задоволена! Є над чим працювати, буду робити ще краще —
+            не підведу! 💪
+          </div>
+          <div class="qbot"><div class="stars">★★★★★</div></div>
+        </article>
+    
+        <!-- 3 -->
+        <article class="slide">
+          <div class="qtop">
+            <div class="qmark">“</div>
+            <span class="badge">про швидкість</span>
+          </div>
+          <div class="quote">
+            Привіт! По часу прискорилась конкретно👌 До 2 годин уже роблю
+            укріплення з френчем 🙌 Усі поради використовую — зайвих рухів немає,
+            носибельність значно краща 🥰
+          </div>
+          <div class="qbot"><div class="stars">★★★★★</div></div>
+        </article>
+      </div>
+    
+      <div class="navDots" id="reviewsDots" aria-hidden="true"></div>
     </section>
 
     <!-- ===== FOOTER ===== -->
@@ -419,6 +566,50 @@
     }
     tick();
 
+    /* ===== REVIEWS slider ===== */
+    (function(){
+      const reel = document.getElementById('reviewsReel');
+      if(!reel) return;
+    
+      const slides = Array.from(reel.children);
+      const dotsWrap = document.getElementById('reviewsDots');
+    
+      // Dots
+      slides.forEach((_,i)=>{
+        const b=document.createElement('button');
+        if(i===0) b.setAttribute('aria-current','true');
+        b.addEventListener('click', ()=>reel.scrollTo({left: i*reel.clientWidth*0.86 + i*14, behavior:'smooth'}));
+        dotsWrap.appendChild(b);
+      });
+    
+      const dots = Array.from(dotsWrap.children);
+      function setActiveByScroll(){
+        const w = reel.clientWidth;
+        const idx = Math.round(reel.scrollLeft / (w*0.86 + 14));
+        dots.forEach((d,i)=>d.toggleAttribute('aria-current', i===idx));
+      }
+      reel.addEventListener('scroll', ()=>{ requestAnimationFrame(setActiveByScroll); });
+    
+      // Arrows
+      const prev = document.querySelector('#reviews .prev');
+      const next = document.querySelector('#reviews .next');
+      const step = ()=> reel.scrollBy({left: reel.clientWidth*0.9, behavior:'smooth'});
+      const back = ()=> reel.scrollBy({left: -reel.clientWidth*0.9, behavior:'smooth'});
+      if(prev) prev.addEventListener('click', back);
+      if(next) next.addEventListener('click', step);
+    
+      // Autoplay (з паузою при взаємодії)
+      let timer = setInterval(step, 5500);
+      const pause = ()=>{ clearInterval(timer); timer=null; };
+      const resume = ()=>{ if(!timer) timer=setInterval(step, 5500); };
+      ['pointerdown','touchstart','wheel','keydown','focusin','mouseenter'].forEach(ev=>{
+        reel.addEventListener(ev, pause, {passive:true});
+      });
+      ['pointerup','touchend','mouseleave','blur'].forEach(ev=>{
+        reel.addEventListener(ev, resume, {passive:true});
+      });
+    })();
+    
     /* ===== Плавающая кнопка, когда hero вне экрана ===== */
     (function(){
       const hero=$("#hero"), floater=$("#floatCta");
