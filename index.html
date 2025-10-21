@@ -426,20 +426,20 @@
     const WORKER="https://filipskanails-pay.timanov-business.workers.dev"; // твій бекенд-домен
     const THANK ="https://filipskanails.github.io/filipskanails/thankyou.html";
     const TITLE ="Доступ до курсу Next Level";
-
+  
     // ЦІНИ
     const PROMO_HOURS   = 5;
-    const GROUP_BASE    = 2;
-    const GROUP_DISC    = 1;
-    const INDIV_BASE    = 4;
-    const INDIV_DISC    = 2;
-
-    // MONO endpoint (твій Worker повинен мати POST /mono/checkout)
+    const GROUP_BASE    = 10000;
+    const GROUP_DISC    = 7800;
+    const INDIV_BASE    = 16000;
+    const INDIV_DISC    = 12800;
+  
+    // MONO endpoint (твій Worker має POST /mono/checkout)
     const MONO_ENDPOINT = WORKER + "/mono/checkout";
-
+  
     const $=s=>document.querySelector(s);
     const fmt=n=>new Intl.NumberFormat("uk-UA").format(n);
-
+  
     /* ===== стабільний layout HERO ===== */
     function cssVarNum(el,name,fallback){ const v=getComputedStyle(el).getPropertyValue(name).trim(); const num=parseFloat(v); return Number.isFinite(num)?num:fallback; }
     function computeHeroLayout(){
@@ -459,14 +459,14 @@
     });
     window.addEventListener('orientationchange', computeHeroLayout);
     window.addEventListener('load', computeHeroLayout);
-
+  
     /* ===== ТАЙМЕР та логіка промо ===== */
     const COUNT=$("#countdown");
     const key="promoEndsAt-v1";
     const now=Date.now();
     let ends=parseInt(localStorage.getItem(key)||"0",10);
     if(!ends||ends<now){ ends=now+PROMO_HOURS*60*60*1000; localStorage.setItem(key,String(ends)); }
-
+  
     function renderHeroPrice(active, old){
       const line=$("#priceLine");
       if(line){
@@ -475,47 +475,47 @@
           : `ціна ${fmt(active)} грн`;
       }
     }
-
+  
     function setTariffPrices(promo){
       const gActive = promo ? GROUP_DISC : GROUP_BASE;
       const iActive = promo ? INDIV_DISC : INDIV_BASE;
       const gOld    = promo ? GROUP_BASE : null;
       const iOld    = promo ? INDIV_BASE : null;
-
+  
       const gP=$("#gPrice"), gO=$("#gOld"), iP=$("#iPrice"), iO=$("#iOld");
       if(gP) gP.textContent = fmt(gActive) + " грн";
       if(iP) iP.textContent = fmt(iActive) + " грн";
       if(gO){ if(gOld){ gO.style.display="block"; gO.textContent=fmt(gOld)+" грн"; } else gO.style.display="none"; }
       if(iO){ if(iOld){ iO.style.display="block"; iO.textContent=fmt(iOld)+" грн"; } else iO.style.display="none"; }
-
+  
       renderHeroPrice(gActive, gOld);
     }
-
+  
     function tick(){
       const left=Math.max(0, ends - Date.now());
       const promoActive = left>0;
-
+  
       if(COUNT) COUNT.style.display = promoActive ? "flex" : "none";
       setTariffPrices(promoActive);
-
+  
       if(!promoActive) return;
-
+  
       const h=Math.floor(left/3600000), m=Math.floor((left%3600000)/60000), s=Math.floor((left%60000)/1000);
       const pad=n=>String(n).padStart(2,"0");
       $("#cd-h").textContent=pad(h); $("#cd-m").textContent=pad(m); $("#cd-s").textContent=pad(s);
       setTimeout(tick,1000);
     }
     tick();
-
+  
     /* ===== REVIEWS slider (30s, wrap arrows, IO-активація) ===== */
     (function(){
       const reel = document.getElementById('reviewsReel');
       if(!reel) return;
-
+  
       const AUTOSCROLL_MS = 30000;
       const slides = Array.from(reel.children);
       const dotsWrap = document.getElementById('reviewsDots');
-
+  
       dotsWrap.innerHTML = "";
       slides.forEach((_,i)=>{
         const b=document.createElement('button');
@@ -524,20 +524,20 @@
         dotsWrap.appendChild(b);
       });
       const dots = Array.from(dotsWrap.children);
-
+  
       const stepW = ()=> (reel.clientWidth*0.86 + 14);
-
+  
       let active = 0;
       let dir = 1;
       let timer = null;
-
+  
       function updateDots(i){
         dots.forEach((d,idx)=>{
           if(idx===i) d.setAttribute('aria-current','true');
           else d.removeAttribute('aria-current');
         });
       }
-
+  
       function setActive(i){
         if(i===active) return;
         slides[active]?.classList.remove('is-active');
@@ -545,24 +545,24 @@
         active = i;
         updateDots(i);
       }
-
+  
       function goTo(i){
         const clamped = Math.max(0, Math.min(slides.length-1, i));
         reel.scrollTo({ left: clamped*stepW(), behavior:'smooth' });
       }
-
+  
       function autoStep(){
         if(dir>0 && active >= slides.length-1) dir = -1;
         else if(dir<0 && active <= 0) dir = 1;
         goTo(active + dir);
       }
-
+  
       function start(){ if(timer) return; timer = setInterval(autoStep, AUTOSCROLL_MS); }
       function stop(){ clearInterval(timer); timer=null; }
-
+  
       const thresholds = Array.from({length: 41}, (_,i)=> i/40);
       const ratios = new Array(slides.length).fill(0);
-
+  
       const io = new IntersectionObserver((entries)=>{
         for(const e of entries){
           const i = slides.indexOf(e.target);
@@ -574,9 +574,9 @@
         }
         if(bestRatio >= 0.98){ setActive(bestIdx); }
       },{ root: reel, threshold: thresholds });
-
+  
       slides.forEach(sl => io.observe(sl));
-
+  
       const prevBtn = document.querySelector('#reviews .prev');
       const nextBtn = document.querySelector('#reviews .next');
       if(prevBtn) prevBtn.addEventListener('click', ()=>{
@@ -593,19 +593,19 @@
         goTo(target);
         start();
       });
-
+  
       ['pointerdown','touchstart','wheel','keydown','focusin','mouseenter'].forEach(ev=>{
         reel.addEventListener(ev, stop, {passive:true});
       });
       ['pointerup','touchend','mouseleave','blur'].forEach(ev=>{
         reel.addEventListener(ev, start, {passive:true});
       });
-
+  
       slides[0]?.classList.add('is-active');
       updateDots(0);
       start();
     })();
-
+  
     /* ===== utils для підсвітки тарифів після скролу ===== */
     function visibleRatio(el){
       if(!el) return 0;
@@ -651,7 +651,7 @@
       promo.scrollIntoView({behavior:'smooth', block:'start'});
       waitScrollEnd(afterScrollSettledThenPulse);
     }
-
+  
     /* ===== плаваюча кнопка + Hero CTA: скрол до тарифів з підсвіткою ===== */
     (function(){
       const floatBtn=$("#buyFloat"), topBtn=$("#buyTop");
@@ -663,7 +663,7 @@
         topBtn.addEventListener('click', (e)=>{ e.preventDefault(); scrollToPromoAndPulse(); });
       }
     })();
-
+  
     /* ===== Плаваюча кнопка: показувати ЛИШЕ коли Hero і Promo поза екраном ===== */
     (function(){
       const hero=$("#hero"), promo=$("#promo"), floater=$("#floatCta");
@@ -679,7 +679,7 @@
       }, { threshold: 0.12 });
       io.observe(hero); io.observe(promo); update();
     })();
-
+  
     /* ===== CHECKOUT MODAL + MONO CHECKOUT ===== */
     (function(){
       const backdrop = $("#checkoutBackdrop");
@@ -690,7 +690,7 @@
       const bGroup   = $("#psGroup");
       const bIndiv   = $("#psIndiv");
       let selectedPlan = "group";
-
+  
       function currentPromoActive(){
         const left = Math.max(0, (parseInt(localStorage.getItem("promoEndsAt-v1")||"0",10)) - Date.now());
         return left>0;
@@ -724,22 +724,22 @@
         backdrop.classList.remove("show");
         backdrop.setAttribute("aria-hidden","true");
       }
-
+  
       const btnGroup = $("#buyGroup");
       const btnIndiv = $("#buyIndiv");
       if(btnGroup) btnGroup.addEventListener("click", (e)=>{ e.preventDefault(); openCheckout("group"); });
       if(btnIndiv) btnIndiv.addEventListener("click", (e)=>{ e.preventDefault(); openCheckout("individual"); });
-
+  
       bGroup.addEventListener("click", ()=>{ selectedPlan="group"; updatePlanUI(); });
       bIndiv.addEventListener("click", ()=>{ selectedPlan="individual"; updatePlanUI(); });
-
+  
       bClose.addEventListener("click", closeCheckout);
       backdrop.addEventListener("click", (e)=>{ if(e.target===backdrop) closeCheckout(); });
       document.addEventListener("keydown",(e)=>{ if(e.key==="Escape" && backdrop.classList.contains("show")) closeCheckout(); });
-
+  
       const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
       const normPhone = v => v.replace(/[^\d+]/g,"");
-
+  
       coForm.addEventListener("submit", async (e)=>{
         e.preventDefault();
         coErr.classList.remove("show"); coErr.textContent="";
@@ -748,21 +748,21 @@
         const email     = $("#coEmail").value.trim().toLowerCase();
         const phone     = normPhone($("#coPhone").value.trim());
         const agree     = $("#coAgree").checked;
-
+  
         if(firstName.length<2 || lastName.length<2){ coErr.textContent="Вкажіть ім’я та прізвище."; coErr.classList.add("show"); return; }
         if(!isEmail(email)){ coErr.textContent="Некоректний email."; coErr.classList.add("show"); return; }
         if(phone.length<10){ coErr.textContent="Некоректний телефон."; coErr.classList.add("show"); return; }
         if(!agree){ coErr.textContent="Підтвердіть згоду з умовами."; coErr.classList.add("show"); return; }
-
+  
         ["coFirst","coLast","coEmail","coPhone"].forEach(id=>{
           const v=$("#"+id).value.trim(); localStorage.setItem(id, v);
         });
-
+  
         const prices = getPrices();
         const amountUAH = selectedPlan==="group" ? prices.group : prices.indiv;
-
+  
         coBtn.disabled = true; coBtn.textContent = "Створюємо платіж…";
-
+  
         try{
           const res = await fetch(MONO_ENDPOINT, {
             method:"POST",
@@ -770,9 +770,14 @@
             body: JSON.stringify({ plan: selectedPlan, amountUAH, email, phone, firstName, lastName })
           });
           if(!res.ok) throw new Error("Помилка сервера. Спробуйте ще раз.");
-          const data = await res.json(); // очікуємо { pageUrl }
-          if(!data.pageUrl) throw new Error("Немає посилання на оплату.");
-          window.location.href = data.pageUrl;
+          const data = await res.json(); // очікуємо { pageUrl, invoiceId, reference }
+  
+          // ✅ НОВА логіка:
+          const thankUrl = `${THANK}?ref=${encodeURIComponent(data.reference)}&invoiceId=${encodeURIComponent(data.invoiceId||'')}`;
+          const win = window.open(data.pageUrl, '_blank', 'noopener'); // платіжка у новій вкладці
+          window.location.href = thankUrl;                               // поточна вкладка -> thankyou
+          if(!win){ window.location.href = data.pageUrl; }               // якщо попап заблоковано
+  
         }catch(err){
           console.error(err);
           const isNetwork = (err && String(err.message).toLowerCase().includes('failed to fetch'));
