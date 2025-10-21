@@ -16,6 +16,8 @@
     .wait{color:#ffe3a3}
     .err{color:#ffb4b4}
     .cta{display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border-radius:999px;background:linear-gradient(135deg,var(--accent-2),var(--accent));color:#062217;font-weight:900;text-transform:uppercase;box-shadow:0 10px 28px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12);text-decoration:none}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .row .cta{flex:1}
   </style>
 </head>
 <body>
@@ -25,13 +27,25 @@
       <p class="muted">Номер замовлення: <b id="ref">—</b></p>
       <p class="muted">Статус оплати: <b id="status">очікується</b></p>
 
-      <div id="payBlock" style="margin:14px 0; display:none;">
-        <a id="openPay" class="cta" target="_blank" rel="noopener">Відкрити оплату</a>
-        <p class="muted" style="margin-top:8px">Якщо вікно оплати не відкрилося автоматично, натисніть кнопку вище.</p>
+      <!-- Пояснения "что делать" -->
+      <div id="hintBlock" style="margin:12px 0">
+        <p class="muted">
+          Завершіть оплату у вкладці Monobank (вона вже відкрита). Після цього поверніться на цю сторінку — ми автоматично зафіксуємо оплату.
+        </p>
       </div>
 
-      <div id="nextSteps" style="margin-top:12px">
-        <p class="muted">Після підтвердження оплати надішлемо інструкції на email і в Telegram.</p>
+      <!-- Если попап был заблокирован — покажем ссылку на оплату -->
+      <div id="payBlock" class="row" style="margin:14px 0; display:none;">
+        <a id="openPay" class="cta" target="_blank" rel="noopener">Відкрити оплату</a>
+        <a id="focusPay" class="cta" href="#">Повернутись до оплати</a>
+      </div>
+
+      <!-- После успеха: авто-возврат + кнопка -->
+      <div id="afterSuccess" style="display:none; margin-top:12px">
+        <div class="row">
+          <a id="backBtn" class="cta">Повернутись на сайт</a>
+        </div>
+        <p class="muted" style="margin-top:8px">Повернення автоматично через <b id="backCd">3</b> сек…</p>
       </div>
     </div>
   </div>
@@ -39,19 +53,24 @@
   <script>
   (function(){
     const $ = s => document.querySelector(s);
-    const params = new URLSearchParams(location.search);
+
+    // === Константы
+    const WORKER  = 'https://filipskanails-pay.timanov-business.workers.dev';
+    const LANDING = 'https://filipskanails.github.io/filipskanails/';
+
+    // === Параметры из URL
+    const params    = new URLSearchParams(location.search);
     const invoiceId = params.get('invoiceId');
-    const ref = params.get('ref');
-    const pay = params.get('pay'); // посилання на платіжку (на випадок блокування попапу)
+    const ref       = params.get('ref');
+    const pay       = params.get('pay'); // ссылка на платёжку (если попап был заблокирован)
     $('#ref').textContent = ref || '—';
 
-    if (pay) {
-      const a = $('#openPay');
-      a.href = pay;
-      $('#payBlock').style.display = 'block';
-    }
-
-    const WORKER = 'https://filipskanails-pay.timanov-business.workers.dev';
+    // === Поищем имя вкладки оплаты, чтобы попытаться её сфокусировать
+    let payTabName = 'monoPayTab';
+    try {
+      const saved = localStorage.getItem('monoPayTabName');
+      if (saved) payTabName = saved;
+    } catch {}
 
     function setStatus(txt, cls){
       $('#status').textContent = txt;
@@ -60,20 +79,57 @@
       badge.className = cls;
     }
 
+    // === UI: показать «відкрити оплату» и «повернутись до оплати», если есть pay=
+    if (pay) {
+      const a = $('#openPay');
+      a.href = pay;
+      $('#payBlock').style.display = 'flex';
+    }
+
+    // Кнопка "Повернутись до оплати" — попробуем сфокусировать уже открытую вкладку оплаты
+    $('#focusPay')?.addEventListener('click', (e)=>{
+      e.preventDefault();
+      try {
+        const w = window.open('', payTabName);
+        if (w && !w.closed) { try { w.focus(); } catch {} return; }
+      } catch {}
+      // если не получилось — откроем ссылку оплаты заново
+      if (pay) window.open(pay, '_blank', 'noopener');
+    });
+
+    // === Проверка статуса
     async function check(){
       try{
         if(!invoiceId){ setStatus('очікується (без invoiceId)', 'wait'); setTimeout(check, 5000); return; }
         const r = await fetch(`${WORKER}/mono/status?invoiceId=${encodeURIComponent(invoiceId)}`);
         const data = await r.json();
         const st = String(data.status || '').toLowerCase();
+
         if(st === 'success' || st === 'paid'){
           setStatus('успішно', 'ok');
+
+          // убираем блок с оплатой и показываем авто-возврат
+          $('#payBlock').style.display = 'none';
+          $('#afterSuccess').style.display = 'block';
+          const back = $('#backBtn');
+          back.href = LANDING + '?paid=1#top';
+
+          // авто-возврат через 3 сек
+          let left = 3;
+          $('#backCd').textContent = left;
+          const t = setInterval(()=>{
+            left--; $('#backCd').textContent = left;
+            if(left<=0){ clearInterval(t); window.location.href = LANDING + '?paid=1#top'; }
+          }, 1000);
+
           return;
         }
+
         if(st === 'failure' || st === 'expired' || st === 'reversed'){
           setStatus(st, 'err');
           return;
         }
+
         setStatus(st || 'очікується', 'wait');
         setTimeout(check, 5000);
       }catch(e){
@@ -82,6 +138,11 @@
       }
     }
     check();
+
+    // Подсказка: если вкладка была невидимой и снова стала видимой — сразу проверить статус
+    document.addEventListener('visibilitychange', ()=>{
+      if (!document.hidden) check();
+    });
   })();
   </script>
 </body>
