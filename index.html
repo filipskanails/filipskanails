@@ -100,42 +100,111 @@
     .aboutItem .icon::after{content:"";position:absolute;left:9px;top:10px;width:11px;height:6px;border-left:3px solid #052d21;border-bottom:3px solid #052d21;transform:rotate(-45deg)}
     .aboutItem .txt{flex:1;min-width:0;overflow-wrap:anywhere}
 
-    /* ===== REVIEWS ===== */
-    #reviews{margin:28px 0;margin-left:-16px;margin-right:-16px;width:calc(100% + 32px)}
-    #reviews .head{text-align:center;margin-bottom:12px}
-    #reviews .muted{color:var(--muted)}
-    .reel{position:relative;overflow-x:auto;overflow-y:visible;display:grid;grid-auto-flow:column;grid-auto-columns:86%;gap:14px;padding:6px 16px 12px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(90deg,transparent 0,#000 24px,#000 calc(100% - 24px),transparent 100%)}
-    .slide{scroll-snap-align:center;position:relative;border-radius:22px;background:rgba(16,23,19,.7);border:1px solid var(--line);backdrop-filter:blur(8px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 18px 40px rgba(0,0,0,.28);padding:18px 16px 16px}
-    .slide::before{content:"";position:absolute;inset:-1px;border-radius:22px;pointer-events:none;background:radial-gradient(140% 120% at 100% 0%, rgba(11,125,71,.22), transparent 60%),radial-gradient(140% 120% at 0% 100%, rgba(0,74,37,.16), transparent 60%);mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);-webkit-mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);padding:1px}
-    .quote{font-size:16px;line-height:1.5}
-    .qtop{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-    .qtop .qmark{width:26px;height:26px;border-radius:50%;background:radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.20), transparent 55%),linear-gradient(135deg,var(--accent-2),var(--accent));box-shadow:0 0 0 3px rgba(11,125,71,.18);display:grid;place-items:center;color:#062217;font-weight:900}
-    .qbot{display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:10px}
-    .badge{font-size:12px;color:#cfe6dc;padding:6px 10px;border-radius:999px;background:rgba(12,16,14,.55);border:1px solid rgba(142,243,199,.18);backdrop-filter:blur(6px)}
-    .stars{font-size:14px;letter-spacing:1px;opacity:.9}
-    .navDots{display:flex;justify-content:center;gap:8px;margin-top:10px}
-    .navDots button{width:8px;height:8px;border-radius:999px;border:none;padding:0;background:#2a3a34;opacity:.7}
-    .navDots button[aria-current="true"]{background:var(--accent-2);opacity:1}
-    .reviewsArrows{position:relative;height:0}
-    .reviewsArrows .arrow{position:absolute;top:-86px;z-index:2;width:34px;height:34px;border-radius:999px;border:1px solid var(--line);background:rgba(12,16,14,.7);display:grid;place-items:center;box-shadow:0 8px 22px rgba(0,0,0,.25)}
-    .reviewsArrows .prev{left:22px}.reviewsArrows .next{right:22px}
-    .reviewsArrows .arrow:active{transform:scale(.98)}
-
-    footer.footer{margin-top:26px;padding:22px 16px 96px;text-align:center;color:var(--muted);border-top:1px solid var(--line)}
-    .footer .brand{font-size:22px;color:var(--text);margin:0 0 6px;font-weight:700}
-    .footer .legal{font-size:14px;line-height:1.5;max-width:720px;margin:10px auto 0;opacity:.95}
-    .footer .links{margin-top:10px;font-size:14px}
-    .footer .links a{color:var(--muted);text-decoration:underline dotted;margin:0 8px}
-    .footer small.copy{display:block;margin-top:12px;opacity:.7}
-    .floater{position:fixed;left:0;right:0;bottom:12px;z-index:50;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .28s ease,transform .28s ease}
-    .floater.show{opacity:1;transform:translateY(0);pointer-events:auto}
-    .floater-inner{max-width:720px;margin:0 auto;padding:0 16px}
-    .floater .cta{width:100%}
-    @media (prefers-reduced-motion:reduce){.floater{transition:none}}
-  </style>
-</head>
-<body>
-  <div class="wrap">
+    /* ===== REVIEWS (chat-bubble style) ===== */
+    #reviews{ margin:28px 0; margin-left:-16px; margin-right:-16px; width:calc(100% + 32px) }
+    #reviews .head{ text-align:center; margin-bottom:12px }
+    #reviews .muted{ color:var(--muted) }
+    
+    /* рейл (залишаємо логіку ширини карток ~86% + gap) */
+    .reel{
+      position:relative;
+      overflow-x:auto; overflow-y:visible;
+      display:grid; grid-auto-flow:column; grid-auto-columns:86%;
+      gap:14px; padding:6px 16px 12px;
+      scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+      mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+    }
+    
+    /* слайд тепер прозорий, без коробки */
+    .slide{
+      scroll-snap-align:center;
+      position:relative;
+      background:transparent; border:none; box-shadow:none;
+      padding:8px 2px;
+    }
+    .slide::before{ content:none }
+    
+    /* повідомлення-картка */
+    .msg .row{ display:flex; align-items:flex-start; gap:10px }
+    .msg.right .row{ flex-direction:row-reverse }
+    
+    .msg .avatar{
+      width:40px; height:40px; border-radius:50%;
+      display:grid; place-items:center; font-weight:900;
+      color:#062217; letter-spacing:.3px;
+      background:
+        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.24), transparent 55%),
+        linear-gradient(135deg, var(--accent-2), var(--accent));
+      border:1px solid #2b4136; box-shadow:0 6px 16px rgba(0,0,0,.28);
+      flex:0 0 40px; user-select:none;
+    }
+    
+    .msg .content{ min-width:0; max-width:100% }
+    .msg .meta{ font-size:12px; color:var(--muted); margin:0 0 6px; opacity:.95 }
+    
+    /* бульбашка з хвостиком */
+    .msg .bubble{
+      position:relative;
+      padding:14px 16px;
+      border-radius:18px 18px 18px 6px;      /* лівий хвостик за замовчуванням */
+      background:rgba(16,23,19,.72);
+      border:1px solid var(--line);
+      backdrop-filter:blur(8px);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.03), 0 18px 40px rgba(0,0,0,.28);
+      font-size:16px; line-height:1.55;
+    }
+    .msg.right .bubble{ border-radius:18px 18px 6px 18px }
+    
+    .msg .bubble::after{
+      content:"";
+      position:absolute; bottom:10px; left:-7px;
+      width:12px; height:12px;
+      background:inherit;
+      border-left:1px solid var(--line);
+      border-bottom:1px solid var(--line);
+      transform:rotate(45deg);
+      filter:drop-shadow(0 6px 14px rgba(0,0,0,.28));
+    }
+    .msg.right .bubble::after{
+      left:auto; right:-7px;
+      border-left:none; border-bottom:none;
+      border-right:1px solid var(--line);
+      border-top:1px solid var(--line);
+    }
+    
+    .msg .stars{ font-size:14px; letter-spacing:1px; opacity:.9; margin-top:8px }
+    
+    /* нав-точки та стрілки лишаємо, стилізуємо під акцент */
+    .navDots{ display:flex; justify-content:center; gap:8px; margin-top:10px }
+    .navDots button{ width:8px; height:8px; border-radius:999px; border:none; padding:0; background:#2a3a34; opacity:.7 }
+    .navDots button[aria-current="true"]{ background:var(--accent-2); opacity:1 }
+    
+    .reviewsArrows{ position:relative; height:0 }
+    .reviewsArrows .arrow{
+      position:absolute; top:-86px; z-index:2;
+      width:34px; height:34px; border-radius:999px; border:1px solid var(--line);
+      background:rgba(12,16,14,.7);
+      display:grid; place-items:center;
+      box-shadow:0 8px 22px rgba(0,0,0,.25);
+    }
+    .reviewsArrows .prev{ left:22px } .reviewsArrows .next{ right:22px }
+    .reviewsArrows .arrow:active{ transform:scale(.98) }
+    
+        footer.footer{margin-top:26px;padding:22px 16px 96px;text-align:center;color:var(--muted);border-top:1px solid var(--line)}
+        .footer .brand{font-size:22px;color:var(--text);margin:0 0 6px;font-weight:700}
+        .footer .legal{font-size:14px;line-height:1.5;max-width:720px;margin:10px auto 0;opacity:.95}
+        .footer .links{margin-top:10px;font-size:14px}
+        .footer .links a{color:var(--muted);text-decoration:underline dotted;margin:0 8px}
+        .footer small.copy{display:block;margin-top:12px;opacity:.7}
+        .floater{position:fixed;left:0;right:0;bottom:12px;z-index:50;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .28s ease,transform .28s ease}
+        .floater.show{opacity:1;transform:translateY(0);pointer-events:auto}
+        .floater-inner{max-width:720px;margin:0 auto;padding:0 16px}
+        .floater .cta{width:100%}
+        @media (prefers-reduced-motion:reduce){.floater{transition:none}}
+      </style>
+    </head>
+    <body>
+      <div class="wrap">
 
     <!-- ===== HERO ===== -->
     <section id="hero" class="hero-stage" aria-label="Головний екран">
@@ -249,30 +318,59 @@
         <h2>Відгуки</h2>
         <div class="muted">Результати та враження після Next Level</div>
       </div>
+    
       <div class="reviewsArrows">
         <button class="arrow prev" type="button" aria-label="Попередній">‹</button>
         <button class="arrow next" type="button" aria-label="Наступний">›</button>
       </div>
+    
       <div class="reel" id="reviewsReel" aria-label="Слайдер відгуків">
         <!-- 1 -->
-        <article class="slide">
-          <div class="qtop"><div class="qmark" aria-hidden="true">“</div><span class="badge">випускниця курсу</span></div>
-          <div class="quote">Привіт, хочу поділитися враженнями про курс підвищення — це було дуже круто. Теорія і практика сприймалися легко. Результат перевищив очікування. Швидкість і якість зросли: час роботи з однією клієнткою скоротився щонайменше на пів години. Дуже рекомендую!</div>
-          <div class="qbot"><div class="stars" aria-label="5 зірок">★★★★★</div></div>
+        <article class="slide msg left">
+          <div class="row">
+            <div class="avatar" aria-hidden="true">І</div>
+            <div class="content">
+              <div class="meta">Ірина · випускниця курсу</div>
+              <div class="bubble">
+                Дуже крутий курс! Теорія і практика сприймалися легко, а результати
+                перевищили очікування — мінус ~30 хв на процедурі без втрати якості.
+                Рекомендую кожному, хто хоче апгрейднути навички.
+              </div>
+              <div class="stars" aria-label="5 зірок">★★★★★</div>
+            </div>
+          </div>
         </article>
         <!-- 2 -->
-        <article class="slide">
-          <div class="qtop"><div class="qmark" aria-hidden="true">“</div><span class="badge">результати після модулів</span></div>
-          <div class="quote">Сьогодні було максимально круто! Бачу великі зміни у вирівнюванні та манікюрі. Розібрала всі нюанси квадрату: як пиляти й на що звертати увагу. Емоції переповнюють — я щаслива і задоволена.</div>
-          <div class="qbot"><div class="stars" aria-label="5 зірок">★★★★★</div></div>
+        <article class="slide msg right">
+          <div class="row">
+            <div class="avatar" aria-hidden="true">Н</div>
+            <div class="content">
+              <div class="meta">Наталія · після модулів</div>
+              <div class="bubble">
+                Найбільше зайшов блок про квадрат: покроково, зрозуміло,
+                без «води». Після корекції алгоритму — ідеальні паралелі та
+                чистий зріз стабільно, клієнтки у захваті.
+              </div>
+              <div class="stars" aria-label="5 зірок">★★★★★</div>
+            </div>
+          </div>
         </article>
         <!-- 3 -->
-        <article class="slide">
-          <div class="qtop"><div class="qmark" aria-hidden="true">“</div><span class="badge">про швидкість</span></div>
-          <div class="quote">По часу прискорилась конкретно: до 2 годин уже роблю укріплення з френчем. Усі поради використовую — зайвих рухів немає, носибельність значно краща.</div>
-          <div class="qbot"><div class="stars" aria-label="5 зірок">★★★★★</div></div>
+        <article class="slide msg left">
+          <div class="row">
+            <div class="avatar" aria-hidden="true">В</div>
+            <div class="content">
+              <div class="meta">Вікторія · про швидкість</div>
+              <div class="bubble">
+                Прискорилась до 2 годин на укріпленні з френчем. Поради з економії
+                рухів — золото. Носибельність краща, переробок майже немає.
+              </div>
+              <div class="stars" aria-label="5 зірок">★★★★★</div>
+            </div>
+          </div>
         </article>
       </div>
+    
       <div class="navDots" id="reviewsDots" aria-hidden="true"></div>
     </section>
 
@@ -403,20 +501,81 @@
     }
     tick();
 
-    /* ===== REVIEWS slider ===== */
+    /* ===== REVIEWS slider (ping-pong автоскрол) ===== */
     (function(){
-      const reel = document.getElementById('reviewsReel'); if(!reel) return;
-      const slides = Array.from(reel.children); const dotsWrap = document.getElementById('reviewsDots');
-      slides.forEach((_,i)=>{ const b=document.createElement('button'); if(i===0) b.setAttribute('aria-current','true'); b.addEventListener('click', ()=>reel.scrollTo({left: i*reel.clientWidth*0.86 + i*14, behavior:'smooth'})); dotsWrap.appendChild(b); });
+      const reel = document.getElementById('reviewsReel');
+      if(!reel) return;
+    
+      const slides = Array.from(reel.children);
+      const dotsWrap = document.getElementById('reviewsDots');
+    
+      // генеруємо точки
+      dotsWrap.innerHTML = "";
+      slides.forEach((_,i)=>{
+        const b=document.createElement('button');
+        if(i===0) b.setAttribute('aria-current','true');
+        b.addEventListener('click', ()=>goTo(i));
+        dotsWrap.appendChild(b);
+      });
       const dots = Array.from(dotsWrap.children);
-      function setActiveByScroll(){ const w=reel.clientWidth; const idx=Math.round(reel.scrollLeft/(w*0.86+14)); dots.forEach((d,i)=>d.toggleAttribute('aria-current', i===idx)); }
-      reel.addEventListener('scroll', ()=>{ requestAnimationFrame(setActiveByScroll); });
-      const prev=document.querySelector('#reviews .prev'), next=document.querySelector('#reviews .next');
-      const step=()=>reel.scrollBy({left:reel.clientWidth*0.9, behavior:'smooth'}); const back=()=>reel.scrollBy({left:-reel.clientWidth*0.9, behavior:'smooth'});
-      if(prev) prev.addEventListener('click', back); if(next) next.addEventListener('click', step);
-      let timer=setInterval(step, 5500); const pause=()=>{clearInterval(timer);timer=null}; const resume=()=>{if(!timer) timer=setInterval(step, 5500)};
-      ['pointerdown','touchstart','wheel','keydown','focusin','mouseenter'].forEach(ev=>reel.addEventListener(ev,pause,{passive:true}));
-      ['pointerup','touchend','mouseleave','blur'].forEach(ev=>reel.addEventListener(ev,resume,{passive:true}));
+    
+      const stepW = ()=> (reel.clientWidth*0.86 + 14);   // має збігатися з CSS
+      let idx = 0;                                       // активний індекс
+      let dir = 1;                                       // 1 -> вправо, -1 -> вліво
+      let timer = null;
+    
+      function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+      function updateDots(){ dots.forEach((d,i)=>d.toggleAttribute('aria-current', i===idx)); }
+    
+      function goTo(i, smooth=true){
+        idx = clamp(i, 0, slides.length-1);
+        reel.scrollTo({ left: idx*stepW(), behavior: smooth?'smooth':'auto' });
+        updateDots();
+      }
+    
+      function next(){
+        if(idx >= slides.length-1){ dir = -1; goTo(idx-1); }
+        else{ goTo(idx+1); }
+      }
+      function prev(){
+        if(idx <= 0){ dir = 1; goTo(idx+1); }
+        else{ goTo(idx-1); }
+      }
+    
+      // автоскрол пінг-понгом
+      function start(){ if(timer) return; timer = setInterval(()=>{
+        // коригуємо напрямок на межах
+        if(dir>0 && idx >= slides.length-1) dir = -1;
+        else if(dir<0 && idx <= 0) dir = 1;
+        goTo(idx + dir);
+      }, 4800); }   // можна підкрутити швидкість
+      function stop(){ clearInterval(timer); timer=null; }
+    
+      // синк індексу при ручному скролі
+      function syncByScroll(){
+        const i = Math.round(reel.scrollLeft / stepW());
+        const clamped = clamp(i, 0, slides.length-1);
+        if(clamped !== idx){ idx = clamped; updateDots(); }
+      }
+      reel.addEventListener('scroll', ()=>{ requestAnimationFrame(syncByScroll); });
+    
+      // стрілки
+      const prevBtn = document.querySelector('#reviews .prev');
+      const nextBtn = document.querySelector('#reviews .next');
+      if(prevBtn) prevBtn.addEventListener('click', prev);
+      if(nextBtn) nextBtn.addEventListener('click', next);
+    
+      // пауза при взаємодії
+      ['pointerdown','touchstart','wheel','keydown','focusin','mouseenter'].forEach(ev=>{
+        reel.addEventListener(ev, stop, {passive:true});
+      });
+      ['pointerup','touchend','mouseleave','blur'].forEach(ev=>{
+        reel.addEventListener(ev, start, {passive:true});
+      });
+    
+      // ініт
+      goTo(0,false);
+      start();
     })();
 
     /* ===== плаваюча кнопка ===== */
