@@ -123,8 +123,7 @@
     .slide::before{ content:none }
 
     .msg .row{ display:flex; align-items:flex-start; gap:10px }
-    /* усі в один бік (вліво) */
-    .msg.right .row{ flex-direction:row }
+    .msg.right .row{ flex-direction:row } /* хвостики всі вліво */
 
     .msg .avatar{
       width:40px; height:40px; border-radius:50%;
@@ -151,7 +150,6 @@
       will-change: transform, opacity, filter;
     }
     .msg.right .bubble{ border-radius:18px 18px 18px 6px }
-
     .msg .bubble::after{
       content:"";
       position:absolute; bottom:10px; left:-7px;   /* завжди зліва */
@@ -162,15 +160,13 @@
       transform:rotate(45deg);
       filter:drop-shadow(0 6px 14px rgba(0,0,0,.28));
     }
-    .msg.right .bubble::after{
-      left:-7px; right:auto; border-right:none; border-top:none; border-left:1px solid var(--line); border-bottom:1px solid var(--line);
-    }
+    .msg.right .bubble::after{ left:-7px; right:auto; border-right:none; border-top:none }
 
     .msg .stars{ font-size:14px; letter-spacing:1px; opacity:.9; margin-top:8px }
 
     .navDots{ display:flex; justify-content:center; gap:8px; margin-top:10px }
     .navDots button{ width:8px; height:8px; border-radius:999px; border:none; padding:0; background:#2a3a34; opacity:.7 }
-    .navDots button[aria-current="true"]{ background:var(--accent-2); opacity:1 }
+    .navDots button[aria-current]{ background:var(--accent-2); opacity:1 }
 
     .reviewsArrows{ position:relative; height:0 }
     .reviewsArrows .arrow{
@@ -183,7 +179,7 @@
     .reviewsArrows .prev{ left:22px } .reviewsArrows .next{ right:22px }
     .reviewsArrows .arrow:active{ transform:scale(.98) }
 
-    /* ===== REVIEWS: appear-only animations (без hide — без мерехтіння) ===== */
+    /* ===== REVIEWS: базово — ВСЕ скрыто; показываем и анимируем только активный ===== */
     @keyframes bubbleIn {
       from { opacity:0; transform: translateY(8px) scale(.98); filter: blur(2px); }
       to   { opacity:1; transform: translateY(0)  scale(1);   filter: none; }
@@ -192,15 +188,32 @@
       from { opacity:0; transform: translateY(4px); }
       to   { opacity:1; transform: none; }
     }
-    /* анімуємо ТІЛЬКИ коли слайд стає активним */
-    #reviews .slide.is-active .bubble{ animation: bubbleIn .6s cubic-bezier(.2,.65,.3,1) both; }
-    #reviews .slide.is-active .meta{ animation: fadeUp .4s ease .05s both; }
-    #reviews .slide.is-active .stars{ animation: fadeUp .4s ease .1s  both; }
+
+    /* базовое состояние НЕактивных: прячем контент (сохраняя место) */
+    #reviews .slide .bubble,
+    #reviews .slide .meta,
+    #reviews .slide .stars{
+      opacity:0; visibility:hidden; pointer-events:none;
+    }
+
+    /* активный: делаем видимым и проигрываем вход */
+    #reviews .slide.is-active .bubble{
+      visibility:visible; pointer-events:auto;
+      animation: bubbleIn .6s cubic-bezier(.2,.65,.3,1) both;
+    }
+    #reviews .slide.is-active .meta{
+      visibility:visible; pointer-events:auto;
+      animation: fadeUp .4s ease .05s both;
+    }
+    #reviews .slide.is-active .stars{
+      visibility:visible; pointer-events:auto;
+      animation: fadeUp .4s ease .1s both;
+    }
 
     @media (prefers-reduced-motion: reduce){
       #reviews .slide.is-active .bubble,
       #reviews .slide.is-active .meta,
-      #reviews .slide.is-active .stars{ animation:none!important }
+      #reviews .slide.is-active .stars{ animation:none!important; opacity:1; visibility:visible }
     }
 
     /* footer + floater */
@@ -421,7 +434,6 @@
     const $=s=>document.querySelector(s);
     const fmt=n=>new Intl.NumberFormat("uk-UA").format(n);
 
-    /* посилання на оплату + тайтли */
     function setPayHref(el,amount,label){
       if(!el) return;
       const u=new URL(WORKER);
@@ -431,7 +443,6 @@
       el.href=u.toString(); el.target="_blank"; el.rel="noopener";
     }
 
-    /* оновлення цін у всіх місцях */
     function renderHeroPrice(active, old){
       const line=$("#priceLine");
       if(line){
@@ -439,7 +450,6 @@
           ? `лише ${fmt(active)} грн <span class="oldline">${fmt(old)} грн</span>`
           : `ціна ${fmt(active)} грн`;
       }
-      // Hero кнопки ведуть на груповий тариф
       setPayHref($("#buyTop"), active, "Груповий");
       setPayHref($("#buyFloat"), active, "Груповий");
     }
@@ -465,7 +475,6 @@
       setTariff({price:"#gPrice", old:"#gOld", btn:"#buyGroup"}, gActive, gOld, "Груповий");
       setTariff({price:"#iPrice", old:"#iOld", btn:"#buyIndiv"}, iActive, iOld, "Індивідуальний");
 
-      // оновимо hero-лінію під груповий тариф
       renderHeroPrice(gActive, gOld);
     }
 
@@ -512,7 +521,7 @@
     }
     tick();
 
-    /* ===== REVIEWS slider (IO-активація, 30s, wrap arrows) ===== */
+    /* ===== REVIEWS slider (IO-активація, 30s, wrap arrows, «показывать только активный») ===== */
     (function(){
       const reel = document.getElementById('reviewsReel');
       if(!reel) return;
@@ -533,18 +542,21 @@
 
       const stepW = ()=> (reel.clientWidth*0.86 + 14);
 
-      let active = 0;     // реально активний (видимий >98%)
+      let active = 0;     // реально активний (видимий ~повністю)
       let dir = 1;        // напрям автоскролу
       let timer = null;
 
       function updateDots(i){
-        dots.forEach((d,idx)=> d.toggleAttribute('aria-current', idx===i));
+        dots.forEach((d,idx)=>{
+          if(idx===i) d.setAttribute('aria-current','true');
+          else d.removeAttribute('aria-current');
+        });
       }
 
       function setActive(i){
         if(i===active) return;
-        slides[active]?.classList.remove('is-active');
-        slides[i]?.classList.add('is-active');
+        slides[active]?.classList.remove('is-active'); // старый скрывается (без анимации выхода)
+        slides[i]?.classList.add('is-active');         // новый появится с анимацией входа
         active = i;
         updateDots(i);
       }
@@ -552,11 +564,10 @@
       function goTo(i){
         const clamped = Math.max(0, Math.min(slides.length-1, i));
         reel.scrollTo({ left: clamped*stepW(), behavior:'smooth' });
-        // НЕ міняємо актив одразу — дочекаємося IO підтвердження, щоб не було «ранньої» анімації
+        // Актив обновим по IO, чтобы появление было строго в момент «слой в центре»
       }
 
       function autoStep(){
-        // пінг-понг відносно активного індексу
         if(dir>0 && active >= slides.length-1) dir = -1;
         else if(dir<0 && active <= 0) dir = 1;
         goTo(active + dir);
@@ -565,8 +576,8 @@
       function start(){ if(timer) return; timer = setInterval(autoStep, AUTOSCROLL_MS); }
       function stop(){ clearInterval(timer); timer=null; }
 
-      // IntersectionObserver: активуємо слайд тільки коли він майже повністю у в’юпорті
-      const thresholds = Array.from({length: 21}, (_,i)=> i/20); // 0..1 крок 0.05
+      // IntersectionObserver: активуємо слайд тільки коли він практично повністю у в’юпорті
+      const thresholds = Array.from({length: 41}, (_,i)=> i/40); // крок 0.025 для стабільності
       const ratios = new Array(slides.length).fill(0);
 
       const io = new IntersectionObserver((entries)=>{
@@ -574,7 +585,7 @@
           const i = slides.indexOf(e.target);
           if(i>=0) ratios[i] = e.intersectionRatio;
         }
-        // беремо той, що має найбільшу площу видимості і >=0.98
+        // обираємо найвидиміший; активуємо лише якщо >= 0.98
         let bestIdx = active, bestRatio = ratios[active];
         for(let i=0;i<ratios.length;i++){
           if(ratios[i] > bestRatio){ bestRatio = ratios[i]; bestIdx = i; }
@@ -584,13 +595,12 @@
 
       slides.forEach(sl => io.observe(sl));
 
-      // стрілки з «обгортанням»
+      // стрелки с «обгортанням»
       const prevBtn = document.querySelector('#reviews .prev');
       const nextBtn = document.querySelector('#reviews .next');
       if(prevBtn) prevBtn.addEventListener('click', ()=>{
         stop();
         const target = (active<=0) ? slides.length-1 : active-1;
-        // при стрибку з 0 на останній — корисно підказати напряму вліво
         dir = -1;
         goTo(target);
         start();
@@ -611,7 +621,7 @@
         reel.addEventListener(ev, start, {passive:true});
       });
 
-      // init
+      // init: показываем только первый (остальные скрыты базово)
       slides[0]?.classList.add('is-active');
       updateDots(0);
       start();
