@@ -743,31 +743,24 @@
         e.preventDefault();
         coErr.classList.remove("show"); coErr.textContent="";
       
-        // 1) Откроем ПУСТУЮ вкладку СРАЗУ (пока жест активен), БЕЗ 'noopener',
-        //    и дадим ей имя — чтобы на thankyou мы могли попытаться сфокусировать её.
-        let payWin = null;
-        const payTabName = "monoPayTab";
-        try {
-          payWin = window.open("", payTabName); // пустая/или переиспользуем именованную вкладку
-          try { localStorage.setItem("monoPayTabName", payTabName); } catch {}
-        } catch {}
-      
-        // 2) Соберём и провалидируем поля
         const firstName = $("#coFirst").value.trim();
         const lastName  = $("#coLast").value.trim();
         const email     = $("#coEmail").value.trim().toLowerCase();
         const phone     = $("#coPhone").value.trim().replace(/[^\d+]/g,"");
         const agree     = $("#coAgree").checked;
+      
+        // валидация
         if(firstName.length<2 || lastName.length<2){ coErr.textContent="Вкажіть ім’я та прізвище."; coErr.classList.add("show"); return; }
         if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ coErr.textContent="Некоректний email."; coErr.classList.add("show"); return; }
         if(phone.replace(/\D/g,"").length<10){ coErr.textContent="Некоректний телефон."; coErr.classList.add("show"); return; }
         if(!agree){ coErr.textContent="Підтвердіть згоду з умовами."; coErr.classList.add("show"); return; }
       
+        // збережемо поля
         ["coFirst","coLast","coEmail","coPhone"].forEach(id=>{
           const v=$("#"+id).value.trim(); localStorage.setItem(id, v);
         });
       
-        // 3) Посчитаем сумму (с учётом промо-таймера)
+        // ціна з урахуванням промо
         const promoLeft = Math.max(0, (parseInt(localStorage.getItem("promoEndsAt-v1")||"0",10)) - Date.now());
         const promo = promoLeft>0;
         const prices = { group: promo ? GROUP_DISC : GROUP_BASE, indiv: promo ? INDIV_DISC : INDIV_BASE };
@@ -776,7 +769,7 @@
         coBtn.disabled = true; coBtn.textContent = "Створюємо платіж…";
       
         try{
-          // 4) Создаём инвойс на бэке
+          // створюємо інвойс у воркері
           const res = await fetch(MONO_ENDPOINT, {
             method:"POST",
             headers:{"content-type":"application/json"},
@@ -785,19 +778,13 @@
           if(!res.ok) throw new Error("Помилка сервера. Спробуйте ще раз.");
           const data = await res.json(); // { pageUrl, invoiceId, reference }
       
-          // 5) Строим ссылку на thankyou c нужными параметрами + ссылкой на оплату (pay)
-          const thankUrl = `${THANK}?ref=${encodeURIComponent(data.reference)}&invoiceId=${encodeURIComponent(data.invoiceId||'')}&pay=${encodeURIComponent(data.pageUrl)}`;
+          // ⚠️ НОВИЙ ФЛОУ: НЕ відкриваємо Monobank.
+          // Перенаправляємо на "Дякуємо", передаємо все необхідне там:
+          //  - ref, invoiceId (для перевірки статусу)
+          //  - pay (URL платіжки), щоб користувач відкрив оплату з цієї сторінки
+          const thankUrl = `${THANK}?ref=${encodeURIComponent(data.reference)}&invoiceId=${encodeURIComponent(data.invoiceId||'')}&pay=${encodeURIComponent(data.pageUrl)}&plan=${encodeURIComponent(selectedPlan)}`;
       
-          // 6) Если вкладка оплаты открылась — отправим её на Monobank и сфокусируем,
-          //    а текущую — на thankyou (мы там ждём оплату и всё объясняем пользователю).
-          if (payWin && !payWin.closed) {
-            try { payWin.location.replace(data.pageUrl); payWin.focus(); } catch {}
-            window.location.replace(thankUrl);
-            return;
-          }
-      
-          // 7) Если попап заблокирован — уйдём на оплату в этой же вкладке
-          window.location.assign(data.pageUrl);
+          window.location.replace(thankUrl); // поточна вкладка -> thankyou
       
         }catch(err){
           console.error(err);
