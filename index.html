@@ -10,26 +10,16 @@
     :root{
       --bg:#0c100e; --card:#121614; --line:#223129;
       --text:#e7f0ea; --muted:#a1b3ab;
-
       --accent:#004a25; --accent-2:#0b7d47;
       --accent-rgb:0,74,37; --accent2-rgb:11,125,71;
-
       --radius:24px; --shadow:0 10px 28px rgba(0,0,0,.24);
-
-      /* керується з JS */
       --img-top:320px; --cta-top:560px; --bubble-top:440px; --glow-top:380px; --hero-h:760px;
       --promoOverlap:18px;
-
-      /* тонка ручна настройка hero */
       --gap:8; --bubble-offset:200; --cta-ratio:.68; --cta-extra:40;
     }
 
     *{box-sizing:border-box}
-    html,body{
-      margin:0;background:var(--bg);color:var(--text);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif;
-      overflow-x:hidden
-    }
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif;overflow-x:hidden}
     a{color:inherit;text-decoration:none}
     img{max-width:100%;display:block}
     .wrap{max-width:720px;margin:0 auto;padding:16px}
@@ -62,7 +52,7 @@
     .section{margin:28px 0}
     h2{font-size:clamp(22px,6vw,28px);margin:0 0 12px}
 
-    /* ===== PROMO (ТАРИФИ) ===== */
+    /* ===== PROMO / ТАРИФИ ===== */
     #promo{margin-top:calc(-1 * var(--promoOverlap));padding-top:var(--promoOverlap);margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);position:relative;z-index:5}
     .promoCard{border-radius:var(--radius);padding:18px;background:var(--card);border:1px solid var(--line);backdrop-filter:blur(6px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22)}
     .promoHead{display:grid;gap:6px;margin-bottom:10px;text-align:center}
@@ -72,42 +62,21 @@
     .countbox .t{color:var(--muted);margin-top:6px;font-size:clamp(12px,3.6vw,15px)}
     .tariffsGrid{display:grid;gap:14px;margin-top:10px}
     @media (min-width:720px){ .tariffsGrid{grid-template-columns:1fr 1fr} }
-    .tariff{
-      position:relative;border:1px solid var(--line);border-radius:22px;background:rgba(16,23,19,.7);
-      padding:16px;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 18px 40px rgba(0,0,0,.28);
-    }
-    .tariff::after{
-      content:"";position:absolute;inset:-1px;border-radius:22px;pointer-events:none;
-      background:radial-gradient(140% 120% at 100% 0%, rgba(11,125,71,.22), transparent 60%),
-                 radial-gradient(140% 120% at 0% 100%, rgba(0,74,37,.16), transparent 60%);
-      mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);
-      -webkit-mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);
-      padding:1px
-    }
+    .tariff{position:relative;border:1px solid var(--line);border-radius:22px;background:rgba(16,23,19,.7);padding:16px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 18px 40px rgba(0,0,0,.28)}
+    .tariff::after{content:"";position:absolute;inset:-1px;border-radius:22px;pointer-events:none;background:radial-gradient(140% 120% at 100% 0%, rgba(11,125,71,.22), transparent 60%),radial-gradient(140% 120% at 0% 100%, rgba(0,74,37,.16), transparent 60%);mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);-webkit-mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);padding:1px}
     .tariffHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
     .tariffName{font-weight:900;font-size:18px}
     .ribbon{font-size:11px;padding:6px 10px;border-radius:999px;background:rgba(12,16,14,.55);border:1px solid rgba(142,243,199,.18);backdrop-filter:blur(6px);color:#cfe6dc}
     .featList{list-style:none;margin:10px 0 12px;padding:0;display:grid;gap:8px}
     .featList li{display:flex;gap:8px;align-items:flex-start}
-    .featList li::before{
-      content:"";width:18px;height:18px;border-radius:50%;margin-top:2px;flex:0 0 18px;
-      background:radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.20), transparent 55%),
-                 linear-gradient(135deg,var(--accent-2),var(--accent));
-      box-shadow:0 0 0 2px rgba(11,125,71,.18)
-    }
+    .featList li::before{content:"";width:18px;height:18px;border-radius:50%;margin-top:2px;flex:0 0 18px;background:radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.20), transparent 55%),linear-gradient(135deg,var(--accent-2),var(--accent));box-shadow:0 0 0 2px rgba(11,125,71,.18)}
     .priceWrap{display:flex;align-items:center;justify-content:space-between;gap:10px}
     .priceNow{font-size:clamp(20px,5.4vw,26px);font-weight:900}
     .priceOld{color:#95a49b;text-decoration:line-through;font-size:14px;opacity:.9}
     .tariff .cta{width:100%;margin-top:12px}
     .bonusList{list-style:none;padding:0;margin:16px 0 4px;display:grid;gap:10px}
     .bonusList li{display:flex;align-items:center;gap:10px}
-    .bonusList li::before{
-      content:"";width:24px;height:24px;border-radius:999px;
-      background:radial-gradient(130% 160% at 50% 18%, rgba(255,255,255,.22), rgba(255,255,255,0) 40%),
-                 linear-gradient(135deg,var(--accent-2),var(--accent));
-      box-shadow:0 0 0 2px rgba(var(--accent2-rgb),.25) inset;display:inline-block
-    }
+    .bonusList li::before{content:"";width:24px;height:24px;border-radius:999px;background:radial-gradient(130% 160% at 50% 18%, rgba(255,255,255,.22), rgba(255,255,255,0) 40%),linear-gradient(135deg,var(--accent-2),var(--accent));box-shadow:0 0 0 2px rgba(var(--accent2-rgb),.25) inset;display:inline-block}
 
     /* ===== ABOUT ===== */
     #about{margin-top:20px;margin-left:-16px;margin-right:-16px;width:calc(100% + 32px)}
@@ -117,111 +86,44 @@
     .aboutCard::before{content:"";position:absolute;inset:-10% -8% auto -8%;height:44%;background:radial-gradient(60% 100% at 50% 0%, rgba(var(--accent2-rgb),.18), transparent 70%);filter:blur(10px);pointer-events:none;border-radius:var(--radius) var(--radius) 0 0}
     .aboutList{list-style:none;padding:0;margin:0;display:grid;gap:14px}
     .aboutItem{display:flex;align-items:flex-start;gap:12px;line-height:1.45;border-radius:16px;padding:6px 0}
-    .aboutItem .icon{
-      position:relative;width:32px;height:32px;border-radius:50%;flex:0 0 32px;margin-top:2px;
-      background:conic-gradient(from 210deg, rgba(var(--accent2-rgb),.95), rgba(var(--accent2-rgb),.85), rgba(var(--accent-rgb),.95));
-      box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 4px rgba(var(--accent2-rgb),.12);
-      border:1px solid #2b4136;overflow:hidden
-    }
+    .aboutItem .icon{position:relative;width:32px;height:32px;border-radius:50%;flex:0 0 32px;margin-top:2px;background:conic-gradient(from 210deg, rgba(var(--accent2-rgb),.95), rgba(var(--accent2-rgb),.85), rgba(var(--accent-rgb),.95));box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 4px rgba(var(--accent2-rgb),.12);border:1px solid #2b4136;overflow:hidden}
     .aboutItem .icon::before{content:"";position:absolute;inset:2px;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.45), rgba(255,255,255,.06));mix-blend:screen}
-    .aboutItem .icon::after{
-      content:"";position:absolute;left:9px;top:10px;width:11px;height:6px;
-      border-left:3px solid #052d21;border-bottom:3px solid #052d21;transform:rotate(-45deg)
-    }
+    .aboutItem .icon::after{content:"";position:absolute;left:9px;top:10px;width:11px;height:6px;border-left:3px solid #052d21;border-bottom:3px solid #052d21;transform:rotate(-45deg)}
     .aboutItem .txt{flex:1;min-width:0;overflow-wrap:anywhere}
 
-    /* ===== REVIEWS (chat-bubble style) ===== */
+    /* ===== REVIEWS (chat-bubble) ===== */
     #reviews{ margin:28px 0; margin-left:-16px; margin-right:-16px; width:calc(100% + 32px) }
     #reviews .head{ text-align:center; margin-bottom:12px }
     #reviews .muted{ color:var(--muted) }
-
-    .reel{
-      position:relative;
-      overflow-x:auto; overflow-y:visible;
-      display:grid; grid-auto-flow:column; grid-auto-columns:86%;
-      gap:14px; padding:6px 16px 12px;
-      scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
-      mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
-    }
-    .slide{ scroll-snap-align:center; position:relative; background:transparent; border:none; box-shadow:none; padding:8px 2px }
-    .slide::before{ content:none }
-
-    .msg .row{ display:flex; align-items:flex-start; gap:10px }
-    .msg.right .row{ flex-direction:row } /* хвостики всі вліво */
-
-    .msg .avatar{
-      width:40px; height:40px; border-radius:50%;
-      display:grid; place-items:center; font-weight:900;
-      color:#062217; letter-spacing:.3px;
-      background:
-        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.24), transparent 55%),
-        linear-gradient(135deg, var(--accent-2), var(--accent));
-      border:1px solid #2b4136; box-shadow:0 6px 16px rgba(0,0,0,.28);
-      flex:0 0 40px; user-select:none;
-    }
-    .msg .content{ min-width:0; max-width:100% }
-    .msg .meta{ font-size:12px; color:var(--muted); margin:0 0 6px; opacity:.95 }
-
-    .msg .bubble{
-      position:relative;
-      padding:14px 16px;
-      border-radius:18px 18px 18px 6px;   /* лівий хвостик */
-      background:rgba(16,23,19,.72);
-      border:1px solid var(--line);
-      backdrop-filter:blur(8px);
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.03), 0 18px 40px rgba(0,0,0,.28);
-      font-size:16px; line-height:1.55;
-      will-change: transform, opacity, filter;
-    }
-    .msg.right .bubble{ border-radius:18px 18px 18px 6px }
-    .msg .bubble::after{
-      content:""; position:absolute; bottom:10px; left:-7px;   /* завжди зліва */
-      width:12px; height:12px; background:inherit;
-      border-left:1px solid var(--line); border-bottom:1px solid var(--line);
-      transform:rotate(45deg); filter:drop-shadow(0 6px 14px rgba(0,0,0,.28));
-    }
-    .msg.right .bubble::after{ left:-7px; right:auto; border-right:none; border-top:none }
-
-    .msg .stars{ font-size:14px; letter-spacing:1px; opacity:.9; margin-top:8px }
-
-    .navDots{ display:flex; justify-content:center; gap:8px; margin-top:10px }
-    .navDots button{ width:8px; height:8px; border-radius:999px; border:none; padding:0; background:#2a3a34; opacity:.7 }
-    .navDots button[aria-current]{ background:var(--accent-2); opacity:1 }
-
-    .reviewsArrows{ position:relative; height:0 }
-    .reviewsArrows .arrow{
-      position:absolute; top:-86px; z-index:2;
-      width:34px; height:34px; border-radius:999px; border:1px solid var(--line);
-      background:rgba(12,16,14,.7);
-      display:grid; place-items:center;
-      box-shadow:0 8px 22px rgba(0,0,0,.25);
-    }
-    .reviewsArrows .prev{ left:22px } .reviewsArrows .next{ right:22px }
-    .reviewsArrows .arrow:active{ transform:scale(.98) }
-
-    /* ===== REVIEWS: показуємо лише активний (анімація входу) ===== */
-    @keyframes bubbleIn { from { opacity:0; transform: translateY(8px) scale(.98); filter: blur(2px); } to { opacity:1; transform: translateY(0) scale(1); filter:none; } }
-    @keyframes fadeUp   { from { opacity:0; transform: translateY(4px); } to { opacity:1; transform:none; } }
-
-    #reviews .slide .bubble, #reviews .slide .meta, #reviews .slide .stars{ opacity:0; visibility:hidden; pointer-events:none }
-    #reviews .slide.is-active .bubble{ visibility:visible; pointer-events:auto; animation: bubbleIn .6s cubic-bezier(.2,.65,.3,1) both }
-    #reviews .slide.is-active .meta{   visibility:visible; pointer-events:auto; animation: fadeUp .4s ease .05s both }
-    #reviews .slide.is-active .stars{  visibility:visible; pointer-events:auto; animation: fadeUp .4s ease .1s both }
-
-    /* ===== Tariff pulse (підсвітка при автоскроллі) ===== */
-    @keyframes cardPulse {
-      0%   { transform: translateY(0) scale(1);     box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 18px 40px rgba(0,0,0,.28), 0 0 0 0 rgba(var(--accent2-rgb),.35) }
-      40%  { transform: translateY(-2px) scale(1.015); box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 22px 46px rgba(0,0,0,.3), 0 0 0 8px rgba(var(--accent2-rgb),.18) }
-      100% { transform: translateY(0) scale(1);     box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 18px 40px rgba(0,0,0,.28), 0 0 0 0 rgba(var(--accent2-rgb),0) }
-    }
-    .tariff.pulse{ animation: cardPulse .9s ease-out }
-
-    @media (prefers-reduced-motion: reduce){
-      #reviews .slide.is-active .bubble,
-      #reviews .slide.is-active .meta,
-      #reviews .slide.is-active .stars,
-      .tariff.pulse{ animation:none!important }
-    }
+    .reel{position:relative;overflow-x:auto;overflow-y:visible;display:grid;grid-auto-flow:column;grid-auto-columns:86%;gap:14px;padding:6px 16px 12px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%)}
+    .slide{scroll-snap-align:center;position:relative;background:transparent;border:none;box-shadow:none;padding:8px 2px}
+    .slide::before{content:none}
+    .msg .row{display:flex;align-items:flex-start;gap:10px}
+    .msg.right .row{flex-direction:row} /* хвостики вліво */
+    .msg .avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:900;color:#062217;letter-spacing:.3px;background:radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.24), transparent 55%),linear-gradient(135deg, var(--accent-2), var(--accent));border:1px solid #2b4136;box-shadow:0 6px 16px rgba(0,0,0,.28);flex:0 0 40px;user-select:none}
+    .msg .content{min-width:0;max-width:100%}
+    .msg .meta{font-size:12px;color:var(--muted);margin:0 0 6px;opacity:.95}
+    .msg .bubble{position:relative;padding:14px 16px;border-radius:18px 18px 18px 6px;background:rgba(16,23,19,.72);border:1px solid var(--line);backdrop-filter:blur(8px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.03), 0 18px 40px rgba(0,0,0,.28);font-size:16px;line-height:1.55;will-change:transform,opacity,filter}
+    .msg.right .bubble{border-radius:18px 18px 18px 6px}
+    .msg .bubble::after{content:"";position:absolute;bottom:10px;left:-7px;width:12px;height:12px;background:inherit;border-left:1px solid var(--line);border-bottom:1px solid var(--line);transform:rotate(45deg);filter:drop-shadow(0 6px 14px rgba(0,0,0,.28))}
+    .msg.right .bubble::after{left:-7px;right:auto;border-right:none;border-top:none}
+    .msg .stars{font-size:14px;letter-spacing:1px;opacity:.9;margin-top:8px}
+    .navDots{display:flex;justify-content:center;gap:8px;margin-top:10px}
+    .navDots button{width:8px;height:8px;border-radius:999px;border:none;padding:0;background:#2a3a34;opacity:.7}
+    .navDots button[aria-current]{background:var(--accent-2);opacity:1}
+    .reviewsArrows{position:relative;height:0}
+    .reviewsArrows .arrow{position:absolute;top:-86px;z-index:2;width:34px;height:34px;border-radius:999px;border:1px solid var(--line);background:rgba(12,16,14,.7);display:grid;place-items:center;box-shadow:0 8px 22px rgba(0,0,0,.25)}
+    .reviewsArrows .prev{left:22px}.reviewsArrows .next{right:22px}
+    .reviewsArrows .arrow:active{transform:scale(.98)}
+    @keyframes bubbleIn{from{opacity:0;transform:translateY(8px) scale(.98);filter:blur(2px)}to{opacity:1;transform:translateY(0) scale(1);filter:none}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+    #reviews .slide .bubble,#reviews .slide .meta,#reviews .slide .stars{opacity:0;visibility:hidden;pointer-events:none}
+    #reviews .slide.is-active .bubble{visibility:visible;pointer-events:auto;animation:bubbleIn .6s cubic-bezier(.2,.65,.3,1) both}
+    #reviews .slide.is-active .meta{visibility:visible;pointer-events:auto;animation:fadeUp .4s ease .05s both}
+    #reviews .slide.is-active .stars{visibility:visible;pointer-events:auto;animation:fadeUp .4s ease .1s both}
+    @keyframes cardPulse{0%{transform:translateY(0) scale(1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 18px 40px rgba(0,0,0,.28),0 0 0 0 rgba(var(--accent2-rgb),.35)}40%{transform:translateY(-2px) scale(1.015);box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 22px 46px rgba(0,0,0,.3),0 0 0 8px rgba(var(--accent2-rgb),.18)}100%{transform:translateY(0) scale(1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 18px 40px rgba(0,0,0,.28),0 0 0 0 rgba(var(--accent2-rgb),0)}}
+    .tariff.pulse{animation:cardPulse .9s ease-out}
+    @media (prefers-reduced-motion:reduce){#reviews .slide.is-active .bubble,#reviews .slide.is-active .meta,#reviews .slide.is-active .stars,.tariff.pulse{animation:none!important}}
 
     /* footer + floater */
     footer.footer{margin-top:26px;padding:22px 16px 96px;text-align:center;color:var(--muted);border-top:1px solid var(--line)}
@@ -240,34 +142,38 @@
     /* ===== CHECKOUT MODAL (mono) ===== */
     .modal-backdrop{position:fixed;inset:0;background:rgba(3,5,4,.6);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:100}
     .modal-backdrop.show{display:flex}
-    .modal{
-      width:min(680px,calc(100% - 24px));background:var(--card);border:1px solid var(--line);border-radius:20px;
-      box-shadow:0 18px 46px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.02);padding:16px
-    }
+    .modal{width:min(680px,calc(100% - 24px));background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 18px 46px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.02);padding:16px}
     .modal header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
     .modal h3{margin:0;font-size:20px}
     .modal .close{width:36px;height:36px;border-radius:999px;border:1px solid var(--line);background:#0f1713;display:grid;place-items:center;cursor:pointer}
     .planSwitch{display:flex;gap:8px;margin:6px 0 12px}
-    .planSwitch button{
-      flex:1;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#0f1713;color:var(--text);font-weight:700
-    }
-    .planSwitch button[aria-pressed="true"]{
-      background:linear-gradient(135deg,var(--accent-2),var(--accent));color:#062217;box-shadow:0 0 0 3px rgba(var(--accent2-rgb),.18) inset
-    }
+    .planSwitch button{flex:1;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#0f1713;color:var(--text);font-weight:700}
+    .planSwitch button[aria-pressed="true"]{background:linear-gradient(135deg,var(--accent-2),var(--accent));color:#062217;box-shadow:0 0 0 3px rgba(var(--accent2-rgb),.18) inset}
     .formGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .formGrid .wide{grid-column:1/-1}
     .field{display:grid;gap:6px}
     .field label{font-size:12px;color:var(--muted)}
-    .field input[type="text"],.field input[type="email"],.field input[type="tel"]{
-      appearance:none;width:100%;padding:12px 12px;border-radius:12px;border:1px solid var(--line);
-      background:#0f1713;color:var(--text);font-size:16px;outline:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)
-    }
+    .field input[type="text"],.field input[type="email"],.field input[type="tel"]{appearance:none;width:100%;padding:12px 12px;border-radius:12px;border:1px solid var(--line);background:#0f1713;color:var(--text);font-size:16px;outline:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
     .help{font-size:12px;color:var(--muted)}
     .checkline{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--muted)}
     .checkline input{margin-top:3px}
-    .modal .actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
+
+    /* ВАЖНО: адаптивная зона действий модалки */
+    .modal .actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;flex-wrap:wrap}
     .priceBadge{font-weight:900}
-    .modal .cta{min-width:220px}
+    .modal .cta{
+      min-width:0; /* отменяем 220px, чтобы помещалась */
+      padding:14px 18px;
+      font-size:clamp(15px,4.2vw,18px); /* чуть меньше маленький порог */
+      white-space:nowrap;
+      flex:1; /* пусть растягивается на доступную ширину */
+    }
+    @media (max-width:420px){
+      .modal .actions{flex-direction:column-reverse;align-items:stretch}
+      .modal .cta{width:100%}
+      .priceBadge{text-align:center;width:100%}
+    }
+
     .err{color:#ffb4b4;font-size:13px;display:none}
     .err.show{display:block}
     .notePay{font-size:12px;color:var(--muted);margin-top:6px}
@@ -763,12 +669,7 @@
       const hero=$("#hero"), promo=$("#promo"), floater=$("#floatCta");
       if(!hero || !promo || !floater) return;
       let heroIn=false, promoIn=false;
-
-      function update(){
-        if(heroIn || promoIn){ floater.classList.remove('show'); }
-        else { floater.classList.add('show'); }
-      }
-
+      function update(){ if(heroIn || promoIn){ floater.classList.remove('show'); } else { floater.classList.add('show'); } }
       const io = new IntersectionObserver((entries)=>{
         for(const e of entries){
           if(e.target===hero) heroIn = e.isIntersecting;
@@ -776,10 +677,7 @@
         }
         update();
       }, { threshold: 0.12 });
-
-      io.observe(hero);
-      io.observe(promo);
-      update();
+      io.observe(hero); io.observe(promo); update();
     })();
 
     /* ===== CHECKOUT MODAL + MONO CHECKOUT ===== */
@@ -799,10 +697,7 @@
       }
       function getPrices(){
         const promo = currentPromoActive();
-        return {
-          group: promo ? GROUP_DISC : GROUP_BASE,
-          indiv: promo ? INDIV_DISC : INDIV_BASE
-        };
+        return { group: promo ? GROUP_DISC : GROUP_BASE, indiv: promo ? INDIV_DISC : INDIV_BASE };
       }
       function updatePlanUI(){
         const prices = getPrices();
@@ -818,7 +713,6 @@
       function openCheckout(plan){
         selectedPlan = plan || "group";
         updatePlanUI();
-        // Prefill з localStorage
         ["coFirst","coLast","coEmail","coPhone"].forEach(id=>{
           const v = localStorage.getItem(id); if(v) $("#"+id).value = v;
         });
@@ -831,22 +725,18 @@
         backdrop.setAttribute("aria-hidden","true");
       }
 
-      // Перехоплюємо кнопки "Купити" в тарифах
       const btnGroup = $("#buyGroup");
       const btnIndiv = $("#buyIndiv");
       if(btnGroup) btnGroup.addEventListener("click", (e)=>{ e.preventDefault(); openCheckout("group"); });
       if(btnIndiv) btnIndiv.addEventListener("click", (e)=>{ e.preventDefault(); openCheckout("individual"); });
 
-      // Перемикач планів
       bGroup.addEventListener("click", ()=>{ selectedPlan="group"; updatePlanUI(); });
       bIndiv.addEventListener("click", ()=>{ selectedPlan="individual"; updatePlanUI(); });
 
-      // Закриття модалки
       bClose.addEventListener("click", closeCheckout);
       backdrop.addEventListener("click", (e)=>{ if(e.target===backdrop) closeCheckout(); });
       document.addEventListener("keydown",(e)=>{ if(e.key==="Escape" && backdrop.classList.contains("show")) closeCheckout(); });
 
-      // Валідатори
       const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
       const normPhone = v => v.replace(/[^\d+]/g,"");
 
@@ -864,7 +754,6 @@
         if(phone.length<10){ coErr.textContent="Некоректний телефон."; coErr.classList.add("show"); return; }
         if(!agree){ coErr.textContent="Підтвердіть згоду з умовами."; coErr.classList.add("show"); return; }
 
-        // Збережемо дані для зручності
         ["coFirst","coLast","coEmail","coPhone"].forEach(id=>{
           const v=$("#"+id).value.trim(); localStorage.setItem(id, v);
         });
@@ -878,21 +767,18 @@
           const res = await fetch(MONO_ENDPOINT, {
             method:"POST",
             headers:{"content-type":"application/json"},
-            body: JSON.stringify({
-              plan: selectedPlan,
-              amountUAH,
-              email,
-              phone,
-              firstName,
-              lastName
-            })
+            body: JSON.stringify({ plan: selectedPlan, amountUAH, email, phone, firstName, lastName })
           });
           if(!res.ok) throw new Error("Помилка сервера. Спробуйте ще раз.");
           const data = await res.json(); // очікуємо { pageUrl }
           if(!data.pageUrl) throw new Error("Немає посилання на оплату.");
-          window.location.href = data.pageUrl; // перехід на сторінку оплати mono
+          window.location.href = data.pageUrl;
         }catch(err){
-          coErr.textContent = err.message || "Не вдалося створити платіж.";
+          console.error(err);
+          const isNetwork = (err && String(err.message).toLowerCase().includes('failed to fetch'));
+          coErr.textContent = isNetwork
+            ? "Немає зв’язку з бекендом оплати (можливо, ендпоїнт /mono/checkout ще не розгорнутий або CORS)."
+            : (err.message || "Не вдалося створити платіж.");
           coErr.classList.add("show");
           coBtn.disabled = false; coBtn.textContent = "Перейти до оплати";
         }
