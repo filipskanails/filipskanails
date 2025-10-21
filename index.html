@@ -742,32 +742,38 @@
       coForm.addEventListener("submit", async (e)=>{
         e.preventDefault();
         coErr.classList.remove("show"); coErr.textContent="";
-  
-        // 👉 ОТКРЫВАЕМ ПУСТУЮ ВКЛАДКУ СРАЗУ (пока жест еще активен)
+      
+        // 1) Открываем ПУСТУЮ вкладку СРАЗУ и БЕЗ 'noopener' (важно!)
         let payWin = null;
-        try { payWin = window.open('about:blank','_blank','noopener'); } catch {}
-  
+        try { payWin = window.open("", "monoPayTab"); } catch {}
+      
         const firstName = $("#coFirst").value.trim();
         const lastName  = $("#coLast").value.trim();
         const email     = $("#coEmail").value.trim().toLowerCase();
-        const phone     = normPhone($("#coPhone").value.trim());
+        const phone     = $("#coPhone").value.trim().replace(/[^\d+]/g,"");
         const agree     = $("#coAgree").checked;
-  
+      
+        // 2) Валидация
         if(firstName.length<2 || lastName.length<2){ coErr.textContent="Вкажіть ім’я та прізвище."; coErr.classList.add("show"); return; }
-        if(!isEmail(email)){ coErr.textContent="Некоректний email."; coErr.classList.add("show"); return; }
-        if(phone.length<10){ coErr.textContent="Некоректний телефон."; coErr.classList.add("show"); return; }
+        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ coErr.textContent="Некоректний email."; coErr.classList.add("show"); return; }
+        if(phone.replace(/\D/g,"").length<10){ coErr.textContent="Некоректний телефон."; coErr.classList.add("show"); return; }
         if(!agree){ coErr.textContent="Підтвердіть згоду з умовами."; coErr.classList.add("show"); return; }
-  
+      
+        // 3) Сохраним поля локально
         ["coFirst","coLast","coEmail","coPhone"].forEach(id=>{
           const v=$("#"+id).value.trim(); localStorage.setItem(id, v);
         });
-  
-        const prices = getPrices();
-        const amountUAH = selectedPlan==="group" ? prices.group : prices.indiv;
-  
+      
+        // 4) Сумма
+        const promoLeft = Math.max(0, (parseInt(localStorage.getItem("promoEndsAt-v1")||"0",10)) - Date.now());
+        const promo = promoLeft>0;
+        const prices = { group: promo ? GROUP_DISC : GROUP_BASE, indiv: promo ? INDIV_DISC : INDIV_BASE };
+        const amountUAH = (selectedPlan==="group") ? prices.group : prices.indiv;
+      
         coBtn.disabled = true; coBtn.textContent = "Створюємо платіж…";
-  
+      
         try{
+          // 5) Создаём инвойс
           const res = await fetch(MONO_ENDPOINT, {
             method:"POST",
             headers:{"content-type":"application/json"},
@@ -775,19 +781,29 @@
           });
           if(!res.ok) throw new Error("Помилка сервера. Спробуйте ще раз.");
           const data = await res.json(); // { pageUrl, invoiceId, reference }
-  
-          // формируем URL thankyou с ref/invoiceId и ссылкой на оплату (pay)
+      
+          // 6) Thank URL + ссылка на платёжку в параметрах (на случай, если попап таки пустой)
           const thankUrl = `${THANK}?ref=${encodeURIComponent(data.reference)}&invoiceId=${encodeURIComponent(data.invoiceId||'')}&pay=${encodeURIComponent(data.pageUrl)}`;
-  
-          if (payWin) {
-            // если вкладка открылась — отправляем её на оплату, а текущую на thankyou
-            try { payWin.location = data.pageUrl; } catch {}
-            window.location.assign(thankUrl);
-          } else {
-            // если попап заблокирован — уходим в оплату в этой вкладке
-            window.location.assign(data.pageUrl);
+      
+          // 7) Если вкладка реально открылась — отправляем её на Monobank, текущую — на thankyou
+          if (payWin && !payWin.closed) {
+            try {
+              // Safari/Chrome дружат с replace() лучше, чем с присвоением
+              payWin.location.replace(data.pageUrl);
+              try { payWin.focus(); } catch {}
+            } catch (err) {
+              // если вдруг не получилось — попробуем открыть новую вкладку принудительно
+              try { window.open(data.pageUrl, "_blank"); } catch {}
+            }
+            // текущую страницу уводим на thankyou (без возврата в историю)
+            window.location.replace(thankUrl);
+            return;
           }
-  
+      
+          // 8) Попап был заблокирован: в этом случае уводим текущую вкладку в оплату
+          // (пользователь вернётся, а у нас есть кнопка "Відкрити оплату" на thankyou)
+          window.location.assign(data.pageUrl);
+      
         }catch(err){
           console.error(err);
           const isNetwork = (err && String(err.message).toLowerCase().includes('failed to fetch'));
