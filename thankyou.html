@@ -3,49 +3,62 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Дякуємо за оплату — Next Level</title>
+  <title>Дякуємо — Next Level</title>
   <meta name="color-scheme" content="dark">
   <style>
     :root{ --bg:#0c100e; --card:#121614; --line:#223129; --text:#e7f0ea; --muted:#a1b3ab; --accent:#004a25; --accent-2:#0b7d47; }
     *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif}
-    .wrap{max-width:720px;margin:0 auto;padding:24px 16px}
+    .wrap{max-width:800px;margin:0 auto;padding:24px 16px}
     .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22)}
-    h1{font-size:24px;margin:0 0 8px}
+    h1{font-size:26px;margin:0 0 8px}
+    h2{font-size:20px;margin:16px 0 8px}
     .muted{color:var(--muted)}
     .ok{color:#c7f5d2}
     .wait{color:#ffe3a3}
     .err{color:#ffb4b4}
     .cta{display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border-radius:999px;background:linear-gradient(135deg,var(--accent-2),var(--accent));color:#062217;font-weight:900;text-transform:uppercase;box-shadow:0 10px 28px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12);text-decoration:none}
     .row{display:flex;gap:10px;flex-wrap:wrap}
-    .row .cta{flex:1}
+    .row .cta{flex:1;min-width:220px}
+    .box{padding:12px;border:1px dashed var(--line);border-radius:14px;background:rgba(255,255,255,.02)}
+    .kbd{padding:2px 8px;border-radius:6px;background:#0f1713;border:1px solid #27382f}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
-      <h1>Дякуємо! <span id="statusBadge" class="wait">Очікуємо підтвердження…</span></h1>
+      <h1>Дякуємо! <span id="statusBadge" class="wait">Очікуємо оплату…</span></h1>
       <p class="muted">Номер замовлення: <b id="ref">—</b></p>
-      <p class="muted">Статус оплати: <b id="status">очікується</b></p>
+      <p class="muted">Статус: <b id="status">очікується</b></p>
 
-      <!-- Пояснения "что делать" -->
-      <div id="hintBlock" style="margin:12px 0">
-        <p class="muted">
-          Завершіть оплату у вкладці Monobank (вона вже відкрита). Після цього поверніться на цю сторінку — ми автоматично зафіксуємо оплату.
-        </p>
+      <div class="box" style="margin-top:12px">
+        <h2>Як завершити оформлення</h2>
+        <ol style="margin:8px 0 0; padding-left:18px">
+          <li>Натисніть <b>«Відкрити оплату в Monobank»</b> нижче — платіж відкриється в новій вкладці.</li>
+          <li>Завершіть оплату у Monobank.</li>
+          <li>Поверніться на цю сторінку «Дякуємо». Статус зміниться автоматично (або натисніть «Перевірити статус зараз»).</li>
+        </ol>
       </div>
 
-      <!-- Если попап был заблокирован — покажем ссылку на оплату -->
-      <div id="payBlock" class="row" style="margin:14px 0; display:none;">
-        <a id="openPay" class="cta" target="_blank" rel="noopener">Відкрити оплату</a>
-        <a id="focusPay" class="cta" href="#">Повернутись до оплати</a>
+      <div id="actions" class="row" style="margin:14px 0">
+        <a id="openPay" class="cta" target="_blank" rel="noopener">Відкрити оплату в Monobank</a>
+        <a id="checkNow" class="cta" href="#">Перевірити статус зараз</a>
       </div>
 
-      <!-- После успеха: авто-возврат + кнопка -->
-      <div id="afterSuccess" style="display:none; margin-top:12px">
-        <div class="row">
-          <a id="backBtn" class="cta">Повернутись на сайт</a>
+      <div id="afterSuccess" style="display:none; margin-top:16px">
+        <h2>Оплата успішна ✅</h2>
+        <p class="muted">Дякуємо за довіру! Далі:</p>
+        <ul style="margin-top:8px">
+          <li>Ми надішлемо доступи та інструкції на ваш email (<span id="emailEcho">—</span>).</li>
+          <li>Тут з’явиться кнопка з інвайтом до Telegram (залежно від тарифу).</li>
+        </ul>
+        <div class="row" style="margin-top:10px">
+          <a id="toHome" class="cta" href="#">Повернутись на сайт</a>
         </div>
-        <p class="muted" style="margin-top:8px">Повернення автоматично через <b id="backCd">3</b> сек…</p>
+      </div>
+
+      <div id="help" style="margin-top:14px">
+        <p class="muted">Якщо випадково закрили вкладку з оплатою — натисніть «Відкрити оплату в Monobank» ще раз.</p>
+        <p class="muted">Якщо оплата не проходить — спробуйте іншу картку або зв’яжіться з нами.</p>
       </div>
     </div>
   </div>
@@ -54,95 +67,77 @@
   (function(){
     const $ = s => document.querySelector(s);
 
-    // === Константы
+    // Константи
     const WORKER  = 'https://filipskanails-pay.timanov-business.workers.dev';
     const LANDING = 'https://filipskanails.github.io/filipskanails/';
 
-    // === Параметры из URL
+    // Параметри URL
     const params    = new URLSearchParams(location.search);
     const invoiceId = params.get('invoiceId');
     const ref       = params.get('ref');
-    const pay       = params.get('pay'); // ссылка на платёжку (если попап был заблокирован)
+    const pay       = params.get('pay');
+    const plan      = params.get('plan'); // "group" | "individual" (на майбутнє)
     $('#ref').textContent = ref || '—';
 
-    // === Поищем имя вкладки оплаты, чтобы попытаться её сфокусировать
-    let payTabName = 'monoPayTab';
+    // Виведемо email, якщо збережений у локальному сховищі
     try {
-      const saved = localStorage.getItem('monoPayTabName');
-      if (saved) payTabName = saved;
+      const email = localStorage.getItem('coEmail');
+      if (email) $('#emailEcho').textContent = email;
     } catch {}
 
+    // Прив’язуємо кнопку "Відкрити оплату"
+    const aPay = $('#openPay');
+    if (pay) aPay.href = pay;
+
+    // Статус UI
     function setStatus(txt, cls){
       $('#status').textContent = txt;
       const badge = $('#statusBadge');
-      badge.textContent = (cls==='ok') ? 'Оплачено' : (cls==='err') ? 'Помилка' : 'Очікуємо…';
+      badge.textContent = (cls==='ok') ? 'Оплачено' : (cls==='err') ? 'Помилка' : 'Очікуємо оплату…';
       badge.className = cls;
     }
 
-    // === UI: показать «відкрити оплату» и «повернутись до оплати», если есть pay=
-    if (pay) {
-      const a = $('#openPay');
-      a.href = pay;
-      $('#payBlock').style.display = 'flex';
-    }
-
-    // Кнопка "Повернутись до оплати" — попробуем сфокусировать уже открытую вкладку оплаты
-    $('#focusPay')?.addEventListener('click', (e)=>{
-      e.preventDefault();
-      try {
-        const w = window.open('', payTabName);
-        if (w && !w.closed) { try { w.focus(); } catch {} return; }
-      } catch {}
-      // если не получилось — откроем ссылку оплаты заново
-      if (pay) window.open(pay, '_blank', 'noopener');
-    });
-
-    // === Проверка статуса
-    async function check(){
+    // Перевірка статусу
+    let pollTimer = null;
+    async function checkStatus(){
       try{
-        if(!invoiceId){ setStatus('очікується (без invoiceId)', 'wait'); setTimeout(check, 5000); return; }
+        if(!invoiceId){ setStatus('очікується (без invoiceId)', 'wait'); schedule(); return; }
         const r = await fetch(`${WORKER}/mono/status?invoiceId=${encodeURIComponent(invoiceId)}`);
         const data = await r.json();
         const st = String(data.status || '').toLowerCase();
 
         if(st === 'success' || st === 'paid'){
           setStatus('успішно', 'ok');
-
-          // убираем блок с оплатой и показываем авто-возврат
-          $('#payBlock').style.display = 'none';
+          $('#actions').style.display = 'none';
           $('#afterSuccess').style.display = 'block';
-          const back = $('#backBtn');
-          back.href = LANDING + '?paid=1#top';
-
-          // авто-возврат через 3 сек
-          let left = 3;
-          $('#backCd').textContent = left;
-          const t = setInterval(()=>{
-            left--; $('#backCd').textContent = left;
-            if(left<=0){ clearInterval(t); window.location.href = LANDING + '?paid=1#top'; }
-          }, 1000);
-
-          return;
+          // тут пізніше вставимо кнопки Telegram за тарифом
+          return; // зупиняємо опитування
         }
-
         if(st === 'failure' || st === 'expired' || st === 'reversed'){
           setStatus(st, 'err');
-          return;
+          return; // теж зупинимо
         }
 
         setStatus(st || 'очікується', 'wait');
-        setTimeout(check, 5000);
+        schedule();
       }catch(e){
         setStatus('тимчасова помилка мережі', 'wait');
-        setTimeout(check, 5000);
+        schedule();
       }
     }
-    check();
+    function schedule(){ clearTimeout(pollTimer); pollTimer = setTimeout(checkStatus, 5000); }
 
-    // Подсказка: если вкладка была невидимой и снова стала видимой — сразу проверить статус
-    document.addEventListener('visibilitychange', ()=>{
-      if (!document.hidden) check();
-    });
+    // Кнопка "Перевірити статус зараз"
+    $('#checkNow').addEventListener('click', (e)=>{ e.preventDefault(); clearTimeout(pollTimer); checkStatus(); });
+
+    // Якщо вкладка знову стала видимою — одразу перевіримо
+    document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkStatus(); });
+
+    // Кнопка "Повернутись на сайт"
+    $('#toHome').addEventListener('click', (e)=>{ e.preventDefault(); window.location.href = LANDING + '#top'; });
+
+    // Старт
+    checkStatus();
   })();
   </script>
 </body>
