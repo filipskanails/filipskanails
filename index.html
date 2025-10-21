@@ -423,18 +423,17 @@
 
   <script>
     /* ===== CONFIG ===== */
-    const WORKER="https://filipskanails-pay.timanov-business.workers.dev"; // твій бекенд-домен
+    const WORKER="https://filipskanails-pay.timanov-business.workers.dev";
     const THANK ="https://filipskanails.github.io/filipskanails/thankyou.html";
     const TITLE ="Доступ до курсу Next Level";
   
-    // ЦІНИ
+    // ЦІНИ (підстав свої)
     const PROMO_HOURS   = 5;
-    const GROUP_BASE    = 2;
-    const GROUP_DISC    = 1;
-    const INDIV_BASE    = 4;
-    const INDIV_DISC    = 2;
+    const GROUP_BASE    = 2;   // базовий груповий (грн)
+    const GROUP_DISC    = 1;   // промо груповий (грн)
+    const INDIV_BASE    = 4;   // базовий індивідуальний (грн)
+    const INDIV_DISC    = 2;   // промо індивідуальний (грн)
   
-    // MONO endpoint (твій Worker має POST /mono/checkout)
     const MONO_ENDPOINT = WORKER + "/mono/checkout";
   
     const $=s=>document.querySelector(s);
@@ -652,7 +651,7 @@
       waitScrollEnd(afterScrollSettledThenPulse);
     }
   
-    /* ===== плаваюча кнопка + Hero CTA: скрол до тарифів з підсвіткою ===== */
+    /* ===== плаваюча кнопка + Hero CTA ===== */
     (function(){
       const floatBtn=$("#buyFloat"), topBtn=$("#buyTop");
       if(floatBtn){
@@ -743,6 +742,11 @@
       coForm.addEventListener("submit", async (e)=>{
         e.preventDefault();
         coErr.classList.remove("show"); coErr.textContent="";
+  
+        // 👉 ОТКРЫВАЕМ ПУСТУЮ ВКЛАДКУ СРАЗУ (пока жест еще активен)
+        let payWin = null;
+        try { payWin = window.open('about:blank','_blank','noopener'); } catch {}
+  
         const firstName = $("#coFirst").value.trim();
         const lastName  = $("#coLast").value.trim();
         const email     = $("#coEmail").value.trim().toLowerCase();
@@ -770,13 +774,19 @@
             body: JSON.stringify({ plan: selectedPlan, amountUAH, email, phone, firstName, lastName })
           });
           if(!res.ok) throw new Error("Помилка сервера. Спробуйте ще раз.");
-          const data = await res.json(); // очікуємо { pageUrl, invoiceId, reference }
+          const data = await res.json(); // { pageUrl, invoiceId, reference }
   
-          // ✅ НОВА логіка:
-          const thankUrl = `${THANK}?ref=${encodeURIComponent(data.reference)}&invoiceId=${encodeURIComponent(data.invoiceId||'')}`;
-          const win = window.open(data.pageUrl, '_blank', 'noopener'); // платіжка у новій вкладці
-          window.location.href = thankUrl;                               // поточна вкладка -> thankyou
-          if(!win){ window.location.href = data.pageUrl; }               // якщо попап заблоковано
+          // формируем URL thankyou с ref/invoiceId и ссылкой на оплату (pay)
+          const thankUrl = `${THANK}?ref=${encodeURIComponent(data.reference)}&invoiceId=${encodeURIComponent(data.invoiceId||'')}&pay=${encodeURIComponent(data.pageUrl)}`;
+  
+          if (payWin) {
+            // если вкладка открылась — отправляем её на оплату, а текущую на thankyou
+            try { payWin.location = data.pageUrl; } catch {}
+            window.location.assign(thankUrl);
+          } else {
+            // если попап заблокирован — уходим в оплату в этой вкладке
+            window.location.assign(data.pageUrl);
+          }
   
         }catch(err){
           console.error(err);
