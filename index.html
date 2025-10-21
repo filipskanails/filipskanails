@@ -236,6 +236,41 @@
     .floater-inner{max-width:720px;margin:0 auto;padding:0 16px}
     .floater .cta{width:100%}
     @media (prefers-reduced-motion:reduce){.floater{transition:none}}
+
+    /* ===== CHECKOUT MODAL (mono) ===== */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(3,5,4,.6);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:100}
+    .modal-backdrop.show{display:flex}
+    .modal{
+      width:min(680px,calc(100% - 24px));background:var(--card);border:1px solid var(--line);border-radius:20px;
+      box-shadow:0 18px 46px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.02);padding:16px
+    }
+    .modal header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+    .modal h3{margin:0;font-size:20px}
+    .modal .close{width:36px;height:36px;border-radius:999px;border:1px solid var(--line);background:#0f1713;display:grid;place-items:center;cursor:pointer}
+    .planSwitch{display:flex;gap:8px;margin:6px 0 12px}
+    .planSwitch button{
+      flex:1;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#0f1713;color:var(--text);font-weight:700
+    }
+    .planSwitch button[aria-pressed="true"]{
+      background:linear-gradient(135deg,var(--accent-2),var(--accent));color:#062217;box-shadow:0 0 0 3px rgba(var(--accent2-rgb),.18) inset
+    }
+    .formGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .formGrid .wide{grid-column:1/-1}
+    .field{display:grid;gap:6px}
+    .field label{font-size:12px;color:var(--muted)}
+    .field input[type="text"],.field input[type="email"],.field input[type="tel"]{
+      appearance:none;width:100%;padding:12px 12px;border-radius:12px;border:1px solid var(--line);
+      background:#0f1713;color:var(--text);font-size:16px;outline:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)
+    }
+    .help{font-size:12px;color:var(--muted)}
+    .checkline{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--muted)}
+    .checkline input{margin-top:3px}
+    .modal .actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
+    .priceBadge{font-weight:900}
+    .modal .cta{min-width:220px}
+    .err{color:#ffb4b4;font-size:13px;display:none}
+    .err.show{display:block}
+    .notePay{font-size:12px;color:var(--muted);margin-top:6px}
   </style>
 </head>
 <body>
@@ -295,7 +330,7 @@
                 <div class="priceNow" id="gPrice">— грн</div>
                 <div class="priceOld" id="gOld" style="display:none">— грн</div>
               </div>
-              <a id="buyGroup" class="cta" aria-label="Оплатити Груповий тариф">Купити</a>
+              <a id="buyGroup" class="cta" aria-label="Оплатити Груповий тариф" href="#">Купити</a>
             </div>
           </article>
 
@@ -316,7 +351,7 @@
                 <div class="priceNow" id="iPrice">— грн</div>
                 <div class="priceOld" id="iOld" style="display:none">— грн</div>
               </div>
-              <a id="buyIndiv" class="cta" aria-label="Оплатити Індивідуальний тариф">Купити</a>
+              <a id="buyIndiv" class="cta" aria-label="Оплатити Індивідуальний тариф" href="#">Купити</a>
             </div>
           </article>
         </div>
@@ -427,9 +462,62 @@
     </div>
   </div>
 
+  <!-- ===== CHECKOUT MODAL (mono) ===== -->
+  <div class="modal-backdrop" id="checkoutBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="coTitle">
+      <header>
+        <h3 id="coTitle">Оформлення замовлення</h3>
+        <button class="close" type="button" id="coClose" aria-label="Закрити">✕</button>
+      </header>
+
+      <div class="planSwitch" role="tablist" aria-label="Вибір тарифу">
+        <button id="psGroup" role="tab" aria-selected="true" aria-pressed="true" data-plan="group">
+          Груповий · <span id="psGroupPrice">— грн</span>
+        </button>
+        <button id="psIndiv" role="tab" aria-selected="false" aria-pressed="false" data-plan="individual">
+          Індивідуальний · <span id="psIndivPrice">— грн</span>
+        </button>
+      </div>
+
+      <form id="checkoutForm" novalidate>
+        <div class="formGrid">
+          <div class="field">
+            <label for="coFirst">Ім’я</label>
+            <input id="coFirst" name="firstName" type="text" autocomplete="given-name" required>
+          </div>
+          <div class="field">
+            <label for="coLast">Прізвище</label>
+            <input id="coLast" name="lastName" type="text" autocomplete="family-name" required>
+          </div>
+          <div class="field wide">
+            <label for="coEmail">Email</label>
+            <input id="coEmail" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div class="field wide">
+            <label for="coPhone">Телефон</label>
+            <input id="coPhone" name="phone" type="tel" inputmode="tel" placeholder="+380…" required>
+          </div>
+        </div>
+
+        <div class="checkline" style="margin-top:8px">
+          <input id="coAgree" type="checkbox" required>
+          <label for="coAgree">Погоджуюсь з <a href="#offer">офертою</a> та <a href="#privacy">політикою конфіденційності</a></label>
+        </div>
+
+        <div class="err" id="coErr"></div>
+
+        <div class="actions">
+          <div class="priceBadge">До сплати: <span id="coPay">— грн</span></div>
+          <button id="coBtn" class="cta" type="submit">Перейти до оплати</button>
+        </div>
+        <div class="notePay">Оплата відбувається на захищеній сторінці Monobank. Дані картки вводяться там.</div>
+      </form>
+    </div>
+  </div>
+
   <script>
     /* ===== CONFIG ===== */
-    const WORKER="https://filipskanails-pay.timanov-business.workers.dev";
+    const WORKER="https://filipskanails-pay.timanov-business.workers.dev"; // твій бекенд-домен
     const THANK ="https://filipskanails.github.io/filipskanails/thankyou.html";
     const TITLE ="Доступ до курсу Next Level";
 
@@ -440,52 +528,11 @@
     const INDIV_BASE    = 16000;
     const INDIV_DISC    = 12800;
 
+    // MONO endpoint (твій Worker повинен мати POST /mono/checkout)
+    const MONO_ENDPOINT = WORKER + "/mono/checkout";
+
     const $=s=>document.querySelector(s);
     const fmt=n=>new Intl.NumberFormat("uk-UA").format(n);
-
-    /* оплати — тільки на тарифних кнопках */
-    function setPayHref(el,amount,label){
-      if(!el) return;
-      const u=new URL(WORKER);
-      u.searchParams.set("amount",String(amount));
-      u.searchParams.set("title",`${TITLE} — ${label}`);
-      u.searchParams.set("thank",THANK);
-      el.href=u.toString(); el.target="_blank"; el.rel="noopener";
-    }
-
-    function renderHeroPrice(active, old){
-      const line=$("#priceLine");
-      if(line){
-        line.innerHTML = old && old>active
-          ? `лише ${fmt(active)} грн <span class="oldline">${fmt(old)} грн</span>`
-          : `ціна ${fmt(active)} грн`;
-      }
-      // не чіпаємо #buyTop (він скролить)
-    }
-
-    function setTariff(cardIds, active, old, label){
-      const priceNow = $(cardIds.price);
-      const priceOld = $(cardIds.old);
-      const btn      = $(cardIds.btn);
-      if(priceNow) priceNow.textContent = fmt(active) + " грн";
-      if(priceOld){
-        if(old && old>active){ priceOld.style.display="block"; priceOld.textContent = fmt(old) + " грн"; }
-        else { priceOld.style.display="none"; }
-      }
-      setPayHref(btn, active, label);
-    }
-
-    function renderTariffs(promo){
-      const gActive = promo ? GROUP_DISC : GROUP_BASE;
-      const iActive = promo ? INDIV_DISC : INDIV_BASE;
-      const gOld    = promo ? GROUP_BASE : null;
-      const iOld    = promo ? INDIV_BASE : null;
-
-      setTariff({price:"#gPrice", old:"#gOld", btn:"#buyGroup"}, gActive, gOld, "Груповий");
-      setTariff({price:"#iPrice", old:"#iOld", btn:"#buyIndiv"}, iActive, iOld, "Індивідуальний");
-
-      renderHeroPrice(gActive, gOld);
-    }
 
     /* ===== стабільний layout HERO ===== */
     function cssVarNum(el,name,fallback){ const v=getComputedStyle(el).getPropertyValue(name).trim(); const num=parseFloat(v); return Number.isFinite(num)?num:fallback; }
@@ -514,12 +561,36 @@
     let ends=parseInt(localStorage.getItem(key)||"0",10);
     if(!ends||ends<now){ ends=now+PROMO_HOURS*60*60*1000; localStorage.setItem(key,String(ends)); }
 
+    function renderHeroPrice(active, old){
+      const line=$("#priceLine");
+      if(line){
+        line.innerHTML = old && old>active
+          ? `лише ${fmt(active)} грн <span class="oldline">${fmt(old)} грн</span>`
+          : `ціна ${fmt(active)} грн`;
+      }
+    }
+
+    function setTariffPrices(promo){
+      const gActive = promo ? GROUP_DISC : GROUP_BASE;
+      const iActive = promo ? INDIV_DISC : INDIV_BASE;
+      const gOld    = promo ? GROUP_BASE : null;
+      const iOld    = promo ? INDIV_BASE : null;
+
+      const gP=$("#gPrice"), gO=$("#gOld"), iP=$("#iPrice"), iO=$("#iOld");
+      if(gP) gP.textContent = fmt(gActive) + " грн";
+      if(iP) iP.textContent = fmt(iActive) + " грн";
+      if(gO){ if(gOld){ gO.style.display="block"; gO.textContent=fmt(gOld)+" грн"; } else gO.style.display="none"; }
+      if(iO){ if(iOld){ iO.style.display="block"; iO.textContent=fmt(iOld)+" грн"; } else iO.style.display="none"; }
+
+      renderHeroPrice(gActive, gOld);
+    }
+
     function tick(){
       const left=Math.max(0, ends - Date.now());
       const promoActive = left>0;
 
       if(COUNT) COUNT.style.display = promoActive ? "flex" : "none";
-      renderTariffs(promoActive);
+      setTariffPrices(promoActive);
 
       if(!promoActive) return;
 
@@ -530,16 +601,15 @@
     }
     tick();
 
-    /* ===== REVIEWS slider (IO-активація, 30s, wrap arrows, показ лише активного) ===== */
+    /* ===== REVIEWS slider (30s, wrap arrows, IO-активація) ===== */
     (function(){
       const reel = document.getElementById('reviewsReel');
       if(!reel) return;
 
-      const AUTOSCROLL_MS = 30000; // 30 секунд
+      const AUTOSCROLL_MS = 30000;
       const slides = Array.from(reel.children);
       const dotsWrap = document.getElementById('reviewsDots');
 
-      // точки
       dotsWrap.innerHTML = "";
       slides.forEach((_,i)=>{
         const b=document.createElement('button');
@@ -551,8 +621,8 @@
 
       const stepW = ()=> (reel.clientWidth*0.86 + 14);
 
-      let active = 0;     // реально активний
-      let dir = 1;        // напрям автоскролу
+      let active = 0;
+      let dir = 1;
       let timer = null;
 
       function updateDots(i){
@@ -630,7 +700,7 @@
       start();
     })();
 
-    /* ===== промо: обчислення видимості елемента ===== */
+    /* ===== utils для підсвітки тарифів після скролу ===== */
     function visibleRatio(el){
       if(!el) return 0;
       const r = el.getBoundingClientRect();
@@ -641,21 +711,17 @@
       const area = Math.max(1, r.width * r.height);
       return interArea / area;
     }
-
-    /* ===== Tariff pulse (запуск ТІЛЬКИ після фактичної зупинки скролу на Promo) ===== */
     function pulseTariffs(){
       document.querySelectorAll('.tariff').forEach(card=>{
         card.classList.add('pulse');
         card.addEventListener('animationend', ()=>card.classList.remove('pulse'), {once:true});
       });
     }
-
     function afterScrollSettledThenPulse(){
       const card = document.querySelector('#promo .promoCard');
       if(!card) return;
       const ratio = visibleRatio(card);
       if(ratio >= 0.6){ pulseTariffs(); return; }
-      // якщо ще не достатньо видно — дочекаємось через IO
       const io = new IntersectionObserver((entries, obs)=>{
         const e = entries[0];
         if(e && e.isIntersecting && e.intersectionRatio >= 0.6){
@@ -665,16 +731,14 @@
       }, { threshold: [0.6] });
       io.observe(card);
     }
-
     function waitScrollEnd(callback, idleMs=140, capMs=2000){
       let t=null, done=false;
       const onEnd=()=>{ if(done) return; done=true; window.removeEventListener('scroll', onScroll, {passive:true}); clearTimeout(t); callback(); };
       const onScroll=()=>{ clearTimeout(t); t=setTimeout(onEnd, idleMs); };
       window.addEventListener('scroll', onScroll, {passive:true});
-      onScroll(); // старт
-      setTimeout(onEnd, capMs); // страховка
+      onScroll();
+      setTimeout(onEnd, capMs);
     }
-
     function scrollToPromoAndPulse(){
       const promo = $("#promo");
       if(!promo) return;
@@ -715,8 +779,124 @@
 
       io.observe(hero);
       io.observe(promo);
-      // ініціалізація
       update();
+    })();
+
+    /* ===== CHECKOUT MODAL + MONO CHECKOUT ===== */
+    (function(){
+      const backdrop = $("#checkoutBackdrop");
+      const coForm   = $("#checkoutForm");
+      const coBtn    = $("#coBtn");
+      const coErr    = $("#coErr");
+      const bClose   = $("#coClose");
+      const bGroup   = $("#psGroup");
+      const bIndiv   = $("#psIndiv");
+      let selectedPlan = "group";
+
+      function currentPromoActive(){
+        const left = Math.max(0, (parseInt(localStorage.getItem("promoEndsAt-v1")||"0",10)) - Date.now());
+        return left>0;
+      }
+      function getPrices(){
+        const promo = currentPromoActive();
+        return {
+          group: promo ? GROUP_DISC : GROUP_BASE,
+          indiv: promo ? INDIV_DISC : INDIV_BASE
+        };
+      }
+      function updatePlanUI(){
+        const prices = getPrices();
+        $("#psGroupPrice").textContent = fmt(prices.group) + " грн";
+        $("#psIndivPrice").textContent = fmt(prices.indiv) + " грн";
+        $("#coPay").textContent = fmt(selectedPlan==="group" ? prices.group : prices.indiv) + " грн";
+        [bGroup,bIndiv].forEach(btn=>{
+          const is = btn.dataset.plan === selectedPlan;
+          btn.setAttribute("aria-pressed", String(is));
+          btn.setAttribute("aria-selected", String(is));
+        });
+      }
+      function openCheckout(plan){
+        selectedPlan = plan || "group";
+        updatePlanUI();
+        // Prefill з localStorage
+        ["coFirst","coLast","coEmail","coPhone"].forEach(id=>{
+          const v = localStorage.getItem(id); if(v) $("#"+id).value = v;
+        });
+        backdrop.classList.add("show");
+        backdrop.removeAttribute("aria-hidden");
+        $("#coFirst").focus();
+      }
+      function closeCheckout(){
+        backdrop.classList.remove("show");
+        backdrop.setAttribute("aria-hidden","true");
+      }
+
+      // Перехоплюємо кнопки "Купити" в тарифах
+      const btnGroup = $("#buyGroup");
+      const btnIndiv = $("#buyIndiv");
+      if(btnGroup) btnGroup.addEventListener("click", (e)=>{ e.preventDefault(); openCheckout("group"); });
+      if(btnIndiv) btnIndiv.addEventListener("click", (e)=>{ e.preventDefault(); openCheckout("individual"); });
+
+      // Перемикач планів
+      bGroup.addEventListener("click", ()=>{ selectedPlan="group"; updatePlanUI(); });
+      bIndiv.addEventListener("click", ()=>{ selectedPlan="individual"; updatePlanUI(); });
+
+      // Закриття модалки
+      bClose.addEventListener("click", closeCheckout);
+      backdrop.addEventListener("click", (e)=>{ if(e.target===backdrop) closeCheckout(); });
+      document.addEventListener("keydown",(e)=>{ if(e.key==="Escape" && backdrop.classList.contains("show")) closeCheckout(); });
+
+      // Валідатори
+      const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+      const normPhone = v => v.replace(/[^\d+]/g,"");
+
+      coForm.addEventListener("submit", async (e)=>{
+        e.preventDefault();
+        coErr.classList.remove("show"); coErr.textContent="";
+        const firstName = $("#coFirst").value.trim();
+        const lastName  = $("#coLast").value.trim();
+        const email     = $("#coEmail").value.trim().toLowerCase();
+        const phone     = normPhone($("#coPhone").value.trim());
+        const agree     = $("#coAgree").checked;
+
+        if(firstName.length<2 || lastName.length<2){ coErr.textContent="Вкажіть ім’я та прізвище."; coErr.classList.add("show"); return; }
+        if(!isEmail(email)){ coErr.textContent="Некоректний email."; coErr.classList.add("show"); return; }
+        if(phone.length<10){ coErr.textContent="Некоректний телефон."; coErr.classList.add("show"); return; }
+        if(!agree){ coErr.textContent="Підтвердіть згоду з умовами."; coErr.classList.add("show"); return; }
+
+        // Збережемо дані для зручності
+        ["coFirst","coLast","coEmail","coPhone"].forEach(id=>{
+          const v=$("#"+id).value.trim(); localStorage.setItem(id, v);
+        });
+
+        const prices = getPrices();
+        const amountUAH = selectedPlan==="group" ? prices.group : prices.indiv;
+
+        coBtn.disabled = true; coBtn.textContent = "Створюємо платіж…";
+
+        try{
+          const res = await fetch(MONO_ENDPOINT, {
+            method:"POST",
+            headers:{"content-type":"application/json"},
+            body: JSON.stringify({
+              plan: selectedPlan,
+              amountUAH,
+              email,
+              phone,
+              firstName,
+              lastName
+            })
+          });
+          if(!res.ok) throw new Error("Помилка сервера. Спробуйте ще раз.");
+          const data = await res.json(); // очікуємо { pageUrl }
+          if(!data.pageUrl) throw new Error("Немає посилання на оплату.");
+          window.location.href = data.pageUrl; // перехід на сторінку оплати mono
+        }catch(err){
+          coErr.textContent = err.message || "Не вдалося створити платіж.";
+          coErr.classList.add("show");
+          coBtn.disabled = false; coBtn.textContent = "Перейти до оплати";
+        }
+      });
     })();
   </script>
 </body>
