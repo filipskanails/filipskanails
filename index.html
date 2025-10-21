@@ -19,9 +19,15 @@
 
       --radius:24px; --shadow:0 10px 28px rgba(0,0,0,.24);
 
-      /* управляемые из JS */
+      /* управляемые из JS (можно править вручную) */
       --img-top:320px; --cta-top:560px; --bubble-top:440px; --glow-top:380px; --hero-h:760px;
       --promoOverlap:18px;
+
+      /* НОВОЕ: тонкая ручная настройка hero */
+      --gap:8;                 /* отступ между текстом и фото, px */
+      --bubble-offset:200;     /* как высоко “бабл” от верхней кромки фото, px */
+      --cta-ratio:0.68;        /* где CTA по высоте картинки (0..1) */
+      --cta-extra:40;          /* добавочный пиксельный сдвиг CTA */
     }
 
     /* базовое */
@@ -29,7 +35,7 @@
     html,body{
       margin:0;background:var(--bg);color:var(--text);
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif;
-      overflow-x:hidden;  /* убираем горизонтальный скролл */
+      overflow-x:hidden;
     }
     a{color:inherit;text-decoration:none}
     img{max-width:100%;display:block}
@@ -42,7 +48,6 @@
     /* ===== HERO (full-bleed) ===== */
     #hero{margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);position:relative;z-index:1}
     .hero-stage{position:relative;height:var(--hero-h);overflow:hidden;isolation:isolate;background:transparent}
-    /* мягкое свечение, аккуратнее по производительности */
     .hero-stage::after{
       content:""; position:absolute; right:50%; top:var(--glow-top);
       width:min(120vmin,680px); height:min(120vmin,680px); border-radius:50%;
@@ -63,7 +68,7 @@
     .hero-text{
       position:absolute;top:2%;left:50%;transform:translateX(-50%);
       width:calc(100% - 32px);max-width:640px;
-      text-align:center; /* центрируем весь верхний блок */
+      text-align:center;
       text-shadow:0 1px 0 rgba(0,0,0,.2);z-index:2
     }
     .eyebrow{font-size:13px;letter-spacing:.06em;color:var(--muted)}
@@ -72,7 +77,6 @@
     .chip.outline{background:transparent}
 
     .hl{font-size:clamp(28px,7vw,38px);line-height:1.18;font-weight:900;margin:10px 0 8px}
-    /* Микс-выравнивание строк заголовка */
     .hl.hl-mix{display:grid;gap:2px}
     .hl.hl-mix .line{display:block}
     .hl.hl-mix .line.r{text-align:right}
@@ -111,11 +115,11 @@
     .priceLine{font-weight:800;text-align:center;font-size:16px;color:var(--text);opacity:.95}
     .priceLine .oldline{color:#95a49b;text-decoration:line-through;margin-left:10px}
 
-    /* ===== PROMO & ABOUT общая геометрия секции ===== */
+    /* ===== PROMO & ABOUT ===== */
     .section{margin:28px 0}
     h2{font-size:clamp(22px,6vw,28px);margin:0 0 12px}
 
-    /* promo — full-bleed контейнер, карта как в about */
+    /* promo — full-bleed */
     #promo{margin-top:calc(-1 * var(--promoOverlap));padding-top:var(--promoOverlap);
       margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);position:relative;z-index:5}
     .promoCard{
@@ -185,7 +189,6 @@
     #reviews{ margin:28px 0; margin-left:-16px; margin-right:-16px; width:calc(100% + 32px); }
     #reviews .head{ text-align:center; margin-bottom:12px; }
     #reviews .muted{ color:var(--muted); }
-    
     .reel{
       position:relative;
       overflow-x:auto; overflow-y:visible;
@@ -207,10 +210,9 @@
         0 18px 40px rgba(0,0,0,.28);
       padding:18px 16px 16px;
     }
-    .slide::before{ /* тонка акцентна кайма */
+    .slide::before{
       content:""; position:absolute; inset:-1px;
-      border-radius:22px;
-      pointer-events:none;
+      border-radius:22px; pointer-events:none;
       background:
         radial-gradient(140% 120% at 100% 0%, rgba(11,125,71,.22), transparent 60%),
         radial-gradient(140% 120% at 0% 100%, rgba(0,74,37,.16), transparent 60%);
@@ -218,12 +220,8 @@
       -webkit-mask: linear-gradient(#000,#000) content-box, linear-gradient(#000,#000);
       padding:1px;
     }
-    .quote{
-      font-size:16px; line-height:1.5;
-    }
-    .qtop{
-      display:flex; align-items:center; gap:8px; margin-bottom:10px;
-    }
+    .quote{ font-size:16px; line-height:1.5; }
+    .qtop{ display:flex; align-items:center; gap:8px; margin-bottom:10px; }
     .qtop .qmark{
       width:26px; height:26px; border-radius:50%;
       background:
@@ -232,24 +230,19 @@
       box-shadow: 0 0 0 3px rgba(11,125,71,.18);
       display:grid; place-items:center; color:#062217; font-weight:900;
     }
-    .qbot{
-      display:flex; align-items:center; justify-content:space-between;
-      margin-top:12px; gap:10px;
-    }
+    .qbot{ display:flex; align-items:center; justify-content:space-between; margin-top:12px; gap:10px; }
     .badge{
       font-size:12px; color:#cfe6dc; padding:6px 10px; border-radius:999px;
       background:rgba(12,16,14,.55); border:1px solid rgba(142,243,199,.18);
       backdrop-filter:blur(6px);
     }
     .stars{ font-size:14px; letter-spacing:1px; opacity:.9 }
-    
     .navDots{display:flex; justify-content:center; gap:8px; margin-top:10px}
     .navDots button{
       width:8px; height:8px; border-radius:999px; border:none; padding:0;
       background:#2a3a34; opacity:.7;
     }
     .navDots button[aria-current="true"]{ background:var(--accent-2); opacity:1; }
-    
     .reviewsArrows{position:relative; height:0}
     .reviewsArrows .arrow{
       position:absolute; top:-86px; z-index:2;
@@ -262,7 +255,27 @@
     .reviewsArrows .next{ right:22px }
     .reviewsArrows .arrow:active{ transform:scale(.98) }
 
-    /* footer */
+    /* ===== PROGRAM (новый блок) ===== */
+    #program{ margin:28px 0; margin-left:-16px; margin-right:-16px; width:calc(100% + 32px); }
+    #program .head{ text-align:center; margin-bottom:12px; }
+    .programGrid{
+      display:grid; gap:14px; padding:0 16px;
+    }
+    .moduleCard{
+      border-radius:22px; background:var(--card); border:1px solid var(--line);
+      padding:16px 16px 14px; box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22);
+      position:relative; overflow:hidden;
+    }
+    .moduleCard::after{
+      content:""; position:absolute; inset:auto -20% -40% auto; width:60%; height:120%;
+      background: radial-gradient(60% 60% at 100% 100%, rgba(var(--accent2-rgb),.20), transparent 70%);
+      pointer-events:none; filter:blur(8px);
+    }
+    .moduleTitle{ font-weight:900; font-size:18px; margin:0 0 8px; }
+    .moduleList{ margin:0; padding-left:18px; color:var(--muted); line-height:1.5; }
+    .moduleList li{ margin:6px 0; }
+
+    /* footer + floater */
     footer.footer{margin-top:26px;padding:22px 16px 96px;text-align:center;color:var(--muted);border-top:1px solid var(--line)}
     .footer .brand{font-size:22px;color:var(--text);margin:0 0 6px;font-weight:700}
     .footer .legal{font-size:14px;line-height:1.5;max-width:720px;margin:10px auto 0;opacity:.95}
@@ -270,7 +283,6 @@
     .footer .links a{color:var(--muted);text-decoration:underline dotted;margin:0 8px}
     .footer small.copy{display:block;margin-top:12px;opacity:.7}
 
-    /* плавающая кнопка */
     .floater{position:fixed;left:0;right:0;bottom:12px;z-index:50;opacity:0;transform:translateY(16px);pointer-events:none;
       transition:opacity .28s ease,transform .28s ease}
     .floater.show{opacity:1;transform:translateY(0);pointer-events:auto}
@@ -286,8 +298,8 @@
   <div class="wrap">
 
     <!-- ===== HERO ===== -->
-    <section id="hero" class="hero-stage">
-      <img class="hero-img" src="img/main.png" alt="Інструктор курсу">
+    <section id="hero" class="hero-stage" aria-label="Головний екран">
+      <img class="hero-img" src="img/main.png" alt="Інструктор курсу Next Level">
 
       <div class="hero-text">
         <div class="eyebrow">
@@ -295,19 +307,17 @@
           <span class="accent nowrap">АННИ ФІЛІПСЬКОЇ</span>
         </div>
 
-        <!-- Заголовок: строки с разным выравниванием -->
-        <h1 class="hl hl-mix">
+        <h1 class="hl hl-mix" aria-label="Заголовок">
           <span class="line l">ІНСТАКВАДРАТИ.</span>
           <span class="line r">ІДЕАЛЬНИЙ КОМБІ.</span>
           <span class="line l">ІДЕАЛЬНИЙ ФРЕНЧ.</span>
           <span class="line r">ТВІЙ NEXT LEVEL.</span>
         </h1>
 
-        <!-- Лид по центру -->
         <p class="lead">Цей курс - твоя можливість перейти з "майстра базовика" у впевнену, сильну майстриню з власним стилем і високим прайсом.<br>Next Level - коли твої роботи говорять самі за себе.</p>
       </div>
 
-      <div class="hero-bubble" id="heroBubble">
+      <div class="hero-bubble" id="heroBubble" role="note">
         Клієнти шукають сучасних і професійних майстрів.
         Не втрачай свій шанс бути серед кращих!
       </div>
@@ -319,7 +329,7 @@
     </section>
 
     <!-- ===== PROMO ===== -->
-    <section id="promo" class="section">
+    <section id="promo" class="section" aria-label="Акційна пропозиція">
       <div class="promoCard">
         <h2>Приєднуйся зараз та отримай бонуси</h2>
         <ul class="bonusList">
@@ -327,7 +337,7 @@
           <li>Відео-урок «Чистий комбі зріз»</li>
         </ul>
 
-        <div class="countdown" id="countdown">
+        <div class="countdown" id="countdown" aria-live="polite">
           <div class="countbox"><div class="n" id="cd-h">00</div><div class="t">Годин</div></div>
           <div class="countbox"><div class="n" id="cd-m">00</div><div class="t">Хвилин</div></div>
           <div class="countbox"><div class="n" id="cd-s">00</div><div class="t">Секунд</div></div>
@@ -342,88 +352,134 @@
       </div>
     </section>
 
-    <!-- ===== ABOUT / ПРО МЕНЕ ===== -->
-    <section id="about" class="section">
+    <!-- ===== ABOUT ===== -->
+    <section id="about" class="section" aria-label="Про мене">
       <h2>Про мене</h2>
       <p class="aboutLead">Привіт, я Анна Філіпська</p>
 
       <div class="aboutCard">
         <ul class="aboutList">
-          <li class="aboutItem"><span class="icon"></span><span class="txt">За <span class="accent">6 років</span> зробила понад <span class="accent">5000 манікюрів</span>.</span></li>
-          <li class="aboutItem"><span class="icon"></span><span class="txt"><span class="accent">90%</span> моїх учениць почали заробляти вже <b>після бази</b>.</span></li>
-          <li class="aboutItem"><span class="icon"></span><span class="txt">Допомогла майстриням підняти чек у <span class="accent">2–3 рази</span>.</span></li>
-          <li class="aboutItem"><span class="icon"></span><span class="txt">Мої учениці вже відкрили <b>власні кабінети</b>.</span></li>
-          <li class="aboutItem"><span class="icon"></span><span class="txt">Знаю, як перетворити хобі на <span class="accent">прибуткову справу</span>.</span></li>
-          <li class="aboutItem"><span class="icon"></span><span class="txt">Створила курс <b>Next Level</b> — для майстрів, які хочуть вийти на <span class="accent">новий рівень</span>.</span></li>
-          <li class="aboutItem"><span class="icon"></span><span class="txt">Допомагаю скоротити час роботи з <span class="accent">4 годин</span> до <span class="accent">1.5</span> — <b>без втрати якості</b>.</span></li>
+          <li class="aboutItem"><span class="icon" aria-hidden="true"></span><span class="txt">За <span class="accent">6 років</span> зробила понад <span class="accent">5000 манікюрів</span>.</span></li>
+          <li class="aboutItem"><span class="icon" aria-hidden="true"></span><span class="txt"><span class="accent">90%</span> моїх учениць почали заробляти вже <b>після бази</b>.</span></li>
+          <li class="aboutItem"><span class="icon" aria-hidden="true"></span><span class="txt">Допомогла майстриням підняти чек у <span class="accent">2–3 рази</span>.</span></li>
+          <li class="aboutItem"><span class="icon" aria-hidden="true"></span><span class="txt">Мої учениці вже відкрили <b>власні кабінети</b>.</span></li>
+          <li class="aboutItem"><span class="icon" aria-hidden="true"></span><span class="txt">Знаю, як перетворити хобі на <span class="accent">прибуткову справу</span>.</span></li>
+          <li class="aboutItem"><span class="icon" aria-hidden="true"></span><span class="txt">Створила курс <b>Next Level</b> — для майстрів, які хочуть вийти на <span class="accent">новий рівень</span>.</span></li>
+          <li class="aboutItem"><span class="icon" aria-hidden="true"></span><span class="txt">Допомагаю скоротити час роботи з <span class="accent">4 годин</span> до <span class="accent">1.5</span> — <b>без втрати якості</b>.</span></li>
         </ul>
       </div>
     </section>
 
     <!-- ===== REVIEWS ===== -->
-    <section id="reviews" class="section">
+    <section id="reviews" class="section" aria-label="Відгуки">
       <div class="head">
-        <h2>Відгуки учениць</h2>
+        <h2>Відгуки</h2>
         <div class="muted">Результати та враження після Next Level</div>
       </div>
-    
+
       <div class="reviewsArrows">
         <button class="arrow prev" type="button" aria-label="Попередній">‹</button>
         <button class="arrow next" type="button" aria-label="Наступний">›</button>
       </div>
-    
+
       <div class="reel" id="reviewsReel" aria-label="Слайдер відгуків">
         <!-- 1 -->
         <article class="slide">
           <div class="qtop">
-            <div class="qmark">“</div>
+            <div class="qmark" aria-hidden="true">“</div>
             <span class="badge">випускниця курсу</span>
           </div>
           <div class="quote">
             Привіт, хочу поділитися враженнями про курс підвищення —
-            це було дуже круто ✨ Теорія і практика сприймалися легко ❤️
-            Результат перевищив очікування 🙌 Безмежно вдячна за твій вклад!
-            Швидкість і якість зросли моментально: час роботи з однією
-            клієнткою скоротився щонайменше на пів години 👏
+            це було дуже круто. Теорія і практика сприймалися легко.
+            Результат перевищив очікування. Швидкість і якість зросли:
+            час роботи з однією клієнткою скоротився щонайменше на пів години.
             Дуже рекомендую всім майстрам пройти цей курс!
           </div>
-          <div class="qbot">
-            <div class="stars">★★★★★</div>
-          </div>
+          <div class="qbot"><div class="stars" aria-label="5 зірок">★★★★★</div></div>
         </article>
-    
+
         <!-- 2 -->
         <article class="slide">
           <div class="qtop">
-            <div class="qmark">“</div>
+            <div class="qmark" aria-hidden="true">“</div>
             <span class="badge">результати після модулів</span>
           </div>
           <div class="quote">
             Сьогодні було максимально круто! Бачу великі зміни у вирівнюванні
-            та манікюрі — взагалі, це пушка! З твоєю допомогою розібрала всі
-            нюанси квадрату: як пиляти й на що звертати увагу. Емоції переповнюють,
-            я щаслива і задоволена! Є над чим працювати, буду робити ще краще —
-            не підведу! 💪
+            та манікюрі. З твоєю допомогою розібрала всі нюанси квадрату:
+            як пиляти й на що звертати увагу. Емоції переповнюють — я щаслива
+            і задоволена. Є над чим працювати, буду робити ще краще!
           </div>
-          <div class="qbot"><div class="stars">★★★★★</div></div>
+          <div class="qbot"><div class="stars" aria-label="5 зірок">★★★★★</div></div>
         </article>
-    
+
         <!-- 3 -->
         <article class="slide">
           <div class="qtop">
-            <div class="qmark">“</div>
+            <div class="qmark" aria-hidden="true">“</div>
             <span class="badge">про швидкість</span>
           </div>
           <div class="quote">
-            Привіт! По часу прискорилась конкретно👌 До 2 годин уже роблю
-            укріплення з френчем 🙌 Усі поради використовую — зайвих рухів немає,
-            носибельність значно краща 🥰
+            По часу прискорилась конкретно: до 2 годин уже роблю
+            укріплення з френчем. Усі поради використовую — зайвих рухів немає,
+            носибельність значно краща.
           </div>
-          <div class="qbot"><div class="stars">★★★★★</div></div>
+          <div class="qbot"><div class="stars" aria-label="5 зірок">★★★★★</div></div>
         </article>
       </div>
-    
+
       <div class="navDots" id="reviewsDots" aria-hidden="true"></div>
+    </section>
+
+    <!-- ===== PROGRAM ===== -->
+    <section id="program" class="section" aria-label="Програма курсу">
+      <div class="head">
+        <h2>Програма</h2>
+        <div class="muted">Структура курсу Next Level</div>
+      </div>
+
+      <div class="programGrid">
+        <article class="moduleCard">
+          <h3 class="moduleTitle">Ідеальна техніка комбінованого манікюру</h3>
+          <ul class="moduleList">
+            <li>Стерильність, підготовка інструменту, безпечні кути входу.</li>
+            <li>Підняття пазух, робота фрезами: насадки, оберти, тиск.</li>
+            <li>Чистий зріз: логіка рухів, контроль шкіри, тонкі місця.</li>
+            <li>Типові помилки і як їх уникати. Швидкість без втрати якості.</li>
+          </ul>
+        </article>
+
+        <article class="moduleCard">
+          <h3 class="moduleTitle">Тверді матеріали та опил чіткого квадрату</h3>
+          <ul class="moduleList">
+            <li>Вибір твердих матеріалів: властивості, в’язкість, еластичність.</li>
+            <li>Архітектура: усіни, апекс, паралелі. Побудова міцної форми.</li>
+            <li>Опил квадрату: послідовність, контроль бічних і вільного краю.</li>
+            <li>Реставрація форми, робота з різною довжиною та типами нігтів.</li>
+          </ul>
+        </article>
+
+        <article class="moduleCard">
+          <h3 class="moduleTitle">Однотонне покриття</h3>
+          <ul class="moduleList">
+            <li>Вирівнювання під покриття: тонкий блиск без напливів.</li>
+            <li>Пензлі, в’язкість кольору, 2–3 шари: коли і навіщо.</li>
+            <li>Підведення під кутикулу: чиста лінія без пропусків.</li>
+            <li>Фініш: вирівнювання блиску, носибельність, корекції.</li>
+          </ul>
+        </article>
+
+        <article class="moduleCard">
+          <h3 class="moduleTitle">Ідеальний френч</h3>
+          <ul class="moduleList">
+            <li>Розмітка посмішки: пропорції, симетрія, глибина.</li>
+            <li>Техніки побудови: пензлем, крапельна, гелевий френч.</li>
+            <li>Проблемні нігті: корекція, візуальний баланс.</li>
+            <li>Швидкі алгоритми для зменшення часу роботи.</li>
+          </ul>
+        </article>
+      </div>
     </section>
 
     <!-- ===== FOOTER ===== -->
@@ -458,7 +514,7 @@
     const $=s=>document.querySelector(s);
     const fmt=n=>new Intl.NumberFormat("uk-UA").format(n);
 
-    /* дата в чипе */
+    /* дата в чипе (если понадобится, добавь элемент #chipDate) */
     (function(){
       const chip=$("#chipDate");
       if(!chip) return;
@@ -489,25 +545,30 @@
       setPayHref($("#buyFloat"),active);
     }
 
-    /* ===== СТАБИЛЬНЫЙ layout HERO (без лишних пересчётов) ===== */
+    /* ===== СТАБИЛЬНЫЙ layout HERO (с ручными переменными) ===== */
+    function cssVarNum(el,name, fallback){
+      const v=getComputedStyle(el).getPropertyValue(name).trim();
+      const num=parseFloat(v);
+      return Number.isFinite(num)?num:fallback;
+    }
     function computeHeroLayout(){
       const stage=$("#hero"), text=stage?.querySelector('.hero-text'), img=stage?.querySelector('.hero-img'), cta=stage?.querySelector('.hero-cta');
       if(!stage||!text||!img||!cta) return;
 
+      const GAP = cssVarNum(stage,'--gap',8);
+      const BUBBLE_OFFSET = cssVarNum(stage,'--bubble-offset',200);
+      const CTA_RATIO = cssVarNum(stage,'--cta-ratio',0.68);
+      const CTA_EXTRA = cssVarNum(stage,'--cta-extra',40);
+
       // 1) позиция изображения под текстом
       const textBottom = text.offsetTop + text.offsetHeight;
-      const GAP = 8;
       const imgTop = textBottom + GAP;
       img.style.top = imgTop + "px";
 
-      // 2) далее измеряем высоту изображения (уже после установки top)
-      const imgH = img.getBoundingClientRect().height || 420; // запас
+      // 2) высота изображения
+      const imgH = img.getBoundingClientRect().height || 420;
 
-      // 3) вычисляем остальные элементы
-      const BUBBLE_OFFSET = 200;
-      const CTA_RATIO = 0.68;
-      const CTA_EXTRA = 40;
-
+      // 3) вычисления завязаны на переменных
       const ctaTop    = Math.round(imgTop + imgH*CTA_RATIO) + CTA_EXTRA;
       const bubbleTop = Math.round(imgTop + BUBBLE_OFFSET);
       const glowTop   = Math.round(imgTop + imgH*0.52) - 220;
@@ -517,14 +578,14 @@
       stage.style.setProperty('--bubble-top', bubbleTop+'px');
       stage.style.setProperty('--glow-top', Math.max(0,glowTop)+'px');
 
-      // 4) фиксируем высоту секции пикселями, чтобы не было "прыжков" при скролле
+      // 4) фиксируем высоту секции
       const ctaH = cta.offsetHeight;
       const needH = Math.round(ctaTop + ctaH + 24);
       stage.style.setProperty('--hero-h', needH+'px');
       stage.style.height = needH+'px';
     }
 
-    // Вызываем layout: при загрузке, повороте, а также когда меняется размер hero-текста/картинки.
+    // Вызываем layout: при загрузке/resize
     const ro = new ResizeObserver(()=>computeHeroLayout());
     window.addEventListener('DOMContentLoaded', ()=>{
       const img = document.querySelector('.hero-img');
@@ -570,10 +631,10 @@
     (function(){
       const reel = document.getElementById('reviewsReel');
       if(!reel) return;
-    
+
       const slides = Array.from(reel.children);
       const dotsWrap = document.getElementById('reviewsDots');
-    
+
       // Dots
       slides.forEach((_,i)=>{
         const b=document.createElement('button');
@@ -581,7 +642,7 @@
         b.addEventListener('click', ()=>reel.scrollTo({left: i*reel.clientWidth*0.86 + i*14, behavior:'smooth'}));
         dotsWrap.appendChild(b);
       });
-    
+
       const dots = Array.from(dotsWrap.children);
       function setActiveByScroll(){
         const w = reel.clientWidth;
@@ -589,7 +650,7 @@
         dots.forEach((d,i)=>d.toggleAttribute('aria-current', i===idx));
       }
       reel.addEventListener('scroll', ()=>{ requestAnimationFrame(setActiveByScroll); });
-    
+
       // Arrows
       const prev = document.querySelector('#reviews .prev');
       const next = document.querySelector('#reviews .next');
@@ -597,7 +658,7 @@
       const back = ()=> reel.scrollBy({left: -reel.clientWidth*0.9, behavior:'smooth'});
       if(prev) prev.addEventListener('click', back);
       if(next) next.addEventListener('click', step);
-    
+
       // Autoplay (з паузою при взаємодії)
       let timer = setInterval(step, 5500);
       const pause = ()=>{ clearInterval(timer); timer=null; };
@@ -609,8 +670,8 @@
         reel.addEventListener(ev, resume, {passive:true});
       });
     })();
-    
-    /* ===== Плавающая кнопка, когда hero вне экрана ===== */
+
+    /* ===== Плавающая кнопка ===== */
     (function(){
       const hero=$("#hero"), floater=$("#floatCta");
       if(!hero||!floater) return;
