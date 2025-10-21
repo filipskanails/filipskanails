@@ -123,7 +123,7 @@
     .slide::before{ content:none }
 
     .msg .row{ display:flex; align-items:flex-start; gap:10px }
-    /* усі в один бік (вліво): не перевертаємо навіть для .right */
+    /* усі в один бік (вліво) */
     .msg.right .row{ flex-direction:row }
 
     .msg .avatar{
@@ -148,6 +148,7 @@
       backdrop-filter:blur(8px);
       box-shadow:inset 0 0 0 1px rgba(255,255,255,.03), 0 18px 40px rgba(0,0,0,.28);
       font-size:16px; line-height:1.55;
+      will-change: transform, opacity, filter;
     }
     .msg.right .bubble{ border-radius:18px 18px 18px 6px }
 
@@ -182,26 +183,24 @@
     .reviewsArrows .prev{ left:22px } .reviewsArrows .next{ right:22px }
     .reviewsArrows .arrow:active{ transform:scale(.98) }
 
-    /* ===== REVIEWS: bubble appear animation ===== */
+    /* ===== REVIEWS: appear-only animations (без hide — без мерехтіння) ===== */
     @keyframes bubbleIn {
       from { opacity:0; transform: translateY(8px) scale(.98); filter: blur(2px); }
       to   { opacity:1; transform: translateY(0)  scale(1);   filter: none; }
     }
-    /* стартовий стан */
-    #reviews .slide .bubble{ opacity:0; transform: translateY(6px) scale(.98); will-change: transform, opacity, filter; }
-    #reviews .slide .meta,
-    #reviews .slide .stars{ opacity:0; transform: translateY(4px); transition: opacity .4s ease .05s, transform .4s ease .05s; }
-    /* активний слайд */
-    #reviews .slide.is-active .bubble{ animation: bubbleIn .6s cubic-bezier(.2,.65,.3,1) forwards; }
-    #reviews .slide.is-active .meta,
-    #reviews .slide.is-active .stars{ opacity:1; transform: none; }
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(4px); }
+      to   { opacity:1; transform: none; }
+    }
+    /* показуємо завжди; анімуємо ТІЛЬКИ коли слайд стає активним */
+    #reviews .slide.is-active .bubble{ animation: bubbleIn .6s cubic-bezier(.2,.65,.3,1) both; }
+    #reviews .slide.is-active .meta{ animation: fadeUp .4s ease .05s both; }
+    #reviews .slide.is-active .stars{ animation: fadeUp .4s ease .1s  both; }
+
     @media (prefers-reduced-motion: reduce){
-      #reviews .slide .bubble,
-      #reviews .slide .meta,
-      #reviews .slide .stars{
-        animation:none!important; transition:none!important;
-        opacity:1!important; transform:none!important; filter:none!important;
-      }
+      #reviews .slide.is-active .bubble,
+      #reviews .slide.is-active .meta,
+      #reviews .slide.is-active .stars{ animation:none!important }
     }
 
     /* footer + floater */
@@ -513,7 +512,7 @@
     }
     tick();
 
-    /* ===== REVIEWS slider (ping-pong, 30s, фікс aria-current + анімація) ===== */
+    /* ===== REVIEWS slider (ping-pong, 30s, фікс aria-current + appear-only анімації) ===== */
     (function(){
       const reel = document.getElementById('reviewsReel');
       if(!reel) return;
@@ -546,15 +545,14 @@
         });
       }
 
-      // керування класом активного слайда + перезапуск анімації
       function setActiveSlide(){
         slides.forEach((el,i)=>{
           if(i===idx){
-            el.classList.remove('is-active');
-            void el.offsetWidth; // рефлоу для рестарту CSS-анімації
+            el.classList.remove('is-active'); // перезапуск анімації
+            void el.offsetWidth;
             el.classList.add('is-active');
           }else{
-            el.classList.remove('is-active');
+            el.classList.remove('is-active'); // видалили — але без hide-стилів => без мерехтіння
           }
         });
       }
