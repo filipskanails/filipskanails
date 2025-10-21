@@ -11,287 +11,127 @@
       --bg:#0c100e; --card:#121614; --line:#223129;
       --text:#e7f0ea; --muted:#a1b3ab;
 
-      /* бренд: на базі #004a25 */
-      --accent:#004a25;
-      --accent-2:#0b7d47;
-      --accent-rgb:0,74,37;
-      --accent2-rgb:11,125,71;
+      --accent:#004a25; --accent-2:#0b7d47;
+      --accent-rgb:0,74,37; --accent2-rgb:11,125,71;
 
       --radius:24px; --shadow:0 10px 28px rgba(0,0,0,.24);
 
-      /* управляемые из JS (можно править вручную) */
+      /* управляється з JS */
       --img-top:320px; --cta-top:560px; --bubble-top:440px; --glow-top:380px; --hero-h:760px;
       --promoOverlap:18px;
 
-      /* НОВОЕ: тонкая ручная настройка hero */
-      --gap:8;                 /* отступ между текстом и фото, px */
-      --bubble-offset:200;     /* как высоко “бабл” от верхней кромки фото, px */
-      --cta-ratio:0.68;        /* где CTA по высоте картинки (0..1) */
-      --cta-extra:40;          /* добавочный пиксельный сдвиг CTA */
+      /* ручна тонка настройка hero */
+      --gap:8; --bubble-offset:200; --cta-ratio:.68; --cta-extra:40;
     }
 
-    /* базовое */
     *{box-sizing:border-box}
-    html,body{
-      margin:0;background:var(--bg);color:var(--text);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif;
-      overflow-x:hidden;
-    }
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif;overflow-x:hidden}
     a{color:inherit;text-decoration:none}
     img{max-width:100%;display:block}
-
     .wrap{max-width:720px;margin:0 auto;padding:16px}
-
     .accent{color:var(--accent-2);font-weight:900;text-shadow:0 0 8px rgba(var(--accent2-rgb),.32)}
     .nowrap{white-space:nowrap}
 
-    /* ===== HERO (full-bleed) ===== */
+    /* ===== HERO ===== */
     #hero{margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);position:relative;z-index:1}
     .hero-stage{position:relative;height:var(--hero-h);overflow:hidden;isolation:isolate;background:transparent}
     .hero-stage::after{
       content:""; position:absolute; right:50%; top:var(--glow-top);
       width:min(120vmin,680px); height:min(120vmin,680px); border-radius:50%;
       background:
-        radial-gradient(circle at 50% 50%,
-          rgba(var(--accent2-rgb),.96) 0%,
-          rgba(var(--accent2-rgb),.64) 28%,
-          rgba(var(--accent-rgb),.34) 60%,
-          rgba(var(--accent-rgb),.14) 78%,
-          rgba(var(--accent-rgb),.06) 90%,
-          transparent 100%),
+        radial-gradient(circle at 50% 50%, rgba(var(--accent2-rgb),.96) 0%, rgba(var(--accent2-rgb),.64) 28%, rgba(var(--accent-rgb),.34) 60%, rgba(var(--accent-rgb),.14) 78%, rgba(var(--accent-rgb),.06) 90%, transparent 100%),
         radial-gradient(60% 40% at 50% 0%, rgba(255,255,255,.10), transparent 55%);
-      filter:blur(16px);
-      transform:translate(50%,-28%);
-      pointer-events:none; z-index:0;
+      filter:blur(16px); transform:translate(50%,-28%); pointer-events:none; z-index:0;
     }
-
-    .hero-text{
-      position:absolute;top:2%;left:50%;transform:translateX(-50%);
-      width:calc(100% - 32px);max-width:640px;
-      text-align:center;
-      text-shadow:0 1px 0 rgba(0,0,0,.2);z-index:2
-    }
+    .hero-text{position:absolute;top:2%;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:640px;text-align:center;text-shadow:0 1px 0 rgba(0,0,0,.2);z-index:2}
     .eyebrow{font-size:13px;letter-spacing:.06em;color:var(--muted)}
-    .chips{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px}
-    .chip{padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:#0f1713}
-    .chip.outline{background:transparent}
-
     .hl{font-size:clamp(28px,7vw,38px);line-height:1.18;font-weight:900;margin:10px 0 8px}
-    .hl.hl-mix{display:grid;gap:2px}
-    .hl.hl-mix .line{display:block}
-    .hl.hl-mix .line.r{text-align:right}
-    .hl.hl-mix .line.l{text-align:left}
-
+    .hl.hl-mix{display:grid;gap:2px}.hl.hl-mix .line{display:block}.hl.hl-mix .line.r{text-align:right}.hl.hl-mix .line.l{text-align:left}
     .lead{color:var(--muted);margin:0 0 10px;text-align:center}
-
-    .hero-img{
-      position:absolute;right:50%;transform:translateX(44%);
-      top:var(--img-top); width:min(620px,112vw);
-      object-fit:contain; filter:drop-shadow(0 16px 28px rgba(0,0,0,.35));
-      z-index:1; pointer-events:none;
-    }
-
-    .hero-bubble{
-      position:absolute; right:8%; top:var(--bubble-top); max-width:60vw; color:#fff;
-      background:rgba(12,16,14,.58);
-      border:1px solid rgba(var(--accent2-rgb),.28);
-      padding:12px 14px; border-radius:28px; backdrop-filter:blur(8px);
-      box-shadow:0 10px 26px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.10);
-      font-size:14px; line-height:1.35; z-index:2;
-    }
-
+    .hero-img{position:absolute;right:50%;transform:translateX(44%);top:var(--img-top);width:min(620px,112vw);object-fit:contain;filter:drop-shadow(0 16px 28px rgba(0,0,0,.35));z-index:1;pointer-events:none}
+    .hero-bubble{position:absolute;right:8%;top:var(--bubble-top);max-width:60vw;color:#fff;background:rgba(12,16,14,.58);border:1px solid rgba(var(--accent2-rgb),.28);padding:12px 14px;border-radius:28px;backdrop-filter:blur(8px);box-shadow:0 10px 26px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.10);font-size:14px;line-height:1.35;z-index:2}
     .hero-cta{position:absolute;left:50%;transform:translateX(-50%);top:var(--cta-top);display:grid;gap:10px;text-align:center;z-index:3}
-    .cta{
-      display:inline-flex;align-items:center;justify-content:center;gap:10px;
-      padding:16px 26px;border-radius:999px;
-      background:
-        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.18), rgba(255,255,255,0) 55%),
-        linear-gradient(135deg,var(--accent-2),var(--accent));
-      color:#fff;font-weight:900;text-transform:uppercase;
-      font-size:clamp(18px,5vw,22px);letter-spacing:.3px;white-space:nowrap;
-      box-shadow:var(--shadow), 0 0 0 1px rgba(255,255,255,.06) inset;
-      text-shadow:0 1px 0 rgba(0,0,0,.18);
-    }
+    .cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 26px;border-radius:999px;background:radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.18), rgba(255,255,255,0) 55%),linear-gradient(135deg,var(--accent-2),var(--accent));color:#fff;font-weight:900;text-transform:uppercase;font-size:clamp(18px,5vw,22px);letter-spacing:.3px;white-space:nowrap;box-shadow:var(--shadow),0 0 0 1px rgba(255,255,255,.06) inset;text-shadow:0 1px 0 rgba(0,0,0,.18)}
     .priceLine{font-weight:800;text-align:center;font-size:16px;color:var(--text);opacity:.95}
     .priceLine .oldline{color:#95a49b;text-decoration:line-through;margin-left:10px}
 
-    /* ===== PROMO & ABOUT ===== */
     .section{margin:28px 0}
     h2{font-size:clamp(22px,6vw,28px);margin:0 0 12px}
 
-    /* promo — full-bleed */
-    #promo{margin-top:calc(-1 * var(--promoOverlap));padding-top:var(--promoOverlap);
-      margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);position:relative;z-index:5}
-    .promoCard{
-      border-radius:var(--radius); padding:18px; background:var(--card);
-      border:1px solid var(--line); backdrop-filter:blur(6px);
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22);
-    }
+    /* ===== PROMO (ТАРИФИ) ===== */
+    #promo{margin-top:calc(-1 * var(--promoOverlap));padding-top:var(--promoOverlap);margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);position:relative;z-index:5}
+    .promoCard{border-radius:var(--radius);padding:18px;background:var(--card);border:1px solid var(--line);backdrop-filter:blur(6px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22)}
+    .promoHead{display:grid;gap:6px;margin-bottom:10px;text-align:center}
+    .countdown{display:flex;gap:10px;justify-content:space-between;margin:6px 0 6px}
+    .countbox{flex:1 1 0;border:1px solid #2b4136;border-radius:14px;background:#0f1713;padding:14px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+    .countbox .n{font-size:clamp(22px,8vw,36px);font-weight:900;line-height:1}
+    .countbox .t{color:var(--muted);margin-top:6px;font-size:clamp(12px,3.6vw,15px)}
 
-    .bonusList{list-style:none;padding:0;margin:12px 0 10px;display:grid;gap:10px}
+    .tariffsGrid{display:grid;gap:14px;margin-top:10px}
+    @media (min-width:720px){ .tariffsGrid{grid-template-columns:1fr 1fr} }
+
+    .tariff{position:relative;border:1px solid var(--line);border-radius:22px;background:rgba(16,23,19,.7);padding:16px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 18px 40px rgba(0,0,0,.28)}
+    .tariff::after{content:"";position:absolute;inset:-1px;border-radius:22px;pointer-events:none;background:radial-gradient(140% 120% at 100% 0%, rgba(11,125,71,.22), transparent 60%),radial-gradient(140% 120% at 0% 100%, rgba(0,74,37,.16), transparent 60%);mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);-webkit-mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);padding:1px}
+    .tariffHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+    .tariffName{font-weight:900;font-size:18px}
+    .ribbon{font-size:11px;padding:6px 10px;border-radius:999px;background:rgba(12,16,14,.55);border:1px solid rgba(142,243,199,.18);backdrop-filter:blur(6px);color:#cfe6dc}
+    .featList{list-style:none;margin:10px 0 12px;padding:0;display:grid;gap:8px}
+    .featList li{display:flex;gap:8px;align-items:flex-start}
+    .featList li::before{content:"";width:18px;height:18px;border-radius:50%;margin-top:2px;flex:0 0 18px;background:radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.20), transparent 55%),linear-gradient(135deg,var(--accent-2),var(--accent));box-shadow:0 0 0 2px rgba(11,125,71,.18)}
+    .priceWrap{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .priceNow{font-size:clamp(20px,5.4vw,26px);font-weight:900}
+    .priceOld{color:#95a49b;text-decoration:line-through;font-size:14px;opacity:.9}
+    .tariff .cta{width:100%;margin-top:12px}
+
+    .bonusList{list-style:none;padding:0;margin:16px 0 4px;display:grid;gap:10px}
     .bonusList li{display:flex;align-items:center;gap:10px}
-    .bonusList li::before{
-      content:"";width:24px;height:24px;border-radius:999px;
-      background:
-        radial-gradient(130% 160% at 50% 18%, rgba(255,255,255,.22), rgba(255,255,255,0) 40%),
-        linear-gradient(135deg,var(--accent-2),var(--accent));
-      box-shadow:0 0 0 2px rgba(var(--accent2-rgb),.25) inset;
-      display:inline-block;
-    }
+    .bonusList li::before{content:"";width:24px;height:24px;border-radius:999px;background:radial-gradient(130% 160% at 50% 18%, rgba(255,255,255,.22), rgba(255,255,255,0) 40%),linear-gradient(135deg,var(--accent-2),var(--accent));box-shadow:0 0 0 2px rgba(var(--accent2-rgb),.25) inset;display:inline-block}
 
-    .countdown{display:flex;gap:10px;justify-content:space-between;margin:14px 0 6px}
-    .countbox{
-      flex:1 1 0;border:1px solid #2b4136;border-radius:14px;background:#0f1713;padding:14px 8px;
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.06)
-    }
-    .countbox .n{font-size:clamp(22px,8vw,36px);font-weight:900;line-height:1;white-space:nowrap}
-    .countbox .t{color:var(--muted);margin-top:6px;font-size:clamp(12px,3.6vw,15px);white-space:nowrap}
-
-    .priceRow{display:flex;align-items:center;gap:14px;margin:10px 0}
-    .pricePill{
-      display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;
-      background:
-        radial-gradient(130% 180% at 50% 0%, rgba(255,255,255,.18), rgba(255,255,255,0) 55%),
-        linear-gradient(135deg,var(--accent-2),var(--accent));
-      color:#e6fff3;font-weight:900;box-shadow:0 10px 28px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12)
-    }
-    .priceNum{font-size:clamp(20px,6vw,26px);font-weight:900}
-    .old{color:#95a49b;text-decoration:line-through;font-size:16px;display:none}
-
-    /* about */
+    /* ===== ABOUT ===== */
     #about{margin-top:20px;margin-left:-16px;margin-right:-16px;width:calc(100% + 32px)}
     #about h2{text-align:center;margin-bottom:10px}
     .aboutLead{text-align:center;color:var(--muted);margin:0 0 18px}
-    .aboutCard{position:relative;border-radius:var(--radius);padding:18px 14px;background:var(--card);
-      border:1px solid var(--line);backdrop-filter:blur(6px);
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22)}
-    .aboutCard::before{
-      content:"";position:absolute;inset:-10% -8% auto -8%;height:44%;
-      background:radial-gradient(60% 100% at 50% 0%, rgba(var(--accent2-rgb),.18), transparent 70%);
-      filter:blur(10px);pointer-events:none;border-radius:var(--radius) var(--radius) 0 0;
-    }
-
+    .aboutCard{position:relative;border-radius:var(--radius);padding:18px 14px;background:var(--card);border:1px solid var(--line);backdrop-filter:blur(6px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22)}
+    .aboutCard::before{content:"";position:absolute;inset:-10% -8% auto -8%;height:44%;background:radial-gradient(60% 100% at 50% 0%, rgba(var(--accent2-rgb),.18), transparent 70%);filter:blur(10px);pointer-events:none;border-radius:var(--radius) var(--radius) 0 0}
     .aboutList{list-style:none;padding:0;margin:0;display:grid;gap:14px}
     .aboutItem{display:flex;align-items:flex-start;gap:12px;line-height:1.45;border-radius:16px;padding:6px 0}
-    .aboutItem .icon{
-      position:relative;width:32px;height:32px;border-radius:50%;flex:0 0 32px; margin-top:2px;
-      background:conic-gradient(from 210deg, rgba(var(--accent2-rgb),.95), rgba(var(--accent2-rgb),.85), rgba(var(--accent-rgb),.95));
-      box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 4px rgba(var(--accent2-rgb),.12);
-      border:1px solid #2b4136;overflow:hidden
-    }
-    .aboutItem .icon::before{content:"";position:absolute;inset:2px;border-radius:50%;
-      background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.45), rgba(255,255,255,.06));mix-blend:screen}
+    .aboutItem .icon{position:relative;width:32px;height:32px;border-radius:50%;flex:0 0 32px;margin-top:2px;background:conic-gradient(from 210deg, rgba(var(--accent2-rgb),.95), rgba(var(--accent2-rgb),.85), rgba(var(--accent-rgb),.95));box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 4px rgba(var(--accent2-rgb),.12);border:1px solid #2b4136;overflow:hidden}
+    .aboutItem .icon::before{content:"";position:absolute;inset:2px;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.45), rgba(255,255,255,.06));mix-blend:screen}
     .aboutItem .icon::after{content:"";position:absolute;left:9px;top:10px;width:11px;height:6px;border-left:3px solid #052d21;border-bottom:3px solid #052d21;transform:rotate(-45deg)}
-    .aboutItem .txt{flex:1;min-width:0;word-break:normal;overflow-wrap:anywhere}
+    .aboutItem .txt{flex:1;min-width:0;overflow-wrap:anywhere}
 
     /* ===== REVIEWS ===== */
-    #reviews{ margin:28px 0; margin-left:-16px; margin-right:-16px; width:calc(100% + 32px); }
-    #reviews .head{ text-align:center; margin-bottom:12px; }
-    #reviews .muted{ color:var(--muted); }
-    .reel{
-      position:relative;
-      overflow-x:auto; overflow-y:visible;
-      display:grid; grid-auto-flow:column; grid-auto-columns:86%;
-      gap:14px; padding:6px 16px 12px;
-      scroll-snap-type:x mandatory;
-      -webkit-overflow-scrolling:touch;
-      mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
-    }
-    .slide{
-      scroll-snap-align:center;
-      position:relative;
-      border-radius:22px;
-      background:rgba(16,23,19,.7);
-      border:1px solid var(--line);
-      backdrop-filter: blur(8px);
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,.03),
-        0 18px 40px rgba(0,0,0,.28);
-      padding:18px 16px 16px;
-    }
-    .slide::before{
-      content:""; position:absolute; inset:-1px;
-      border-radius:22px; pointer-events:none;
-      background:
-        radial-gradient(140% 120% at 100% 0%, rgba(11,125,71,.22), transparent 60%),
-        radial-gradient(140% 120% at 0% 100%, rgba(0,74,37,.16), transparent 60%);
-      mask: linear-gradient(#000,#000) content-box, linear-gradient(#000,#000);
-      -webkit-mask: linear-gradient(#000,#000) content-box, linear-gradient(#000,#000);
-      padding:1px;
-    }
-    .quote{ font-size:16px; line-height:1.5; }
-    .qtop{ display:flex; align-items:center; gap:8px; margin-bottom:10px; }
-    .qtop .qmark{
-      width:26px; height:26px; border-radius:50%;
-      background:
-        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.20), transparent 55%),
-        linear-gradient(135deg, var(--accent-2), var(--accent));
-      box-shadow: 0 0 0 3px rgba(11,125,71,.18);
-      display:grid; place-items:center; color:#062217; font-weight:900;
-    }
-    .qbot{ display:flex; align-items:center; justify-content:space-between; margin-top:12px; gap:10px; }
-    .badge{
-      font-size:12px; color:#cfe6dc; padding:6px 10px; border-radius:999px;
-      background:rgba(12,16,14,.55); border:1px solid rgba(142,243,199,.18);
-      backdrop-filter:blur(6px);
-    }
-    .stars{ font-size:14px; letter-spacing:1px; opacity:.9 }
-    .navDots{display:flex; justify-content:center; gap:8px; margin-top:10px}
-    .navDots button{
-      width:8px; height:8px; border-radius:999px; border:none; padding:0;
-      background:#2a3a34; opacity:.7;
-    }
-    .navDots button[aria-current="true"]{ background:var(--accent-2); opacity:1; }
-    .reviewsArrows{position:relative; height:0}
-    .reviewsArrows .arrow{
-      position:absolute; top:-86px; z-index:2;
-      width:34px; height:34px; border-radius:999px; border:1px solid var(--line);
-      background:rgba(12,16,14,.7);
-      display:grid; place-items:center;
-      box-shadow: 0 8px 22px rgba(0,0,0,.25);
-    }
-    .reviewsArrows .prev{ left:22px }
-    .reviewsArrows .next{ right:22px }
-    .reviewsArrows .arrow:active{ transform:scale(.98) }
+    #reviews{margin:28px 0;margin-left:-16px;margin-right:-16px;width:calc(100% + 32px)}
+    #reviews .head{text-align:center;margin-bottom:12px}
+    #reviews .muted{color:var(--muted)}
+    .reel{position:relative;overflow-x:auto;overflow-y:visible;display:grid;grid-auto-flow:column;grid-auto-columns:86%;gap:14px;padding:6px 16px 12px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(90deg,transparent 0,#000 24px,#000 calc(100% - 24px),transparent 100%)}
+    .slide{scroll-snap-align:center;position:relative;border-radius:22px;background:rgba(16,23,19,.7);border:1px solid var(--line);backdrop-filter:blur(8px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 18px 40px rgba(0,0,0,.28);padding:18px 16px 16px}
+    .slide::before{content:"";position:absolute;inset:-1px;border-radius:22px;pointer-events:none;background:radial-gradient(140% 120% at 100% 0%, rgba(11,125,71,.22), transparent 60%),radial-gradient(140% 120% at 0% 100%, rgba(0,74,37,.16), transparent 60%);mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);-webkit-mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);padding:1px}
+    .quote{font-size:16px;line-height:1.5}
+    .qtop{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+    .qtop .qmark{width:26px;height:26px;border-radius:50%;background:radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.20), transparent 55%),linear-gradient(135deg,var(--accent-2),var(--accent));box-shadow:0 0 0 3px rgba(11,125,71,.18);display:grid;place-items:center;color:#062217;font-weight:900}
+    .qbot{display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:10px}
+    .badge{font-size:12px;color:#cfe6dc;padding:6px 10px;border-radius:999px;background:rgba(12,16,14,.55);border:1px solid rgba(142,243,199,.18);backdrop-filter:blur(6px)}
+    .stars{font-size:14px;letter-spacing:1px;opacity:.9}
+    .navDots{display:flex;justify-content:center;gap:8px;margin-top:10px}
+    .navDots button{width:8px;height:8px;border-radius:999px;border:none;padding:0;background:#2a3a34;opacity:.7}
+    .navDots button[aria-current="true"]{background:var(--accent-2);opacity:1}
+    .reviewsArrows{position:relative;height:0}
+    .reviewsArrows .arrow{position:absolute;top:-86px;z-index:2;width:34px;height:34px;border-radius:999px;border:1px solid var(--line);background:rgba(12,16,14,.7);display:grid;place-items:center;box-shadow:0 8px 22px rgba(0,0,0,.25)}
+    .reviewsArrows .prev{left:22px}.reviewsArrows .next{right:22px}
+    .reviewsArrows .arrow:active{transform:scale(.98)}
 
-    /* ===== PROGRAM (новый блок) ===== */
-    #program{ margin:28px 0; margin-left:-16px; margin-right:-16px; width:calc(100% + 32px); }
-    #program .head{ text-align:center; margin-bottom:12px; }
-    .programGrid{
-      display:grid; gap:14px; padding:0 16px;
-    }
-    .moduleCard{
-      border-radius:22px; background:var(--card); border:1px solid var(--line);
-      padding:16px 16px 14px; box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22);
-      position:relative; overflow:hidden;
-    }
-    .moduleCard::after{
-      content:""; position:absolute; inset:auto -20% -40% auto; width:60%; height:120%;
-      background: radial-gradient(60% 60% at 100% 100%, rgba(var(--accent2-rgb),.20), transparent 70%);
-      pointer-events:none; filter:blur(8px);
-    }
-    .moduleTitle{ font-weight:900; font-size:18px; margin:0 0 8px; }
-    .moduleList{ margin:0; padding-left:18px; color:var(--muted); line-height:1.5; }
-    .moduleList li{ margin:6px 0; }
-
-    /* footer + floater */
     footer.footer{margin-top:26px;padding:22px 16px 96px;text-align:center;color:var(--muted);border-top:1px solid var(--line)}
     .footer .brand{font-size:22px;color:var(--text);margin:0 0 6px;font-weight:700}
     .footer .legal{font-size:14px;line-height:1.5;max-width:720px;margin:10px auto 0;opacity:.95}
     .footer .links{margin-top:10px;font-size:14px}
     .footer .links a{color:var(--muted);text-decoration:underline dotted;margin:0 8px}
     .footer small.copy{display:block;margin-top:12px;opacity:.7}
-
-    .floater{position:fixed;left:0;right:0;bottom:12px;z-index:50;opacity:0;transform:translateY(16px);pointer-events:none;
-      transition:opacity .28s ease,transform .28s ease}
+    .floater{position:fixed;left:0;right:0;bottom:12px;z-index:50;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .28s ease,transform .28s ease}
     .floater.show{opacity:1;transform:translateY(0);pointer-events:auto}
     .floater-inner{max-width:720px;margin:0 auto;padding:0 16px}
     .floater .cta{width:100%}
-
-    @media (prefers-reduced-motion:reduce){
-      .floater{transition:none}
-    }
+    @media (prefers-reduced-motion:reduce){.floater{transition:none}}
   </style>
 </head>
 <body>
@@ -300,55 +140,89 @@
     <!-- ===== HERO ===== -->
     <section id="hero" class="hero-stage" aria-label="Головний екран">
       <img class="hero-img" src="img/main.png" alt="Інструктор курсу Next Level">
-
       <div class="hero-text">
-        <div class="eyebrow">
-          ОНЛАЙН КУРС ВІД ІНСТРУКТОРА МАНІКЮРУ&nbsp;
-          <span class="accent nowrap">АННИ ФІЛІПСЬКОЇ</span>
-        </div>
-
+        <div class="eyebrow">ОНЛАЙН КУРС ВІД ІНСТРУКТОРА МАНІКЮРУ&nbsp;<span class="accent nowrap">АННИ ФІЛІПСЬКОЇ</span></div>
         <h1 class="hl hl-mix" aria-label="Заголовок">
           <span class="line l">ІНСТАКВАДРАТИ.</span>
           <span class="line r">ІДЕАЛЬНИЙ КОМБІ.</span>
           <span class="line l">ІДЕАЛЬНИЙ ФРЕНЧ.</span>
           <span class="line r">ТВІЙ NEXT LEVEL.</span>
         </h1>
-
-        <p class="lead">Цей курс - твоя можливість перейти з "майстра базовика" у впевнену, сильну майстриню з власним стилем і високим прайсом.<br>Next Level - коли твої роботи говорять самі за себе.</p>
+        <p class="lead">Цей курс – твоя можливість перейти з "майстра базовика" у впевнену, сильну майстриню з власним стилем і високим прайсом.<br>Next Level – коли твої роботи говорять самі за себе.</p>
       </div>
-
-      <div class="hero-bubble" id="heroBubble" role="note">
-        Клієнти шукають сучасних і професійних майстрів.
-        Не втрачай свій шанс бути серед кращих!
-      </div>
-
+      <div class="hero-bubble" id="heroBubble" role="note">Клієнти шукають сучасних і професійних майстрів. Не втрачай свій шанс бути серед кращих!</div>
       <div class="hero-cta">
         <a id="buyTop" class="cta">Придбати курс</a>
         <div id="priceLine" class="priceLine">лише — грн <span class="oldline">— грн</span></div>
       </div>
     </section>
 
-    <!-- ===== PROMO ===== -->
-    <section id="promo" class="section" aria-label="Акційна пропозиція">
+    <!-- ===== PROMO (ТАРИФИ) ===== -->
+    <section id="promo" class="section" aria-label="Тарифи та бонуси">
       <div class="promoCard">
-        <h2>Приєднуйся зараз та отримай бонуси</h2>
-        <ul class="bonusList">
-          <li>Гайд «Причини відшарувань»</li>
-          <li>Відео-урок «Чистий комбі зріз»</li>
-        </ul>
+        <div class="promoHead">
+          <h2>Тарифи</h2>
+          <div class="muted">Обери формат навчання та зафіксуй вигідну ціну</div>
+        </div>
 
+        <!-- таймер -->
         <div class="countdown" id="countdown" aria-live="polite">
           <div class="countbox"><div class="n" id="cd-h">00</div><div class="t">Годин</div></div>
           <div class="countbox"><div class="n" id="cd-m">00</div><div class="t">Хвилин</div></div>
           <div class="countbox"><div class="n" id="cd-s">00</div><div class="t">Секунд</div></div>
         </div>
 
-        <div class="buy-note">Встигни записатися та навчайся за найвигіднішою ціною</div>
+        <!-- дві картки тарифів -->
+        <div class="tariffsGrid">
+          <!-- GROUP -->
+          <article class="tariff" aria-label="Тариф Груповий">
+            <div class="tariffHead">
+              <div class="tariffName">Груповий</div>
+              <span class="ribbon">Хіт</span>
+            </div>
+            <ul class="featList">
+              <li>Повний доступ до відеоуроків назавжди.</li>
+              <li>Домашні завдання з прикладами розв’язання.</li>
+              <li>Груповий чат підтримки.</li>
+              <li>Сертифікат після проходження.</li>
+            </ul>
+            <div class="priceWrap">
+              <div>
+                <div class="priceNow" id="gPrice">— грн</div>
+                <div class="priceOld" id="gOld" style="display:none">— грн</div>
+              </div>
+              <a id="buyGroup" class="cta" aria-label="Оплатити Груповий тариф">Купити</a>
+            </div>
+          </article>
 
-        <div class="priceRow">
-          <div class="pricePill"><small class="muted" style="color:#cfe6dc">лише</small> <span id="pricePromo" class="priceNum">— грн</span></div>
-          <div id="oldPromo" class="old">— грн</div>
+          <!-- INDIVIDUAL -->
+          <article class="tariff" aria-label="Тариф Індивідуальний">
+            <div class="tariffHead">
+              <div class="tariffName">Індивідуальний</div>
+              <span class="ribbon">Максимум результату</span>
+            </div>
+            <ul class="featList">
+              <li>Усе з «Групового» тарифу.</li>
+              <li>2 персональні розбори робіт 1:1.</li>
+              <li>Пріоритетні відповіді та правки.</li>
+              <li>Індивідуальний план розвитку.</li>
+            </ul>
+            <div class="priceWrap">
+              <div>
+                <div class="priceNow" id="iPrice">— грн</div>
+                <div class="priceOld" id="iOld" style="display:none">— грн</div>
+              </div>
+              <a id="buyIndiv" class="cta" aria-label="Оплатити Індивідуальний тариф">Купити</a>
+            </div>
+          </article>
         </div>
+
+        <!-- бонуси -->
+        <h3 style="margin:16px 0 8px;font-size:18px">Бонуси для обох пакетів</h3>
+        <ul class="bonusList">
+          <li>Гайд «Причини відшарувань»</li>
+          <li>Відео-урок «Чистий комбі зріз»</li>
+        </ul>
       </div>
     </section>
 
@@ -356,7 +230,6 @@
     <section id="about" class="section" aria-label="Про мене">
       <h2>Про мене</h2>
       <p class="aboutLead">Привіт, я Анна Філіпська</p>
-
       <div class="aboutCard">
         <ul class="aboutList">
           <li class="aboutItem"><span class="icon" aria-hidden="true"></span><span class="txt">За <span class="accent">6 років</span> зробила понад <span class="accent">5000 манікюрів</span>.</span></li>
@@ -376,132 +249,45 @@
         <h2>Відгуки</h2>
         <div class="muted">Результати та враження після Next Level</div>
       </div>
-
       <div class="reviewsArrows">
         <button class="arrow prev" type="button" aria-label="Попередній">‹</button>
         <button class="arrow next" type="button" aria-label="Наступний">›</button>
       </div>
-
       <div class="reel" id="reviewsReel" aria-label="Слайдер відгуків">
         <!-- 1 -->
         <article class="slide">
-          <div class="qtop">
-            <div class="qmark" aria-hidden="true">“</div>
-            <span class="badge">випускниця курсу</span>
-          </div>
-          <div class="quote">
-            Привіт, хочу поділитися враженнями про курс підвищення —
-            це було дуже круто. Теорія і практика сприймалися легко.
-            Результат перевищив очікування. Швидкість і якість зросли:
-            час роботи з однією клієнткою скоротився щонайменше на пів години.
-            Дуже рекомендую всім майстрам пройти цей курс!
-          </div>
+          <div class="qtop"><div class="qmark" aria-hidden="true">“</div><span class="badge">випускниця курсу</span></div>
+          <div class="quote">Привіт, хочу поділитися враженнями про курс підвищення — це було дуже круто. Теорія і практика сприймалися легко. Результат перевищив очікування. Швидкість і якість зросли: час роботи з однією клієнткою скоротився щонайменше на пів години. Дуже рекомендую!</div>
           <div class="qbot"><div class="stars" aria-label="5 зірок">★★★★★</div></div>
         </article>
-
         <!-- 2 -->
         <article class="slide">
-          <div class="qtop">
-            <div class="qmark" aria-hidden="true">“</div>
-            <span class="badge">результати після модулів</span>
-          </div>
-          <div class="quote">
-            Сьогодні було максимально круто! Бачу великі зміни у вирівнюванні
-            та манікюрі. З твоєю допомогою розібрала всі нюанси квадрату:
-            як пиляти й на що звертати увагу. Емоції переповнюють — я щаслива
-            і задоволена. Є над чим працювати, буду робити ще краще!
-          </div>
+          <div class="qtop"><div class="qmark" aria-hidden="true">“</div><span class="badge">результати після модулів</span></div>
+          <div class="quote">Сьогодні було максимально круто! Бачу великі зміни у вирівнюванні та манікюрі. Розібрала всі нюанси квадрату: як пиляти й на що звертати увагу. Емоції переповнюють — я щаслива і задоволена.</div>
           <div class="qbot"><div class="stars" aria-label="5 зірок">★★★★★</div></div>
         </article>
-
         <!-- 3 -->
         <article class="slide">
-          <div class="qtop">
-            <div class="qmark" aria-hidden="true">“</div>
-            <span class="badge">про швидкість</span>
-          </div>
-          <div class="quote">
-            По часу прискорилась конкретно: до 2 годин уже роблю
-            укріплення з френчем. Усі поради використовую — зайвих рухів немає,
-            носибельність значно краща.
-          </div>
+          <div class="qtop"><div class="qmark" aria-hidden="true">“</div><span class="badge">про швидкість</span></div>
+          <div class="quote">По часу прискорилась конкретно: до 2 годин уже роблю укріплення з френчем. Усі поради використовую — зайвих рухів немає, носибельність значно краща.</div>
           <div class="qbot"><div class="stars" aria-label="5 зірок">★★★★★</div></div>
         </article>
       </div>
-
       <div class="navDots" id="reviewsDots" aria-hidden="true"></div>
-    </section>
-
-    <!-- ===== PROGRAM ===== -->
-    <section id="program" class="section" aria-label="Програма курсу">
-      <div class="head">
-        <h2>Програма</h2>
-        <div class="muted">Структура курсу Next Level</div>
-      </div>
-
-      <div class="programGrid">
-        <article class="moduleCard">
-          <h3 class="moduleTitle">Ідеальна техніка комбінованого манікюру</h3>
-          <ul class="moduleList">
-            <li>Стерильність, підготовка інструменту, безпечні кути входу.</li>
-            <li>Підняття пазух, робота фрезами: насадки, оберти, тиск.</li>
-            <li>Чистий зріз: логіка рухів, контроль шкіри, тонкі місця.</li>
-            <li>Типові помилки і як їх уникати. Швидкість без втрати якості.</li>
-          </ul>
-        </article>
-
-        <article class="moduleCard">
-          <h3 class="moduleTitle">Тверді матеріали та опил чіткого квадрату</h3>
-          <ul class="moduleList">
-            <li>Вибір твердих матеріалів: властивості, в’язкість, еластичність.</li>
-            <li>Архітектура: усіни, апекс, паралелі. Побудова міцної форми.</li>
-            <li>Опил квадрату: послідовність, контроль бічних і вільного краю.</li>
-            <li>Реставрація форми, робота з різною довжиною та типами нігтів.</li>
-          </ul>
-        </article>
-
-        <article class="moduleCard">
-          <h3 class="moduleTitle">Однотонне покриття</h3>
-          <ul class="moduleList">
-            <li>Вирівнювання під покриття: тонкий блиск без напливів.</li>
-            <li>Пензлі, в’язкість кольору, 2–3 шари: коли і навіщо.</li>
-            <li>Підведення під кутикулу: чиста лінія без пропусків.</li>
-            <li>Фініш: вирівнювання блиску, носибельність, корекції.</li>
-          </ul>
-        </article>
-
-        <article class="moduleCard">
-          <h3 class="moduleTitle">Ідеальний френч</h3>
-          <ul class="moduleList">
-            <li>Розмітка посмішки: пропорції, симетрія, глибина.</li>
-            <li>Техніки побудови: пензлем, крапельна, гелевий френч.</li>
-            <li>Проблемні нігті: корекція, візуальний баланс.</li>
-            <li>Швидкі алгоритми для зменшення часу роботи.</li>
-          </ul>
-        </article>
-      </div>
     </section>
 
     <!-- ===== FOOTER ===== -->
     <footer class="footer">
       <div class="brand">Анна Філіпська</div>
-      <div class="links">
-        <a href="#offer">Договір оферти</a> ·
-        <a href="#privacy">Політика конфіденційності</a>
-      </div>
-      <p class="legal">
-        Умови повернення: згідно із Законом України «Про захист прав споживачів» гарантуємо повернення коштів
-        протягом 14 днів, якщо курс вам не підійде.
-      </p>
+      <div class="links"><a href="#offer">Договір оферти</a> · <a href="#privacy">Політика конфіденційності</a></div>
+      <p class="legal">Умови повернення: згідно із Законом України «Про захист прав споживачів» гарантуємо повернення коштів протягом 14 днів, якщо курс вам не підійде.</p>
       <small class="copy">© Created by | All rights Reserved</small>
     </footer>
   </div>
 
   <!-- Floating CTA -->
   <div class="floater" id="floatCta" aria-hidden="true">
-    <div class="floater-inner">
-      <a id="buyFloat" class="cta">Отримати доступ</a>
-    </div>
+    <div class="floater-inner"><a id="buyFloat" class="cta">Отримати доступ</a></div>
   </div>
 
   <script>
@@ -509,96 +295,92 @@
     const WORKER="https://filipskanails-pay.timanov-business.workers.dev";
     const THANK ="https://filipskanails.github.io/filipskanails/thankyou.html";
     const TITLE ="Доступ до курсу Next Level";
-    const BASE_PRICE=10000, DISCOUNT_PRICE=7800, PROMO_HOURS=5;
+
+    // ЦІНИ (зміни за потреби) // CHANGE HERE
+    const PROMO_HOURS   = 5;
+    const GROUP_BASE    = 10000;
+    const GROUP_DISC    = 7800;
+    const INDIV_BASE    = 16000;  // CHANGE HERE
+    const INDIV_DISC    = 12800;  // CHANGE HERE
 
     const $=s=>document.querySelector(s);
     const fmt=n=>new Intl.NumberFormat("uk-UA").format(n);
 
-    /* дата в чипе (если понадобится, добавь элемент #chipDate) */
+    /* дата у чипі (якщо додаси #chipDate) */
     (function(){
-      const chip=$("#chipDate");
-      if(!chip) return;
-      const dt=new Date();
-      chip.textContent=`${dt.getDate()} ${dt.toLocaleString("uk-UA",{month:"long"})}`;
+      const chip=$("#chipDate"); if(!chip) return;
+      const dt=new Date(); chip.textContent=`${dt.getDate()} ${dt.toLocaleString("uk-UA",{month:"long"})}`;
     })();
 
-    /* ссылки на оплату + цены */
-    function setPayHref(el,amount){
+    /* посилання на оплату + тайтли */
+    function setPayHref(el,amount,label){
       if(!el) return;
       const u=new URL(WORKER);
       u.searchParams.set("amount",String(amount));
-      u.searchParams.set("title",TITLE);
+      u.searchParams.set("title",`${TITLE} — ${label}`);
       u.searchParams.set("thank",THANK);
       el.href=u.toString(); el.target="_blank"; el.rel="noopener";
     }
-    function renderPrices(active,old){
+
+    /* оновлення цін у всіх місцях */
+    function renderHeroPrice(active, old){
       const line=$("#priceLine");
       if(line){
-        line.innerHTML= old && old>active
+        line.innerHTML = old && old>active
           ? `лише ${fmt(active)} грн <span class="oldline">${fmt(old)} грн</span>`
           : `ціна ${fmt(active)} грн`;
       }
-      const pP=$("#pricePromo"), oP=$("#oldPromo");
-      if(pP) pP.textContent=fmt(active)+" грн";
-      if(oP){ if(old&&old>active){oP.style.display="inline";oP.textContent=fmt(old)+" грн"} else oP.style.display="none" }
-      setPayHref($("#buyTop"),active);
-      setPayHref($("#buyFloat"),active);
+      // Hero кнопки ведуть на груповий тариф
+      setPayHref($("#buyTop"), active, "Груповий");
+      setPayHref($("#buyFloat"), active, "Груповий");
     }
 
-    /* ===== СТАБИЛЬНЫЙ layout HERO (с ручными переменными) ===== */
-    function cssVarNum(el,name, fallback){
-      const v=getComputedStyle(el).getPropertyValue(name).trim();
-      const num=parseFloat(v);
-      return Number.isFinite(num)?num:fallback;
+    function setTariff(cardIds, active, old, label){
+      const priceNow = $(cardIds.price);
+      const priceOld = $(cardIds.old);
+      const btn      = $(cardIds.btn);
+      if(priceNow) priceNow.textContent = fmt(active) + " грн";
+      if(priceOld){
+        if(old && old>active){ priceOld.style.display="block"; priceOld.textContent = fmt(old) + " грн"; }
+        else { priceOld.style.display="none"; }
+      }
+      setPayHref(btn, active, label);
     }
+
+    function renderTariffs(promo){
+      const gActive = promo ? GROUP_DISC : GROUP_BASE;
+      const iActive = promo ? INDIV_DISC : INDIV_BASE;
+      const gOld    = promo ? GROUP_BASE : null;
+      const iOld    = promo ? INDIV_BASE : null;
+
+      setTariff({price:"#gPrice", old:"#gOld", btn:"#buyGroup"}, gActive, gOld, "Груповий");
+      setTariff({price:"#iPrice", old:"#iOld", btn:"#buyIndiv"}, iActive, iOld, "Індивідуальний");
+
+      // оновимо hero-лінію під груповий тариф
+      renderHeroPrice(gActive, gOld);
+    }
+
+    /* ===== стабільний layout HERO ===== */
+    function cssVarNum(el,name,fallback){ const v=getComputedStyle(el).getPropertyValue(name).trim(); const num=parseFloat(v); return Number.isFinite(num)?num:fallback; }
     function computeHeroLayout(){
       const stage=$("#hero"), text=stage?.querySelector('.hero-text'), img=stage?.querySelector('.hero-img'), cta=stage?.querySelector('.hero-cta');
       if(!stage||!text||!img||!cta) return;
-
-      const GAP = cssVarNum(stage,'--gap',8);
-      const BUBBLE_OFFSET = cssVarNum(stage,'--bubble-offset',200);
-      const CTA_RATIO = cssVarNum(stage,'--cta-ratio',0.68);
-      const CTA_EXTRA = cssVarNum(stage,'--cta-extra',40);
-
-      // 1) позиция изображения под текстом
-      const textBottom = text.offsetTop + text.offsetHeight;
-      const imgTop = textBottom + GAP;
-      img.style.top = imgTop + "px";
-
-      // 2) высота изображения
+      const GAP=cssVarNum(stage,'--gap',8), BUBBLE=cssVarNum(stage,'--bubble-offset',200), R=cssVarNum(stage,'--cta-ratio',.68), EXTRA=cssVarNum(stage,'--cta-extra',40);
+      const textBottom=text.offsetTop+text.offsetHeight, imgTop=textBottom+GAP; img.style.top=imgTop+"px";
       const imgH = img.getBoundingClientRect().height || 420;
-
-      // 3) вычисления завязаны на переменных
-      const ctaTop    = Math.round(imgTop + imgH*CTA_RATIO) + CTA_EXTRA;
-      const bubbleTop = Math.round(imgTop + BUBBLE_OFFSET);
-      const glowTop   = Math.round(imgTop + imgH*0.52) - 220;
-
-      stage.style.setProperty('--img-top', imgTop+'px');
-      stage.style.setProperty('--cta-top', ctaTop+'px');
-      stage.style.setProperty('--bubble-top', bubbleTop+'px');
-      stage.style.setProperty('--glow-top', Math.max(0,glowTop)+'px');
-
-      // 4) фиксируем высоту секции
-      const ctaH = cta.offsetHeight;
-      const needH = Math.round(ctaTop + ctaH + 24);
-      stage.style.setProperty('--hero-h', needH+'px');
-      stage.style.height = needH+'px';
+      const ctaTop=Math.round(imgTop+imgH*R)+EXTRA, bubbleTop=Math.round(imgTop+BUBBLE), glowTop=Math.round(imgTop+imgH*.52)-220;
+      stage.style.setProperty('--img-top', imgTop+'px'); stage.style.setProperty('--cta-top', ctaTop+'px'); stage.style.setProperty('--bubble-top', bubbleTop+'px'); stage.style.setProperty('--glow-top', Math.max(0,glowTop)+'px');
+      const needH=Math.round(ctaTop + cta.offsetHeight + 24); stage.style.setProperty('--hero-h', needH+'px'); stage.style.height=needH+'px';
     }
-
-    // Вызываем layout: при загрузке/resize
-    const ro = new ResizeObserver(()=>computeHeroLayout());
+    const ro=new ResizeObserver(()=>computeHeroLayout());
     window.addEventListener('DOMContentLoaded', ()=>{
-      const img = document.querySelector('.hero-img');
-      const text= document.querySelector('.hero-text');
-      if(img) ro.observe(img);
-      if(text) ro.observe(text);
-      if(img && !img.complete){ img.addEventListener('load', computeHeroLayout, {once:true}); }
+      const img=$('.hero-img'), text=$('.hero-text'); if(img) ro.observe(img); if(text) ro.observe(text); if(img && !img.complete){ img.addEventListener('load', computeHeroLayout, {once:true}); }
       computeHeroLayout();
     });
     window.addEventListener('orientationchange', computeHeroLayout);
     window.addEventListener('load', computeHeroLayout);
 
-    /* ===== Таймер (localStorage, 1 тик/сек) ===== */
+    /* ===== ТАЙМЕР та логіка промо ===== */
     const COUNT=$("#countdown");
     const key="promoEndsAt-v1";
     const now=Date.now();
@@ -607,79 +389,40 @@
 
     function tick(){
       const left=Math.max(0, ends - Date.now());
-      if(left<=0){
-        if (COUNT) COUNT.style.display="none";
-        renderPrices(BASE_PRICE, null);
-        return;
-      }
-      if (COUNT) COUNT.style.display="flex";
-      renderPrices(DISCOUNT_PRICE, BASE_PRICE);
+      const promoActive = left>0;
 
-      const h=Math.floor(left/3600000),
-            m=Math.floor((left%3600000)/60000),
-            s=Math.floor((left%60000)/1000),
-            pad=n=>String(n).padStart(2,"0");
+      if(COUNT) COUNT.style.display = promoActive ? "flex" : "none";
+      renderTariffs(promoActive);
 
-      $("#cd-h").textContent=pad(h);
-      $("#cd-m").textContent=pad(m);
-      $("#cd-s").textContent=pad(s);
+      if(!promoActive) return;
+
+      const h=Math.floor(left/3600000), m=Math.floor((left%3600000)/60000), s=Math.floor((left%60000)/1000);
+      const pad=n=>String(n).padStart(2,"0");
+      $("#cd-h").textContent=pad(h); $("#cd-m").textContent=pad(m); $("#cd-s").textContent=pad(s);
       setTimeout(tick,1000);
     }
     tick();
 
     /* ===== REVIEWS slider ===== */
     (function(){
-      const reel = document.getElementById('reviewsReel');
-      if(!reel) return;
-
-      const slides = Array.from(reel.children);
-      const dotsWrap = document.getElementById('reviewsDots');
-
-      // Dots
-      slides.forEach((_,i)=>{
-        const b=document.createElement('button');
-        if(i===0) b.setAttribute('aria-current','true');
-        b.addEventListener('click', ()=>reel.scrollTo({left: i*reel.clientWidth*0.86 + i*14, behavior:'smooth'}));
-        dotsWrap.appendChild(b);
-      });
-
+      const reel = document.getElementById('reviewsReel'); if(!reel) return;
+      const slides = Array.from(reel.children); const dotsWrap = document.getElementById('reviewsDots');
+      slides.forEach((_,i)=>{ const b=document.createElement('button'); if(i===0) b.setAttribute('aria-current','true'); b.addEventListener('click', ()=>reel.scrollTo({left: i*reel.clientWidth*0.86 + i*14, behavior:'smooth'})); dotsWrap.appendChild(b); });
       const dots = Array.from(dotsWrap.children);
-      function setActiveByScroll(){
-        const w = reel.clientWidth;
-        const idx = Math.round(reel.scrollLeft / (w*0.86 + 14));
-        dots.forEach((d,i)=>d.toggleAttribute('aria-current', i===idx));
-      }
+      function setActiveByScroll(){ const w=reel.clientWidth; const idx=Math.round(reel.scrollLeft/(w*0.86+14)); dots.forEach((d,i)=>d.toggleAttribute('aria-current', i===idx)); }
       reel.addEventListener('scroll', ()=>{ requestAnimationFrame(setActiveByScroll); });
-
-      // Arrows
-      const prev = document.querySelector('#reviews .prev');
-      const next = document.querySelector('#reviews .next');
-      const step = ()=> reel.scrollBy({left: reel.clientWidth*0.9, behavior:'smooth'});
-      const back = ()=> reel.scrollBy({left: -reel.clientWidth*0.9, behavior:'smooth'});
-      if(prev) prev.addEventListener('click', back);
-      if(next) next.addEventListener('click', step);
-
-      // Autoplay (з паузою при взаємодії)
-      let timer = setInterval(step, 5500);
-      const pause = ()=>{ clearInterval(timer); timer=null; };
-      const resume = ()=>{ if(!timer) timer=setInterval(step, 5500); };
-      ['pointerdown','touchstart','wheel','keydown','focusin','mouseenter'].forEach(ev=>{
-        reel.addEventListener(ev, pause, {passive:true});
-      });
-      ['pointerup','touchend','mouseleave','blur'].forEach(ev=>{
-        reel.addEventListener(ev, resume, {passive:true});
-      });
+      const prev=document.querySelector('#reviews .prev'), next=document.querySelector('#reviews .next');
+      const step=()=>reel.scrollBy({left:reel.clientWidth*0.9, behavior:'smooth'}); const back=()=>reel.scrollBy({left:-reel.clientWidth*0.9, behavior:'smooth'});
+      if(prev) prev.addEventListener('click', back); if(next) next.addEventListener('click', step);
+      let timer=setInterval(step, 5500); const pause=()=>{clearInterval(timer);timer=null}; const resume=()=>{if(!timer) timer=setInterval(step, 5500)};
+      ['pointerdown','touchstart','wheel','keydown','focusin','mouseenter'].forEach(ev=>reel.addEventListener(ev,pause,{passive:true}));
+      ['pointerup','touchend','mouseleave','blur'].forEach(ev=>reel.addEventListener(ev,resume,{passive:true}));
     })();
 
-    /* ===== Плавающая кнопка ===== */
+    /* ===== плаваюча кнопка ===== */
     (function(){
-      const hero=$("#hero"), floater=$("#floatCta");
-      if(!hero||!floater) return;
-      const io=new IntersectionObserver((entries)=>{
-        const e=entries[0];
-        if(e && e.isIntersecting){ floater.classList.remove("show"); }
-        else{ floater.classList.add("show"); }
-      },{threshold:.15});
+      const hero=$("#hero"), floater=$("#floatCta"); if(!hero||!floater) return;
+      const io=new IntersectionObserver((entries)=>{ const e=entries[0]; if(e && e.isIntersecting){ floater.classList.remove("show"); } else { floater.classList.add("show"); } },{threshold:.15});
       io.observe(hero);
     })();
   </script>
