@@ -256,7 +256,6 @@
       </div>
       <div class="hero-bubble" id="heroBubble" role="note">Клієнти шукають сучасних і професійних майстрів. Не втрачай свій шанс бути серед кращих!</div>
       <div class="hero-cta">
-        <!-- ця кнопка тепер скролить до тарифів і підсвічує їх -->
         <a id="buyTop" class="cta" href="#promo" aria-label="Перейти до тарифів">Придбати курс</a>
         <div id="priceLine" class="priceLine">лише — грн <span class="oldline">— грн</span></div>
       </div>
@@ -444,7 +443,7 @@
     const $=s=>document.querySelector(s);
     const fmt=n=>new Intl.NumberFormat("uk-UA").format(n);
 
-    /* лінки на оплату — лише на тарифних кнопках */
+    /* оплати — тільки на тарифних кнопках */
     function setPayHref(el,amount,label){
       if(!el) return;
       const u=new URL(WORKER);
@@ -454,7 +453,6 @@
       el.href=u.toString(); el.target="_blank"; el.rel="noopener";
     }
 
-    /* hero: лише відображення ціни, без лінку на оплату */
     function renderHeroPrice(active, old){
       const line=$("#priceLine");
       if(line){
@@ -462,7 +460,7 @@
           ? `лише ${fmt(active)} грн <span class="oldline">${fmt(old)} грн</span>`
           : `ціна ${fmt(active)} грн`;
       }
-      // ВАЖЛИВО: не чіпаємо #buyTop — він скролить до тарифів
+      // не чіпаємо #buyTop (він скролить)
     }
 
     function setTariff(cardIds, active, old, label){
@@ -632,31 +630,61 @@
       start();
     })();
 
-    /* ===== промо: скрол і мікропульс карток тарифів ===== */
+    /* ===== промо: обчислення видимості елемента ===== */
+    function visibleRatio(el){
+      if(!el) return 0;
+      const r = el.getBoundingClientRect();
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const ix = Math.max(0, Math.min(r.right, vw) - Math.min(r.left, vw));
+      const iy = Math.max(0, Math.min(r.bottom, vh) - Math.min(r.top, vh));
+      const interArea = ix * iy;
+      const area = Math.max(1, r.width * r.height);
+      return interArea / area;
+    }
+
+    /* ===== Tariff pulse (запуск ТІЛЬКИ після фактичної зупинки скролу на Promo) ===== */
     function pulseTariffs(){
       document.querySelectorAll('.tariff').forEach(card=>{
         card.classList.add('pulse');
         card.addEventListener('animationend', ()=>card.classList.remove('pulse'), {once:true});
       });
     }
-    function scrollToPromoAndPulse(){
-      const promo = $("#promo");
-      if(!promo) return;
-      // запускаємо pulse коли промо реально у вікні
-      const observer = new IntersectionObserver((entries, obs)=>{
+
+    function afterScrollSettledThenPulse(){
+      const card = document.querySelector('#promo .promoCard');
+      if(!card) return;
+      const ratio = visibleRatio(card);
+      if(ratio >= 0.6){ pulseTariffs(); return; }
+      // якщо ще не достатньо видно — дочекаємось через IO
+      const io = new IntersectionObserver((entries, obs)=>{
         const e = entries[0];
-        if(e && e.isIntersecting){
+        if(e && e.isIntersecting && e.intersectionRatio >= 0.6){
           pulseTariffs();
           obs.disconnect();
         }
-      }, {threshold:0.4});
-      observer.observe(promo);
+      }, { threshold: [0.6] });
+      io.observe(card);
+    }
+
+    function waitScrollEnd(callback, idleMs=140, capMs=2000){
+      let t=null, done=false;
+      const onEnd=()=>{ if(done) return; done=true; window.removeEventListener('scroll', onScroll, {passive:true}); clearTimeout(t); callback(); };
+      const onScroll=()=>{ clearTimeout(t); t=setTimeout(onEnd, idleMs); };
+      window.addEventListener('scroll', onScroll, {passive:true});
+      onScroll(); // старт
+      setTimeout(onEnd, capMs); // страховка
+    }
+
+    function scrollToPromoAndPulse(){
+      const promo = $("#promo");
+      if(!promo) return;
       promo.scrollIntoView({behavior:'smooth', block:'start'});
+      waitScrollEnd(afterScrollSettledThenPulse);
     }
 
     /* ===== плаваюча кнопка + Hero CTA: скрол до тарифів з підсвіткою ===== */
     (function(){
-      const hero=$("#hero"), floater=$("#floatCta"), floatBtn=$("#buyFloat"), topBtn=$("#buyTop");
+      const floatBtn=$("#buyFloat"), topBtn=$("#buyTop");
       if(floatBtn){
         floatBtn.textContent = "Отримати доступ до курсу";
         floatBtn.addEventListener('click', (e)=>{ e.preventDefault(); scrollToPromoAndPulse(); });
@@ -664,14 +692,31 @@
       if(topBtn){
         topBtn.addEventListener('click', (e)=>{ e.preventDefault(); scrollToPromoAndPulse(); });
       }
-      if(hero&&floater){
-        const io=new IntersectionObserver((entries)=>{
-          const e=entries[0];
-          if(e && e.isIntersecting){ floater.classList.remove("show"); }
-          else{ floater.classList.add("show"); }
-        },{threshold:.15});
-        io.observe(hero);
+    })();
+
+    /* ===== Плаваюча кнопка: показувати ЛИШЕ коли Hero і Promo поза екраном ===== */
+    (function(){
+      const hero=$("#hero"), promo=$("#promo"), floater=$("#floatCta");
+      if(!hero || !promo || !floater) return;
+      let heroIn=false, promoIn=false;
+
+      function update(){
+        if(heroIn || promoIn){ floater.classList.remove('show'); }
+        else { floater.classList.add('show'); }
       }
+
+      const io = new IntersectionObserver((entries)=>{
+        for(const e of entries){
+          if(e.target===hero) heroIn = e.isIntersecting;
+          if(e.target===promo) promoIn = e.isIntersecting;
+        }
+        update();
+      }, { threshold: 0.12 });
+
+      io.observe(hero);
+      io.observe(promo);
+      // ініціалізація
+      update();
     })();
   </script>
 </body>
