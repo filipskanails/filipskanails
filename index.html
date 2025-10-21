@@ -105,7 +105,6 @@
     #reviews .head{ text-align:center; margin-bottom:12px }
     #reviews .muted{ color:var(--muted) }
     
-    /* рейл (залишаємо логіку ширини карток ~86% + gap) */
     .reel{
       position:relative;
       overflow-x:auto; overflow-y:visible;
@@ -115,7 +114,6 @@
       mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
     }
     
-    /* слайд тепер прозорий, без коробки */
     .slide{
       scroll-snap-align:center;
       position:relative;
@@ -124,9 +122,10 @@
     }
     .slide::before{ content:none }
     
-    /* повідомлення-картка */
+    /* сообщения */
     .msg .row{ display:flex; align-items:flex-start; gap:10px }
-    .msg.right .row{ flex-direction:row-reverse }
+    /* ВСЕ хвостики влево — фиксируем прямое направление и игнорируем .right */
+    .msg.right .row{ flex-direction:row }
     
     .msg .avatar{
       width:40px; height:40px; border-radius:50%;
@@ -142,22 +141,22 @@
     .msg .content{ min-width:0; max-width:100% }
     .msg .meta{ font-size:12px; color:var(--muted); margin:0 0 6px; opacity:.95 }
     
-    /* бульбашка з хвостиком */
     .msg .bubble{
       position:relative;
       padding:14px 16px;
-      border-radius:18px 18px 18px 6px;      /* лівий хвостик за замовчуванням */
+      border-radius:18px 18px 18px 6px;   /* левый хвостик */
       background:rgba(16,23,19,.72);
       border:1px solid var(--line);
       backdrop-filter:blur(8px);
       box-shadow:inset 0 0 0 1px rgba(255,255,255,.03), 0 18px 40px rgba(0,0,0,.28);
       font-size:16px; line-height:1.55;
     }
-    .msg.right .bubble{ border-radius:18px 18px 6px 18px }
+    /* .right ведём как обычную левую */
+    .msg.right .bubble{ border-radius:18px 18px 18px 6px }
     
     .msg .bubble::after{
       content:"";
-      position:absolute; bottom:10px; left:-7px;
+      position:absolute; bottom:10px; left:-7px;   /* всегда слева */
       width:12px; height:12px;
       background:inherit;
       border-left:1px solid var(--line);
@@ -165,16 +164,13 @@
       transform:rotate(45deg);
       filter:drop-shadow(0 6px 14px rgba(0,0,0,.28));
     }
+    /* нейтрализация правого хвостика */
     .msg.right .bubble::after{
-      left:auto; right:-7px;
-      border-left:none; border-bottom:none;
-      border-right:1px solid var(--line);
-      border-top:1px solid var(--line);
+      left:-7px; right:auto; border-right:none; border-top:none; border-left:1px solid var(--line); border-bottom:1px solid var(--line);
     }
     
     .msg .stars{ font-size:14px; letter-spacing:1px; opacity:.9; margin-top:8px }
     
-    /* нав-точки та стрілки лишаємо, стилізуємо під акцент */
     .navDots{ display:flex; justify-content:center; gap:8px; margin-top:10px }
     .navDots button{ width:8px; height:8px; border-radius:999px; border:none; padding:0; background:#2a3a34; opacity:.7 }
     .navDots button[aria-current="true"]{ background:var(--accent-2); opacity:1 }
@@ -501,15 +497,16 @@
     }
     tick();
 
-    /* ===== REVIEWS slider (ping-pong автоскрол) ===== */
+    /* ===== REVIEWS slider (ping-pong, 30s, фикс aria-current) ===== */
     (function(){
       const reel = document.getElementById('reviewsReel');
       if(!reel) return;
     
+      const AUTOSCROLL_MS = 30000; // 30 секунд
       const slides = Array.from(reel.children);
       const dotsWrap = document.getElementById('reviewsDots');
     
-      // генеруємо точки
+      // точки
       dotsWrap.innerHTML = "";
       slides.forEach((_,i)=>{
         const b=document.createElement('button');
@@ -519,13 +516,19 @@
       });
       const dots = Array.from(dotsWrap.children);
     
-      const stepW = ()=> (reel.clientWidth*0.86 + 14);   // має збігатися з CSS
-      let idx = 0;                                       // активний індекс
-      let dir = 1;                                       // 1 -> вправо, -1 -> вліво
+      const stepW = ()=> (reel.clientWidth*0.86 + 14);
+      let idx = 0;
+      let dir = 1;
       let timer = null;
     
-      function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
-      function updateDots(){ dots.forEach((d,i)=>d.toggleAttribute('aria-current', i===idx)); }
+      const clamp = (n,min,max)=> Math.max(min, Math.min(max, n));
+    
+      function updateDots(){
+        dots.forEach((d,i)=>{
+          if(i===idx) d.setAttribute('aria-current','true');
+          else d.removeAttribute('aria-current');
+        });
+      }
     
       function goTo(i, smooth=true){
         idx = clamp(i, 0, slides.length-1);
@@ -542,16 +545,18 @@
         else{ goTo(idx-1); }
       }
     
-      // автоскрол пінг-понгом
-      function start(){ if(timer) return; timer = setInterval(()=>{
-        // коригуємо напрямок на межах
-        if(dir>0 && idx >= slides.length-1) dir = -1;
-        else if(dir<0 && idx <= 0) dir = 1;
-        goTo(idx + dir);
-      }, 4800); }   // можна підкрутити швидкість
+      function start(){
+        if(timer) return;
+        timer = setInterval(()=>{
+          // «пінг-понг» між краями
+          if(dir>0 && idx >= slides.length-1) dir = -1;
+          else if(dir<0 && idx <= 0) dir = 1;
+          goTo(idx + dir);
+        }, AUTOSCROLL_MS);
+      }
       function stop(){ clearInterval(timer); timer=null; }
     
-      // синк індексу при ручному скролі
+      // синк активної точки при ручному скролі
       function syncByScroll(){
         const i = Math.round(reel.scrollLeft / stepW());
         const clamped = clamp(i, 0, slides.length-1);
@@ -562,10 +567,10 @@
       // стрілки
       const prevBtn = document.querySelector('#reviews .prev');
       const nextBtn = document.querySelector('#reviews .next');
-      if(prevBtn) prevBtn.addEventListener('click', prev);
-      if(nextBtn) nextBtn.addEventListener('click', next);
+      if(prevBtn) prevBtn.addEventListener('click', ()=>{ stop(); prev(); start(); });
+      if(nextBtn) nextBtn.addEventListener('click', ()=>{ stop(); next(); start(); });
     
-      // пауза при взаємодії
+      // пауза/продовження при взаємодії користувача
       ['pointerdown','touchstart','wheel','keydown','focusin','mouseenter'].forEach(ev=>{
         reel.addEventListener(ev, stop, {passive:true});
       });
@@ -573,7 +578,7 @@
         reel.addEventListener(ev, start, {passive:true});
       });
     
-      // ініт
+      // init
       goTo(0,false);
       start();
     })();
