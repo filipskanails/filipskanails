@@ -245,14 +245,14 @@
     .footer .links a{color:var(--muted);text-decoration:underline dotted;margin:0 8px}
     .footer small.copy{display:block;margin-top:12px;opacity:.7}
 
-    /* ===== FLOATING CTA (повернули) ===== */
+    /* ===== FLOATING CTA ===== */
     .floater{position:fixed;left:0;right:0;bottom:12px;z-index:5000;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .28s ease,transform .28s ease}
     .floater.show{opacity:1;transform:translateY(0);pointer-events:auto}
     .floater-inner{max-width:720px;margin:0 auto;padding:0 16px}
     .floater .cta{width:100%}
     @media (prefers-reduced-motion:reduce){ .floater{transition:none} }
 
-    /* ===== CHECKOUT MODAL (поверх усього) ===== */
+    /* ===== CHECKOUT MODAL ===== */
     .co-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.5); display:grid; place-items:center; z-index:9999; opacity:0; pointer-events:none; transition:opacity .22s ease;}
     .co-backdrop.show{ opacity:1; pointer-events:auto }
     .co-modal{ width:min(720px, 96vw); max-height:96vh; overflow:auto; border-radius:22px; background:var(--card); border:1px solid var(--line); box-shadow:0 30px 60px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.02); padding:16px; position:relative; z-index:10000 }
@@ -272,7 +272,7 @@
     .co-err.show{ display:block } .co-actions{ display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:10px }
     .co-pay{ font-size:14px; color:#cfe6dc }
 
-    /* ===== PULSE (підсвічування тарифів після автоскролу) ===== */
+    /* ===== PULSE (підсвічування тарифів) ===== */
     @keyframes tariffPulse{
       0%{ transform:scale(1); box-shadow:0 10px 26px rgba(0,0,0,.22); }
       35%{ transform:scale(1.015); box-shadow:0 16px 40px rgba(0,0,0,.35), 0 0 0 2px rgba(142,243,199,.22) inset; }
@@ -311,9 +311,95 @@
       .tList{ font-size:15px }
     }
 
-    /* Блокування фону при відкритій модалці + ховаємо флоатер */
+    /* Заблокувати фон при відкритій модалці + сховати флоатер */
     body.modal-open{ overflow:hidden }
     body.modal-open .floater{ display:none !important; }
+
+    /* === BRIGHT PACK: світліше, свіжіше, виразніше === */
+    :root{
+      --mint:#8EF3C7;
+      --pop:#FFB56B;
+      --pop-2:#FF8A5C;
+      --text-strong:#f3fbf7;
+    }
+    body{ position:relative; z-index:0; }
+    body::before{
+      content:""; position:fixed; inset:-20% -10% -30% -10%; z-index:-1; pointer-events:none;
+      background:
+        radial-gradient(60% 40% at 80% 10%, rgba(255,181,107,.10), transparent 55%),
+        radial-gradient(50% 60% at 15% 20%, rgba(142,243,199,.10), transparent 60%),
+        radial-gradient(40% 40% at 85% 75%, rgba(11,125,71,.18), transparent 70%);
+      filter:blur(28px);
+    }
+    h1,h2,.footer .brand{ color:var(--text-strong); }
+    .hero-stage::after{
+      background:
+        radial-gradient(circle at 50% 50%,
+          rgba(var(--accent2-rgb),1) 0%,
+          rgba(var(--accent2-rgb),.70) 28%,
+          rgba(var(--accent-rgb),.40) 60%,
+          rgba(var(--accent-rgb),.16) 78%,
+          rgba(var(--accent-rgb),.08) 90%,
+          transparent 100%),
+        radial-gradient(60% 40% at 50% 0%, rgba(255,255,255,.14), transparent 55%);
+    }
+    .hero-bubble{
+      background:linear-gradient(180deg, rgba(18,25,21,.66), rgba(18,25,21,.52));
+      border-color:rgba(142,243,199,.35);
+      box-shadow:0 12px 28px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12);
+    }
+    .cta{ position:relative; overflow:hidden; }
+    .cta::after{
+      content:""; position:absolute; top:-60%; bottom:-60%; left:-120%;
+      width:50%; transform:skewX(-20deg);
+      background:linear-gradient(120deg, transparent 0%, rgba(255,255,255,.28) 50%, transparent 100%);
+      animation:ctaShine 5.5s ease-in-out infinite;
+    }
+    @keyframes ctaShine{ 0%{ left:-120%; } 15%{ left:140%; } 100%{ left:140%; } }
+    .cta:hover{ box-shadow:var(--shadow), 0 0 0 1px rgba(255,255,255,.08) inset, 0 8px 28px rgba(142,243,199,.22); }
+    .promoCard{
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.00)), var(--card);
+      border-color:#2b3e36;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.03), 0 16px 40px rgba(0,0,0,.28);
+    }
+    .promoCard::before{
+      background:
+        radial-gradient(60% 100% at 40% 0%, rgba(142,243,199,.22), transparent 70%),
+        radial-gradient(60% 100% at 80% 20%, rgba(255,181,107,.18), transparent 70%);
+      filter:blur(18px);
+    }
+    .pBadge{ background:linear-gradient(135deg, rgba(142,243,199,.92), rgba(255,181,107,.92)); color:#042015; text-shadow:0 1px 0 rgba(255,255,255,.35); }
+    .pricePill{
+      background:
+        radial-gradient(130% 180% at 50% 0%, rgba(255,255,255,.22), rgba(255,255,255,0) 55%),
+        linear-gradient(135deg, var(--accent-2), var(--accent));
+      box-shadow:0 12px 32px rgba(0,0,0,.32), 0 0 0 1px rgba(255,255,255,.06) inset;
+    }
+    .saveBadge{ background:linear-gradient(135deg, rgba(142,243,199,.95), rgba(255,181,107,.92)); color:#031b12; }
+    .tariff{
+      background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,0)), #111713;
+      border-color:#2b3e36;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.028), 0 14px 34px rgba(0,0,0,.28);
+    }
+    .tList li{ background:linear-gradient(180deg, rgba(14,20,17,.62), rgba(14,20,17,.50)); border-color:#30463b; }
+    .tList b{ color:var(--mint); }
+    .avatar{
+      background:
+        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.24), transparent 55%),
+        linear-gradient(135deg, var(--accent-2), var(--accent)),
+        linear-gradient(135deg, rgba(255,181,107,.6), transparent);
+      box-shadow:0 0 0 3px rgba(142,243,199,.22);
+    }
+    .bubble{
+      background:linear-gradient(180deg, rgba(18,25,21,.75), rgba(18,25,21,.65));
+      border-color:#2e4439;
+    }
+    .bubble::after{ background:linear-gradient(180deg, rgba(18,25,21,.75), rgba(18,25,21,.65)); border-left-color:#2e4439; border-bottom-color:#2e4439; }
+    @keyframes tariffPulse{
+      0%{ transform:scale(1); box-shadow:0 10px 26px rgba(0,0,0,.22); }
+      35%{ transform:scale(1.02); box-shadow:0 20px 46px rgba(0,0,0,.38), 0 0 0 2px rgba(142,243,199,.24) inset; }
+      100%{ transform:scale(1); box-shadow:0 10px 26px rgba(0,0,0,.22); }
+    }
   </style>
 </head>
 <body>
@@ -617,7 +703,7 @@
         if(!name) return "";
         const parts = String(name).trim().split(/\s+/).filter(Boolean);
         return (parts[0]||"").trim();
-        };
+      };
       slides.forEach(sl=>{
         const raw = sl.getAttribute('data-name')||"";
         const first = firstFrom(raw);
@@ -688,7 +774,7 @@
       slides[0]?.classList.add('is-active'); updateDots(0); start();
     })();
 
-    /* ===== Pulse tariffs after scroll (fixed timing) ===== */
+    /* ===== Pulse tariffs after scroll (robust) ===== */
     function visibleRatio(el){
       if(!el) return 0;
       const r=el.getBoundingClientRect(), vw=innerWidth, vh=innerHeight;
@@ -727,7 +813,7 @@
       if(topBtn){ topBtn.addEventListener('click', e=>{ e.preventDefault(); scrollToPromoAndPulse(); }); }
     })();
 
-    /* ===== floater shows only when hero & promo off-screen (robust) ===== */
+    /* ===== floater shows only when hero & promo off-screen ===== */
     (function(){
       const hero=$("#hero"), promo=$("#promo"), floater=$("#floatCta");
       if(!hero||!promo||!floater) return;
@@ -738,7 +824,7 @@
         const vert = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
         const hor  = Math.max(0, Math.min(r.right, vw) - Math.max(r.left, 0));
         const area = (vert*hor) / Math.max(1, r.width*r.height);
-        return area > 0.12; // ~як threshold
+        return area > 0.12;
       }
       function updateNow(){
         const heroIn = computeInView(hero);
