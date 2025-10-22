@@ -108,16 +108,20 @@
       justify-self:end;
     }
 
-    /* === LIST INSIDE TARIFFS (fixed): bigger font + clean markers === */
+    /* === LIST INSIDE TARIFFS (fixed) === */
     .tList{
       list-style:none; padding:0; margin:12px 0 16px;
       display:grid; gap:10px;
-      font-size:clamp(15px,3.6vw,17px); /* трохи більший текст */
+      font-size:clamp(15px,3.6vw,17px);
     }
-    .tList b{ font-weight:800 }  /* стабільний жирний без зайвих відступів */
+    /* виділення як у "Про мене" */
+    .tList b{
+      font-weight:900;
+      color:var(--accent-2);
+      text-shadow:0 0 8px rgba(var(--accent2-rgb),.32);
+    }
     .tList li{
       display:flex; gap:10px; align-items:flex-start; line-height:1.5;
-      /* важливо дозволити нормальні переноси рядків */
       word-break:normal; overflow-wrap:normal;
     }
     .tList li::before{
@@ -130,7 +134,7 @@
       box-shadow:0 0 0 3px rgba(var(--accent2-rgb),.16);
       border:1px solid #2b4136;
       flex:0 0 22px;
-      margin-top:2px; /* вирівнюємо по першому рядку тексту */
+      margin-top:2px;
     }
 
     .tariff .cta{
@@ -265,9 +269,9 @@
             </div>
 
             <ul class="tList">
-              <li>Доступ<b>3 місяці</b></li>
-              <li><b>Без</b>зворотнього зв'язку</li>
-              <li>Сертифікат про<b>перегляд курсу</b></li>
+              <li>Доступ <b>3 місяці</b></li>
+              <li><b>Без</b> зворотнього зв'язку</li>
+              <li>Сертифікат про <b>перегляд курсу</b></li>
             </ul>
 
             <a id="buyGroup" class="cta" href="#">Придбати груповий</a>
@@ -290,10 +294,10 @@
             </div>
 
             <ul class="tList">
-              <li>Доступ<b>8 місяців</b></li>
-              <li><b>Зворотній</b>зв'язок</li>
-              <li>Сертифікат<b>після проходження</b></li>
-              <li><b>Бонуси:</b>Гайд по відшаруванням</li>
+              <li>Доступ <b>8 місяців</b></li>
+              <li><b>Зворотній</b> зв'язок</li>
+              <li>Сертифікат <b>після проходження</b></li>
+              <li><b>Бонуси:</b> Гайд по відшаруванням</li>
             </ul>
 
             <a id="buyIndiv" class="cta" href="#">Придбати індивідуальний</a>
