@@ -202,72 +202,64 @@
       </div>
     </section>
 
-    <!-- ===== PROMO (ТАРИФИ) ===== -->
-    <section id="promo" class="section" aria-label="Тарифи та бонуси">
+    <!-- ===== PROMO / ТАРИФИ ===== -->
+    <section id="promo" class="section">
       <div class="promoCard">
-        <div class="promoHead">
-          <h2>Тарифи</h2>
-          <div class="muted">Обери формат навчання та зафіксуй вигідну ціну</div>
-        </div>
-
-        <!-- таймер -->
-        <div class="countdown" id="countdown" aria-live="polite">
+        <!-- Таймер знижки (залишаємо як є — він уже працює з твоїм JS) -->
+        <h2>Тарифи</h2>
+    
+        <div class="countdown" id="countdown">
           <div class="countbox"><div class="n" id="cd-h">00</div><div class="t">Годин</div></div>
           <div class="countbox"><div class="n" id="cd-m">00</div><div class="t">Хвилин</div></div>
           <div class="countbox"><div class="n" id="cd-s">00</div><div class="t">Секунд</div></div>
         </div>
-
-        <!-- дві картки тарифів -->
-        <div class="tariffsGrid">
-          <!-- GROUP -->
-          <article class="tariff" aria-label="Тариф Груповий">
-            <div class="tariffHead">
-              <div class="tariffName">Груповий</div>
-              <span class="ribbon">Хіт</span>
-            </div>
-            <ul class="featList">
-              <li>Повний доступ до відеоуроків назавжди.</li>
-              <li>Домашні завдання з прикладами розв’язання.</li>
-              <li>Груповий чат підтримки.</li>
-              <li>Сертифікат після проходження.</li>
-            </ul>
-            <div class="priceWrap">
-              <div>
-                <div class="priceNow" id="gPrice">— грн</div>
-                <div class="priceOld" id="gOld" style="display:none">— грн</div>
+    
+        <div class="tariffs" style="margin-top:10px">
+          <!-- ГРУПОВИЙ -->
+          <article class="tariff" aria-labelledby="t-g-name">
+            <div class="tHead">
+              <div class="tName" id="t-g-name">Груповий</div>
+              <div class="priceRow">
+                <div class="pricePill">
+                  <small class="muted" style="color:#cfe6dc">лише</small>
+                  <span id="gPrice" class="priceNum">— грн</span>
+                </div>
+                <div id="gOld" class="old">— грн</div>
               </div>
-              <a id="buyGroup" class="cta" aria-label="Оплатити Груповий тариф" href="#">Купити</a>
             </div>
+    
+            <ul class="tList">
+              <li>Доступ <b>3 місяці</b></li>
+              <li><b>Без</b> зворотнього зв'язку</li>
+              <li>Сертифікат про <b>перегляд курсу</b></li>
+            </ul>
+    
+            <a id="buyGroup" class="cta" href="#">Придбати груповий</a>
           </article>
-
-          <!-- INDIVIDUAL -->
-          <article class="tariff" aria-label="Тариф Індивідуальний">
-            <div class="tariffHead">
-              <div class="tariffName">Індивідуальний</div>
-              <span class="ribbon">Максимум результату</span>
-            </div>
-            <ul class="featList">
-              <li>Усе з «Групового» тарифу.</li>
-              <li>2 персональні розбори робіт 1:1.</li>
-              <li>Пріоритетні відповіді та правки.</li>
-              <li>Індивідуальний план розвитку.</li>
-            </ul>
-            <div class="priceWrap">
-              <div>
-                <div class="priceNow" id="iPrice">— грн</div>
-                <div class="priceOld" id="iOld" style="display:none">— грн</div>
+    
+          <!-- ІНДИВІДУАЛЬНИЙ -->
+          <article class="tariff" aria-labelledby="t-i-name">
+            <div class="tHead">
+              <div class="tName" id="t-i-name">Індивідуальний</div>
+              <div class="priceRow">
+                <div class="pricePill">
+                  <small class="muted" style="color:#cfe6dc">лише</small>
+                  <span id="iPrice" class="priceNum">— грн</span>
+                </div>
+                <div id="iOld" class="old">— грн</div>
               </div>
-              <a id="buyIndiv" class="cta" aria-label="Оплатити Індивідуальний тариф" href="#">Купити</a>
             </div>
+    
+            <ul class="tList">
+              <li>Доступ <b>8 місяців</b></li>
+              <li><b>Зворотній</b> зв'язок</li>
+              <li>Сертифікат <b>після проходження</b></li>
+              <li><b>Бонуси:</b> Гайд по відшаруванням</li>
+            </ul>
+    
+            <a id="buyIndiv" class="cta" href="#">Придбати індивідуальний</a>
           </article>
         </div>
-
-        <!-- бонуси -->
-        <h3 style="margin:16px 0 8px;font-size:18px">Бонуси для обох пакетів</h3>
-        <ul class="bonusList">
-          <li>Гайд «Причини відшарувань»</li>
-          <li>Відео-урок «Чистий комбі зріз»</li>
-        </ul>
       </div>
     </section>
 
