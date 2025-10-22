@@ -973,16 +973,7 @@
       });
     })();
 
-    /* ===== Program: за замовчуванням відкрито на десктопі, згорнуто на мобільному ===== */
-    (function(){
-      const tracks = document.querySelectorAll('#program details.track');
-      function apply(){
-        const wide = matchMedia('(min-width:740px)').matches;
-        tracks.forEach(d=>{ if(wide) d.setAttribute('open',''); else d.removeAttribute('open'); });
-      }
-      addEventListener('resize', apply);
-      apply();
-    })();
+    /* ===== Program auto-toggle (REMOVED): теперь управление только у пользователя ===== */
   </script>
 </body>
 </html>
