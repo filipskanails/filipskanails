@@ -10,358 +10,189 @@
     :root{
       --bg:#0c100e; --card:#121614; --line:#223129;
       --text:#e7f0ea; --muted:#a1b3ab;
-
-      /* бренд: на базі #004a25 */
-      --accent:#004a25;
-      --accent-2:#0b7d47;
-      --accent-rgb:0,74,37;
-      --accent2-rgb:11,125,71;
-
+      --accent:#004a25; --accent-2:#0b7d47; --accent-rgb:0,74,37; --accent2-rgb:11,125,71;
       --radius:24px; --shadow:0 10px 28px rgba(0,0,0,.24);
-
-      /* управляемые из JS */
       --img-top:320px; --cta-top:560px; --bubble-top:440px; --glow-top:380px; --hero-h:760px;
       --promoOverlap:18px;
     }
 
-    /* базовое */
     *{box-sizing:border-box}
-    html,body{
-      margin:0;background:var(--bg);color:var(--text);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif;
-      overflow-x:hidden;
-    }
-    a{color:inherit;text-decoration:none}
-    img{max-width:100%;display:block}
-
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif;overflow-x:hidden}
+    a{color:inherit;text-decoration:none} img{max-width:100%;display:block}
     .wrap{max-width:720px;margin:0 auto;padding:16px}
-
     .accent{color:var(--accent-2);font-weight:900;text-shadow:0 0 8px rgba(var(--accent2-rgb),.32)}
     .nowrap{white-space:nowrap}
 
-    /* ===== HERO (full-bleed) ===== */
+    /* ===== HERO ===== */
     #hero{margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);position:relative;z-index:1}
-    .hero-stage{position:relative;height:var(--hero-h);overflow:hidden;isolation:isolate;background:transparent}
+    .hero-stage{position:relative;height:var(--hero-h);overflow:hidden;isolation:isolate}
     .hero-stage::after{
       content:""; position:absolute; right:50%; top:var(--glow-top);
       width:min(120vmin,680px); height:min(120vmin,680px); border-radius:50%;
       background:
-        radial-gradient(circle at 50% 50%,
-          rgba(var(--accent2-rgb),.96) 0%,
-          rgba(var(--accent2-rgb),.64) 28%,
-          rgba(var(--accent-rgb),.34) 60%,
-          rgba(var(--accent-rgb),.14) 78%,
-          rgba(var(--accent-rgb),.06) 90%,
-          transparent 100%),
+        radial-gradient(circle at 50% 50%, rgba(var(--accent2-rgb),.96) 0%, rgba(var(--accent2-rgb),.64) 28%, rgba(var(--accent-rgb),.34) 60%, rgba(var(--accent-rgb),.14) 78%, rgba(var(--accent-rgb),.06) 90%, transparent 100%),
         radial-gradient(60% 40% at 50% 0%, rgba(255,255,255,.10), transparent 55%);
-      filter:blur(16px);
-      transform:translate(50%,-28%);
-      pointer-events:none; z-index:0;
+      filter:blur(16px); transform:translate(50%,-28%); pointer-events:none; z-index:0;
     }
-
-    .hero-text{
-      position:absolute;top:2%;left:50%;transform:translateX(-50%);
-      width:calc(100% - 32px);max-width:640px;
-      text-align:center;
-      text-shadow:0 1px 0 rgba(0,0,0,.2);z-index:2
-    }
+    .hero-text{position:absolute;top:2%;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:640px;text-align:center;text-shadow:0 1px 0 rgba(0,0,0,.2);z-index:2}
     .eyebrow{font-size:13px;letter-spacing:.06em;color:var(--muted)}
-    .chips{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px}
-    .chip{padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:#0f1713}
-    .chip.outline{background:transparent}
-
     .hl{font-size:clamp(28px,7vw,38px);line-height:1.18;font-weight:900;margin:10px 0 8px}
     .hl.hl-mix{display:grid;gap:2px}
     .hl.hl-mix .line{display:block}
-    .hl.hl-mix .line.r{text-align:right}
-    .hl.hl-mix .line.l{text-align:left}
-
+    .hl.hl-mix .line.r{text-align:right}.hl.hl-mix .line.l{text-align:left}
     .lead{color:var(--muted);margin:0 0 10px;text-align:center}
-
-    .hero-img{
-      position:absolute;right:50%;transform:translateX(44%);
-      top:var(--img-top); width:min(620px,112vw);
-      object-fit:contain; filter:drop-shadow(0 16px 28px rgba(0,0,0,.35));
-      z-index:1; pointer-events:none;
-    }
-
-    .hero-bubble{
-      position:absolute; right:8%; top:var(--bubble-top); max-width:60vw; color:#fff;
-      background:rgba(12,16,14,.58);
-      border:1px solid rgba(var(--accent2-rgb),.28);
-      padding:12px 14px; border-radius:28px; backdrop-filter:blur(8px);
-      box-shadow:0 10px 26px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.10);
-      font-size:14px; line-height:1.35; z-index:2;
-    }
-
+    .hero-img{position:absolute;right:50%;transform:translateX(44%);top:var(--img-top); width:min(620px,112vw);object-fit:contain; filter:drop-shadow(0 16px 28px rgba(0,0,0,.35)); z-index:1; pointer-events:none;}
+    .hero-bubble{position:absolute; right:8%; top:var(--bubble-top); max-width:60vw; color:#fff;background:rgba(12,16,14,.58); border:1px solid rgba(var(--accent2-rgb),.28); padding:12px 14px; border-radius:28px; backdrop-filter:blur(8px); box-shadow:0 10px 26px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.10); font-size:14px; line-height:1.35; z-index:2;}
     .hero-cta{position:absolute;left:50%;transform:translateX(-50%);top:var(--cta-top);display:grid;gap:10px;text-align:center;z-index:3}
-    .cta{
-      display:inline-flex;align-items:center;justify-content:center;gap:10px;
-      padding:16px 26px;border-radius:999px;
-      background:
-        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.18), rgba(255,255,255,0) 55%),
-        linear-gradient(135deg,var(--accent-2),var(--accent));
-      color:#fff;font-weight:900;text-transform:uppercase;
-      font-size:clamp(18px,5vw,22px);letter-spacing:.3px;white-space:nowrap;
-      box-shadow:var(--shadow), 0 0 0 1px rgba(255,255,255,.06) inset;
-      text-shadow:0 1px 0 rgba(0,0,0,.18);
-    }
+    .cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 26px;border-radius:999px;background:
+        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.18), rgba(255,255,255,0) 55%), linear-gradient(135deg,var(--accent-2),var(--accent));color:#fff;font-weight:900;text-transform:uppercase;font-size:clamp(18px,5vw,22px);letter-spacing:.3px;white-space:nowrap;box-shadow:var(--shadow), 0 0 0 1px rgba(255,255,255,.06) inset;text-shadow:0 1px 0 rgba(0,0,0,.18);}
     .priceLine{font-weight:800;text-align:center;font-size:16px;color:var(--text);opacity:.95}
-    .priceLine .oldline{color:#95a49b;text-decoration:line-through;margin-left:10px}
+    .priceLine .oldline{color:#95a49b;text-decoration:line-through;margin-left:10px;white-space:nowrap}
 
-    /* ===== PROMO / ТАРИФИ (full-bleed) ===== */
-    #promo{margin-top:calc(-1 * var(--promoOverlap));padding-top:var(--promoOverlap);
-      margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);position:relative;z-index:5}
-    .promoCard{
-      position:relative;
-      border-radius:var(--radius); padding:18px; background:var(--card);
-      border:1px solid var(--line); backdrop-filter:blur(6px);
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22);
-      overflow:hidden;
-    }
-    .promoCard::before{
-      content:""; position:absolute; inset:-20% -10% auto -10%; height:56%;
-      background:
+    /* ===== PROMO / ТАРИФИ ===== */
+    #promo{margin-top:calc(-1 * var(--promoOverlap));padding-top:var(--promoOverlap);margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);position:relative;z-index:5}
+    .promoCard{position:relative;border-radius:var(--radius); padding:18px; background:var(--card); border:1px solid var(--line); backdrop-filter:blur(6px); box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22); overflow:hidden;}
+    .promoCard::before{content:""; position:absolute; inset:-20% -10% auto -10%; height:56%; background:
         radial-gradient(60% 100% at 40% 0%, rgba(var(--accent2-rgb),.18), transparent 70%),
-        radial-gradient(60% 100% at 80% 20%, rgba(142,243,199,.08), transparent 70%);
-      filter:blur(16px); pointer-events:none;
-    }
-    .promoHead{
-      display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px;
-    }
+        radial-gradient(60% 100% at 80% 20%, rgba(142,243,199,.08), transparent 70%); filter:blur(16px); pointer-events:none;}
+    .promoHead{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px;}
     .promoTitle{ font-size:clamp(22px,6vw,28px); font-weight:900; }
     .promoBadges{ display:flex; gap:8px; flex-wrap:wrap; }
     .pBadge{
-      font-size:12px; padding:6px 10px; border-radius:999px; letter-spacing:.2px;
-      background:rgba(12,16,14,.55); border:1px solid rgba(142,243,199,.18); color:#cfe6dc;
-      backdrop-filter:blur(6px);
+      font-size:12px; padding:6px 10px; border-radius:999px; letter-spacing:.2px; color:#0a2419; font-weight:900;
+      background:linear-gradient(135deg, rgba(142,243,199,.9), rgba(11,125,71,.85));
+      box-shadow:0 8px 22px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.18);
+      text-shadow:0 1px 0 rgba(255,255,255,.35);
     }
 
     .countdown{display:flex;gap:10px;justify-content:space-between;margin:10px 0 6px}
-    .countbox{
-      flex:1 1 0;border:1px solid #2b4136;border-radius:14px;background:#0f1713;padding:14px 8px;
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.06)
-    }
+    .countbox{flex:1 1 0;border:1px solid #2b4136;border-radius:14px;background:#0f1713;padding:14px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
     .countbox .n{font-size:clamp(22px,8vw,36px);font-weight:900;line-height:1;white-space:nowrap}
     .countbox .t{color:var(--muted);margin-top:6px;font-size:clamp(12px,3.6vw,15px);white-space:nowrap}
 
-    /* Tariffs layout */
+    /* Tariffs grid */
     .tariffs{ display:grid; gap:14px; grid-template-columns:1fr; margin-top:10px }
     @media (min-width:740px){ .tariffs{ grid-template-columns:1fr 1fr; } }
 
-    .tariff{
-      position:relative; border-radius:22px; padding:16px; overflow:hidden;
+    .tariff{position:relative; border-radius:22px; padding:16px; overflow:hidden;
       background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));
       border:1px solid var(--line);
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,.02),
-        0 10px 26px rgba(0,0,0,.22);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), 0 10px 26px rgba(0,0,0,.22);
     }
-    .tariff::after{ /* декоративне світло */
-      content:""; position:absolute; inset:auto -12% -22% -12%; height:44%;
-      background:radial-gradient(60% 100% at 50% 100%, rgba(var(--accent2-rgb),.14), transparent 60%);
-      filter:blur(12px); pointer-events:none;
-    }
-    .tHead{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .tariff::after{content:""; position:absolute; inset:auto -12% -22% -12%; height:44%;
+      background:radial-gradient(60% 100% at 50% 100%, rgba(var(--accent2-rgb),.14), transparent 60%); filter:blur(12px); pointer-events:none;}
+    .tHead{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
     .tName{ font-size:18px; font-weight:900; letter-spacing:.2px; display:flex; align-items:center; gap:8px }
     .tTag{
-      font-size:11px; padding:4px 8px; border-radius:999px; letter-spacing:.2px;
-      background:linear-gradient(135deg, var(--accent-2), var(--accent)); color:#062217; font-weight:900;
-      box-shadow:0 6px 18px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12);
-      text-transform:uppercase;
+      font-size:11px; padding:4px 8px; border-radius:999px; letter-spacing:.2px; color:#062217; font-weight:900; text-transform:uppercase;
+      background:linear-gradient(135deg, rgba(11,125,71,.95), rgba(0,74,37,.95)); box-shadow:0 6px 18px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.18);
     }
 
-    .priceRow{display:flex;align-items:center;gap:12px;margin:8px 0 4px}
+    .priceWrap{display:grid; gap:6px; justify-items:end}
+    .priceRow{display:flex;align-items:center;gap:12px;margin:4px 0 0}
     .pricePill{
-      display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;
-      background:
-        radial-gradient(130% 180% at 50% 0%, rgba(255,255,255,.18), rgba(255,255,255,0) 55%),
-        linear-gradient(135deg,var(--accent-2),var(--accent));
+      display:flex;align-items:baseline;gap:8px;padding:10px 16px;border-radius:999px;white-space:nowrap;
+      background:radial-gradient(130% 180% at 50% 0%, rgba(255,255,255,.18), rgba(255,255,255,0) 55%), linear-gradient(135deg,var(--accent-2),var(--accent));
       color:#e6fff3;font-weight:900;box-shadow:0 10px 28px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12)
     }
-    .priceNum{font-size:clamp(20px,6vw,26px);font-weight:900}
-    .old{color:#95a49b;text-decoration:line-through;font-size:16px;display:none}
+    .priceNum{font-size:clamp(20px,6vw,26px);font-weight:900;line-height:1;white-space:nowrap}
+    .cur{opacity:.95;font-size:clamp(16px,4.8vw,18px);line-height:1;white-space:nowrap}
+    .old{color:#95a49b;text-decoration:line-through;font-size:16px;display:none;white-space:nowrap}
+    .saveBadge{
+      display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px; font-size:12px; color:#0a2419; font-weight:900;
+      background:linear-gradient(135deg, rgba(142,243,199,.9), rgba(11,125,71,.85));
+      box-shadow:0 6px 16px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.22);
+      text-shadow:0 1px 0 rgba(255,255,255,.3);
+      justify-self:end;
+    }
 
-    .tList{ list-style:none; padding:0; margin:10px 0 14px; display:grid; gap:8px }
-    .tList li{ display:flex; gap:10px; align-items:flex-start; line-height:1.45 }
+    .tList{ list-style:none; padding:0; margin:12px 0 16px; display:grid; gap:10px }
+    .tList li{ display:flex; gap:10px; align-items:flex-start; line-height:1.45; }
     .tList li::before{
-      content:""; width:18px; height:18px; flex:0 0 18px; border-radius:50%;
-      background:
-        radial-gradient(130% 160% at 50% 18%, rgba(255,255,255,.20), rgba(255,255,255,0) 40%),
-        linear-gradient(135deg,var(--accent-2),var(--accent));
-      box-shadow:0 0 0 2px rgba(var(--accent2-rgb),.25) inset;
-      margin-top:3px;
+      content:""; width:22px; height:22px; flex:0 0 22px; border-radius:50%;
+      background:conic-gradient(from 210deg, rgba(var(--accent2-rgb),.95), rgba(var(--accent2-rgb),.85), rgba(var(--accent-rgb),.95));
+      box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 3px rgba(var(--accent2-rgb),.16);
+      border:1px solid #2b4136; position:relative; margin-top:2px;
+    }
+    .tList li::after{
+      content:""; position:relative; left:-18px; top:9px; width:10px; height:6px;
+      border-left:3px solid #062d20; border-bottom:3px solid #062d20; transform:rotate(-45deg);
     }
 
-    @keyframes tariffPulse{
-      0%{ transform:scale(1) }
-      30%{ transform:scale(1.02) }
-      100%{ transform:scale(1) }
+    .tariff .cta{
+      width:100%; min-height:52px; /* чтобы кнопки были одинаковые */
+      justify-content:center; text-align:center;
     }
+
+    @keyframes tariffPulse{ 0%{transform:scale(1)} 30%{transform:scale(1.02)} 100%{transform:scale(1)} }
     .tariff.pulse{ animation: tariffPulse .7s ease; outline:1px solid rgba(var(--accent2-rgb),.45); outline-offset:2px; }
 
     /* ===== ABOUT ===== */
     #about{margin-top:20px;margin-left:-16px;margin-right:-16px;width:calc(100% + 32px)}
     #about h2{text-align:center;margin-bottom:10px}
     .aboutLead{text-align:center;color:var(--muted);margin:0 0 18px}
-    .aboutCard{position:relative;border-radius:var(--radius);padding:18px 14px;background:var(--card);
-      border:1px solid var(--line);backdrop-filter:blur(6px);
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22)}
-    .aboutCard::before{
-      content:"";position:absolute;inset:-10% -8% auto -8%;height:44%;
-      background:radial-gradient(60% 100% at 50% 0%, rgba(var(--accent2-rgb),.18), transparent 70%);
-      filter:blur(10px);pointer-events:none;border-radius:var(--radius) var(--radius) 0 0;
-    }
-
+    .aboutCard{position:relative;border-radius:var(--radius);padding:18px 14px;background:var(--card); border:1px solid var(--line);backdrop-filter:blur(6px); box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22)}
+    .aboutCard::before{content:"";position:absolute;inset:-10% -8% auto -8%;height:44%; background:radial-gradient(60% 100% at 50% 0%, rgba(var(--accent2-rgb),.18), transparent 70%); filter:blur(10px);pointer-events:none;border-radius:var(--radius) var(--radius) 0 0;}
     .aboutList{list-style:none;padding:0;margin:0;display:grid;gap:14px}
     .aboutItem{display:flex;align-items:flex-start;gap:12px;line-height:1.45;border-radius:16px;padding:6px 0}
-    .aboutItem .icon{
-      position:relative;width:32px;height:32px;border-radius:50%;flex:0 0 32px; margin-top:2px;
-      background:conic-gradient(from 210deg, rgba(var(--accent2-rgb),.95), rgba(var(--accent2-rgb),.85), rgba(var(--accent-rgb),.95));
-      box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 4px rgba(var(--accent2-rgb),.12);
-      border:1px solid #2b4136;overflow:hidden
-    }
-    .aboutItem .icon::before{content:"";position:absolute;inset:2px;border-radius:50%;
-      background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.45), rgba(255,255,255,.06));mix-blend:screen}
+    .aboutItem .icon{position:relative;width:32px;height:32px;border-radius:50%;flex:0 0 32px;margin-top:2px;background:conic-gradient(from 210deg, rgba(var(--accent2-rgb),.95), rgba(var(--accent2-rgb),.85), rgba(var(--accent-rgb),.95)); box-shadow:0 4px 12px rgba(0,0,0,.35),0 0 0 4px rgba(var(--accent2-rgb),.12); border:1px solid #2b4136;overflow:hidden}
+    .aboutItem .icon::before{content:"";position:absolute;inset:2px;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.45), rgba(255,255,255,.06));mix-blend:screen}
     .aboutItem .icon::after{content:"";position:absolute;left:9px;top:10px;width:11px;height:6px;border-left:3px solid #052d21;border-bottom:3px solid #052d21;transform:rotate(-45deg)}
     .aboutItem .txt{flex:1;min-width:0;word-break:normal;overflow-wrap:anywhere}
 
-    /* ===== REVIEWS ===== */
+    /* ===== REVIEWS (message bubbles) ===== */
     #reviews{ margin:28px 0; margin-left:-16px; margin-right:-16px; width:calc(100% + 32px); }
     #reviews .head{ text-align:center; margin-bottom:12px; }
     #reviews .muted{ color:var(--muted); }
-
-    .reel{
-      position:relative;
-      overflow-x:auto; overflow-y:visible;
-      display:grid; grid-auto-flow:column; grid-auto-columns:86%;
-      gap:14px; padding:6px 16px 12px;
-      scroll-snap-type:x mandatory;
-      -webkit-overflow-scrolling:touch;
-      mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
-    }
-    .slide{
-      scroll-snap-align:center;
-      position:relative;
-      border-radius:20px;
-      background:rgba(16,23,19,.72);
-      border:1px solid var(--line);
-      backdrop-filter: blur(8px);
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,.03),
-        0 18px 40px rgba(0,0,0,.28);
-      padding:18px 16px 16px;
-      transition:transform .28s ease, opacity .28s ease, filter .28s ease;
-      opacity:.92;
-    }
+    .reel{ position:relative; overflow-x:auto; overflow-y:visible; display:grid; grid-auto-flow:column; grid-auto-columns:86%; gap:14px; padding:6px 16px 12px; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);}
+    .slide{ scroll-snap-align:center; position:relative; border-radius:20px; background:rgba(16,23,19,.72); border:1px solid var(--line); backdrop-filter: blur(8px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 18px 40px rgba(0,0,0,.28); padding:18px 16px 16px; transition:transform .28s ease, opacity .28s ease, filter .28s ease; opacity:.92;}
     .slide.is-active{ opacity:1; transform:translateY(-2px) }
-    /* «хвостик» мессенджера (вліво для всіх) */
-    .slide::after{
-      content:""; position:absolute; left:14px; bottom:-10px; width:16px; height:16px; transform:rotate(45deg);
-      background:rgba(16,23,19,.72); border-left:1px solid var(--line); border-bottom:1px solid var(--line);
-      filter:blur(.2px);
-    }
-
+    .slide::after{ content:""; position:absolute; left:14px; bottom:-10px; width:16px; height:16px; transform:rotate(45deg); background:rgba(16,23,19,.72); border-left:1px solid var(--line); border-bottom:1px solid var(--line); filter:blur(.2px);}
     .quote{ font-size:16px; line-height:1.5; }
     .qtop{ display:flex; align-items:center; gap:8px; margin-bottom:10px; }
-    .qtop .qmark{
-      width:26px; height:26px; border-radius:50%;
-      background:
-        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.20), transparent 55%),
-        linear-gradient(135deg, var(--accent-2), var(--accent));
-      box-shadow: 0 0 0 3px rgba(11,125,71,.18);
-      display:grid; place-items:center; color:#062217; font-weight:900;
-    }
+    .qtop .qmark{ width:26px; height:26px; border-radius:50%; background: radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.20), transparent 55%), linear-gradient(135deg, var(--accent-2), var(--accent)); box-shadow: 0 0 0 3px rgba(11,125,71,.18); display:grid; place-items:center; color:#062217; font-weight:900;}
     .qbot{ display:flex; align-items:center; justify-content:space-between; margin-top:12px; gap:10px; }
     .badge{ font-size:12px; color:#cfe6dc; padding:6px 10px; border-radius:999px; background:rgba(12,16,14,.55); border:1px solid rgba(142,243,199,.18); backdrop-filter:blur(6px); }
     .stars{ font-size:14px; letter-spacing:1px; opacity:.9 }
-
     .navDots{display:flex; justify-content:center; gap:8px; margin-top:10px}
-    .navDots button{
-      width:8px; height:8px; border-radius:999px; border:none; padding:0;
-      background:#2a3a34; opacity:.7;
-    }
+    .navDots button{ width:8px; height:8px; border-radius:999px; border:none; padding:0; background:#2a3a34; opacity:.7; }
     .navDots button[aria-current="true"]{ background:var(--accent-2); opacity:1; }
-
     .reviewsArrows{position:relative; height:0}
-    .reviewsArrows .arrow{
-      position:absolute; top:-86px; z-index:2;
-      width:34px; height:34px; border-radius:999px; border:1px solid var(--line);
-      background:rgba(12,16,14,.7);
-      display:grid; place-items:center;
-      box-shadow: 0 8px 22px rgba(0,0,0,.25);
-    }
-    .reviewsArrows .prev{ left:22px }
-    .reviewsArrows .next{ right:22px }
-    .reviewsArrows .arrow:active{ transform:scale(.98) }
+    .reviewsArrows .arrow{ position:absolute; top:-86px; z-index:2; width:34px; height:34px; border-radius:999px; border:1px solid var(--line); background:rgba(12,16,14,.7); display:grid; place-items:center; box-shadow: 0 8px 22px rgba(0,0,0,.25); }
+    .reviewsArrows .prev{ left:22px } .reviewsArrows .next{ right:22px } .reviewsArrows .arrow:active{ transform:scale(.98) }
 
     /* ===== CHECKOUT MODAL ===== */
-    .co-backdrop{
-      position:fixed; inset:0; background:rgba(0,0,0,.5);
-      display:grid; place-items:center; z-index:100; opacity:0; pointer-events:none;
-      transition:opacity .22s ease;
-    }
+    .co-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.5); display:grid; place-items:center; z-index:100; opacity:0; pointer-events:none; transition:opacity .22s ease;}
     .co-backdrop.show{ opacity:1; pointer-events:auto }
-    .co-modal{
-      width:min(720px, 96vw);
-      border-radius:22px; background:var(--card);
-      border:1px solid var(--line); box-shadow:var(--shadow), inset 0 0 0 1px rgba(255,255,255,.02);
-      padding:16px;
-    }
+    .co-modal{ width:min(720px, 96vw); border-radius:22px; background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow), inset 0 0 0 1px rgba(255,255,255,.02); padding:16px; }
     .co-top{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px }
     .co-title{ font-weight:900; font-size:20px }
     .co-close{ width:36px; height:36px; border-radius:999px; border:1px solid var(--line); background:#0f1713; color:#c9ded4; display:grid; place-items:center }
-
-    .ps{
-      display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:10px 0;
-    }
-    .ps button{
-      border-radius:16px; border:1px solid var(--line); background:#0f1713; padding:10px; text-align:left;
-    }
-    .ps .pname{ font-weight:900 }
-    .ps .pprice{ font-weight:800; margin-top:6px }
-    .ps button[aria-selected="true"]{
-      background:linear-gradient(135deg,var(--accent-2),var(--accent)); color:#062217; border-color:transparent;
-      box-shadow:0 10px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.16);
-    }
-
-    .co-grid{
-      display:grid; gap:10px; grid-template-columns:1fr 1fr;
-    }
-    .co-grid .full{ grid-column:1 / -1 }
-    .field{ display:grid; gap:6px }
+    .ps{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:10px 0; }
+    .ps button{ border-radius:16px; border:1px solid var(--line); background:#0f1713; padding:10px; text-align:left; }
+    .ps .pname{ font-weight:900 } .ps .pprice{ font-weight:800; margin-top:6px }
+    .ps button[aria-selected="true"]{ background:linear-gradient(135deg,var(--accent-2),var(--accent)); color:#062217; border-color:transparent; box-shadow:0 10px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.16); }
+    .co-grid{ display:grid; gap:10px; grid-template-columns:1fr 1fr; }
+    .co-grid .full{ grid-column:1 / -1 } .field{ display:grid; gap:6px }
     .field label{ font-size:13px; color:#cfe6dc }
-    .field input[type="text"], .field input[type="email"], .field input[type="tel"]{
-      width:100%; padding:12px 12px; border-radius:12px; background:#0f1713; border:1px solid #2b4136; color:var(--text);
-    }
-    .agree{ display:flex; gap:10px; align-items:flex-start; font-size:14px; color:#cfe6dc }
-    .agree input{ transform:translateY(2px) }
-    .co-err{
-      display:none; margin-top:6px; padding:10px; border-radius:10px; background:rgba(255,80,80,.08); border:1px solid rgba(255,80,80,.25); color:#ffbcbc;
-    }
-    .co-err.show{ display:block }
-    .co-actions{ display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:10px }
+    .field input[type="text"], .field input[type="email"], .field input[type="tel"]{ width:100%; padding:12px 12px; border-radius:12px; background:#0f1713; border:1px solid #2b4136; color:var(--text); }
+    .agree{ display:flex; gap:10px; align-items:flex-start; font-size:14px; color:#cfe6dc } .agree input{ transform:translateY(2px) }
+    .co-err{ display:none; margin-top:6px; padding:10px; border-radius:10px; background:rgba(255,80,80,.08); border:1px solid rgba(255,80,80,.25); color:#ffbcbc; }
+    .co-err.show{ display:block } .co-actions{ display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:10px }
     .co-pay{ font-size:14px; color:#cfe6dc }
 
-    /* footer */
+    /* footer + floater */
     footer.footer{margin-top:26px;padding:22px 16px 96px;text-align:center;color:var(--muted);border-top:1px solid var(--line)}
     .footer .brand{font-size:22px;color:var(--text);margin:0 0 6px;font-weight:700}
     .footer .legal{font-size:14px;line-height:1.5;max-width:720px;margin:10px auto 0;opacity:.95}
     .footer .links{margin-top:10px;font-size:14px}
     .footer .links a{color:var(--muted);text-decoration:underline dotted;margin:0 8px}
     .footer small.copy{display:block;margin-top:12px;opacity:.7}
-
-    /* плавающая кнопка */
-    .floater{position:fixed;left:0;right:0;bottom:12px;z-index:50;opacity:0;transform:translateY(16px);pointer-events:none;
-      transition:opacity .28s ease,transform .28s ease}
+    .floater{position:fixed;left:0;right:0;bottom:12px;z-index:50;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .28s ease,transform .28s ease}
     .floater.show{opacity:1;transform:translateY(0);pointer-events:auto}
     .floater-inner{max-width:720px;margin:0 auto;padding:0 16px}
     .floater .cta{width:100%}
-
-    @media (prefers-reduced-motion:reduce){
-      .floater{transition:none}
-    }
+    @media (prefers-reduced-motion:reduce){ .floater{transition:none} }
   </style>
 </head>
 <body>
@@ -370,31 +201,18 @@
     <!-- ===== HERO ===== -->
     <section id="hero" class="hero-stage">
       <img class="hero-img" src="img/main.png" alt="Інструктор курсу">
-
       <div class="hero-text">
-        <div class="eyebrow">
-          ОНЛАЙН КУРС ВІД ІНСТРУКТОРА МАНІКЮРУ&nbsp;
-          <span class="accent nowrap">АННИ ФІЛІПСЬКОЇ</span>
-        </div>
-
+        <div class="eyebrow">ОНЛАЙН КУРС ВІД ІНСТРУКТОРА МАНІКЮРУ&nbsp;<span class="accent nowrap">АННИ ФІЛІПСЬКОЇ</span></div>
         <h1 class="hl hl-mix">
-          <span class="line l">ІНСТАКВАДРАТИ.</span>
-          <span class="line r">ІДЕАЛЬНИЙ КОМБІ.</span>
-          <span class="line l">ІДЕАЛЬНИЙ ФРЕНЧ.</span>
-          <span class="line r">ТВІЙ NEXT LEVEL.</span>
+          <span class="line l">ІНСТАКВАДРАТИ.</span><span class="line r">ІДЕАЛЬНИЙ КОМБІ.</span>
+          <span class="line l">ІДЕАЛЬНИЙ ФРЕНЧ.</span><span class="line r">ТВІЙ NEXT LEVEL.</span>
         </h1>
-
         <p class="lead">Цей курс - твоя можливість перейти з "майстра базовика" у впевнену, сильну майстриню з власним стилем і високим прайсом.<br>Next Level - коли твої роботи говорять самі за себе.</p>
       </div>
-
-      <div class="hero-bubble" id="heroBubble">
-        Клієнти шукають сучасних і професійних майстрів.
-        Не втрачай свій шанс бути серед кращих!
-      </div>
-
+      <div class="hero-bubble" id="heroBubble">Клієнти шукають сучасних і професійних майстрів. Не втрачай свій шанс бути серед кращих!</div>
       <div class="hero-cta">
         <a id="buyTop" class="cta" href="#promo">Придбати курс</a>
-        <div id="priceLine" class="priceLine">лише — грн <span class="oldline">— грн</span></div>
+        <div id="priceLine" class="priceLine">лише —&nbsp;грн <span class="oldline">—&nbsp;грн</span></div>
       </div>
     </section>
 
@@ -405,7 +223,7 @@
           <div class="promoTitle">Тарифи</div>
           <div class="promoBadges">
             <span class="pBadge">Активна знижка</span>
-            <span class="pBadge">Лімітований набір</span>
+            <span class="pBadge">Оптимальний прайс</span>
           </div>
         </div>
 
@@ -416,17 +234,19 @@
         </div>
 
         <div class="tariffs">
-
           <!-- ГРУПОВИЙ -->
           <article class="tariff" aria-labelledby="t-g-name">
             <div class="tHead">
               <div class="tName" id="t-g-name">Груповий <span class="tTag">Оптимальний вибір</span></div>
-              <div class="priceRow">
-                <div class="pricePill">
-                  <small class="muted" style="color:#cfe6dc">лише</small>
-                  <span id="gPrice" class="priceNum">— грн</span>
+              <div class="priceWrap">
+                <div class="priceRow">
+                  <div class="pricePill">
+                    <span id="gPrice" class="priceNum">—</span>
+                    <span class="cur">грн</span>
+                  </div>
+                  <div id="gOld" class="old">—&nbsp;грн</div>
                 </div>
-                <div id="gOld" class="old">— грн</div>
+                <div id="gSave" class="saveBadge" style="display:none">Економія — <b>—&nbsp;грн</b></div>
               </div>
             </div>
 
@@ -443,12 +263,15 @@
           <article class="tariff" aria-labelledby="t-i-name" style="outline:1px solid rgba(142,243,199,.18)">
             <div class="tHead">
               <div class="tName" id="t-i-name">Індивідуальний <span class="tTag">ХІТ</span></div>
-              <div class="priceRow">
-                <div class="pricePill">
-                  <small class="muted" style="color:#cfe6dc">лише</small>
-                  <span id="iPrice" class="priceNum">— грн</span>
+              <div class="priceWrap">
+                <div class="priceRow">
+                  <div class="pricePill">
+                    <span id="iPrice" class="priceNum">—</span>
+                    <span class="cur">грн</span>
+                  </div>
+                  <div id="iOld" class="old">—&nbsp;грн</div>
                 </div>
-                <div id="iOld" class="old">— грн</div>
+                <div id="iSave" class="saveBadge" style="display:none">Економія — <b>—&nbsp;грн</b></div>
               </div>
             </div>
 
@@ -461,16 +284,14 @@
 
             <a id="buyIndiv" class="cta" href="#">Придбати індивідуальний</a>
           </article>
-
         </div>
       </div>
     </section>
 
-    <!-- ===== ABOUT / ПРО МЕНЕ ===== -->
+    <!-- ===== ABOUT ===== -->
     <section id="about" class="section">
       <h2>Про мене</h2>
       <p class="aboutLead">Привіт, я Анна Філіпська</p>
-
       <div class="aboutCard">
         <ul class="aboutList">
           <li class="aboutItem"><span class="icon"></span><span class="txt">За <span class="accent">6 років</span> зробила понад <span class="accent">5000 манікюрів</span>.</span></li>
@@ -497,52 +318,21 @@
       </div>
 
       <div class="reel" id="reviewsReel" aria-label="Слайдер відгуків">
-        <!-- 1 -->
         <article class="slide">
-          <div class="qtop">
-            <div class="qmark">“</div>
-            <span class="badge">випускниця курсу</span>
-          </div>
-          <div class="quote">
-            Привіт, хочу поділитися враженнями про курс підвищення —
-            це було дуже круто ✨ Теорія і практика сприймалися легко ❤️
-            Результат перевищив очікування 🙌 Безмежно вдячна за твій вклад!
-            Швидкість і якість зросли моментально: час роботи з однією
-            клієнткою скоротився щонайменше на пів години 👏
-            Дуже рекомендую всім майстрам пройти цей курс!
-          </div>
-          <div class="qbot">
-            <div class="stars">★★★★★</div>
-          </div>
-        </article>
-
-        <!-- 2 -->
-        <article class="slide">
-          <div class="qtop">
-            <div class="qmark">“</div>
-            <span class="badge">результати після модулів</span>
-          </div>
-          <div class="quote">
-            Сьогодні було максимально круто! Бачу великі зміни у вирівнюванні
-            та манікюрі — взагалі, це пушка! З твоєю допомогою розібрала всі
-            нюанси квадрату: як пиляти й на що звертати увагу. Емоції переповнюють,
-            я щаслива і задоволена! Є над чим працювати, буду робити ще краще —
-            не підведу! 💪
-          </div>
+          <div class="qtop"><div class="qmark">“</div><span class="badge">випускниця курсу</span></div>
+          <div class="quote">Привіт, хочу поділитися враженнями про курс підвищення — це було дуже круто ✨ Теорія і практика сприймалися легко ❤️ Результат перевищив очікування 🙌 Безмежно вдячна за твій вклад! Швидкість і якість зросли моментально: час роботи з однією клієнткою скоротився щонайменше на пів години 👏 Дуже рекомендую всім майстрам пройти цей курс!</div>
           <div class="qbot"><div class="stars">★★★★★</div></div>
         </article>
 
-        <!-- 3 -->
         <article class="slide">
-          <div class="qtop">
-            <div class="qmark">“</div>
-            <span class="badge">про швидкість</span>
-          </div>
-          <div class="quote">
-            Привіт! По часу прискорилась конкретно👌 До 2 годин уже роблю
-            укріплення з френчем 🙌 Усі поради використовую — зайвих рухів немає,
-            носибельність значно краща 🥰
-          </div>
+          <div class="qtop"><div class="qmark">“</div><span class="badge">результати після модулів</span></div>
+          <div class="quote">Сьогодні було максимально круто! Бачу великі зміни у вирівнюванні та манікюрі — взагалі, це пушка! З твоєю допомогою розібрала всі нюанси квадрату: як пиляти й на що звертати увагу. Емоції переповнюють, я щаслива і задоволена! Є над чим працювати, буду робити ще краще — не підведу! 💪</div>
+          <div class="qbot"><div class="stars">★★★★★</div></div>
+        </article>
+
+        <article class="slide">
+          <div class="qtop"><div class="qmark">“</div><span class="badge">про швидкість</span></div>
+          <div class="quote">Привіт! По часу прискорилась конкретно👌 До 2 годин уже роблю укріплення з френчем 🙌 Усі поради використовую — зайвих рухів немає, носибельність значно краща 🥰</div>
           <div class="qbot"><div class="stars">★★★★★</div></div>
         </article>
       </div>
@@ -553,23 +343,15 @@
     <!-- ===== FOOTER ===== -->
     <footer class="footer">
       <div class="brand">Анна Філіпська</div>
-      <div class="links">
-        <a href="#offer">Договір оферти</a> ·
-        <a href="#privacy">Політика конфіденційності</a>
-      </div>
-      <p class="legal">
-        Умови повернення: згідно із Законом України «Про захист прав споживачів» гарантуємо повернення коштів
-        протягом 14 днів, якщо курс вам не підійде.
-      </p>
+      <div class="links"><a href="#offer">Договір оферти</a> · <a href="#privacy">Політика конфіденційності</a></div>
+      <p class="legal">Умови повернення: згідно із Законом України «Про захист прав споживачів» гарантуємо повернення коштів протягом 14 днів, якщо курс вам не підійде.</p>
       <small class="copy">© Created by | All rights Reserved</small>
     </footer>
   </div>
 
   <!-- Floating CTA -->
   <div class="floater" id="floatCta" aria-hidden="true">
-    <div class="floater-inner">
-      <a id="buyFloat" class="cta">Отримати доступ до курсу</a>
-    </div>
+    <div class="floater-inner"><a id="buyFloat" class="cta">Отримати доступ до курсу</a></div>
   </div>
 
   <!-- CHECKOUT MODAL -->
@@ -581,11 +363,11 @@
       </div>
 
       <div class="ps" role="tablist" aria-label="Вибір тарифу">
-        <button id="psGroup"  data-plan="group"      role="tab" aria-selected="true"  aria-pressed="true">
+        <button id="psGroup" data-plan="group" role="tab" aria-selected="true" aria-pressed="true">
           <div class="pname">Груповий</div>
           <div class="pprice" id="psGroupPrice">— грн</div>
         </button>
-        <button id="psIndiv"  data-plan="individual" role="tab" aria-selected="false" aria-pressed="false">
+        <button id="psIndiv" data-plan="individual" role="tab" aria-selected="false" aria-pressed="false">
           <div class="pname">Індивідуальний</div>
           <div class="pprice" id="psIndivPrice">— грн</div>
         </button>
@@ -593,31 +375,13 @@
 
       <form id="checkoutForm" novalidate>
         <div class="co-grid">
-          <div class="field">
-            <label for="coFirst">Ім’я</label>
-            <input id="coFirst" type="text" autocomplete="given-name" placeholder="Анна">
-          </div>
-          <div class="field">
-            <label for="coLast">Прізвище</label>
-            <input id="coLast" type="text" autocomplete="family-name" placeholder="Філіпська">
-          </div>
-          <div class="field full">
-            <label for="coEmail">Email</label>
-            <input id="coEmail" type="email" autocomplete="email" placeholder="name@email.com">
-          </div>
-          <div class="field full">
-            <label for="coPhone">Телефон (для зв’язку)</label>
-            <input id="coPhone" type="tel" inputmode="tel" placeholder="+380">
-          </div>
+          <div class="field"><label for="coFirst">Ім’я</label><input id="coFirst" type="text" autocomplete="given-name" placeholder="Анна"></div>
+          <div class="field"><label for="coLast">Прізвище</label><input id="coLast" type="text" autocomplete="family-name" placeholder="Філіпська"></div>
+          <div class="field full"><label for="coEmail">Email</label><input id="coEmail" type="email" autocomplete="email" placeholder="name@email.com"></div>
+          <div class="field full"><label for="coPhone">Телефон (для зв’язку)</label><input id="coPhone" type="tel" inputmode="tel" placeholder="+380"></div>
         </div>
-
-        <div class="agree" style="margin-top:10px">
-          <input id="coAgree" type="checkbox">
-          <label for="coAgree">Погоджуюсь з <a href="#offer">офертою</a> і <a href="#privacy">політикою конфіденційності</a>.</label>
-        </div>
-
+        <div class="agree" style="margin-top:10px"><input id="coAgree" type="checkbox"><label for="coAgree">Погоджуюсь з <a href="#offer">офертою</a> і <a href="#privacy">політикою конфіденційності</a>.</label></div>
         <div id="coErr" class="co-err" role="alert"></div>
-
         <div class="co-actions">
           <div class="co-pay">До сплати: <b id="coPay">— грн</b></div>
           <button id="coBtn" class="cta" type="submit">Перейти до оплати</button>
@@ -627,371 +391,261 @@
   </div>
 
   <script>
-  /* ===== CONFIG ===== */
-  const WORKER="https://filipskanails-pay.timanov-business.workers.dev";
-  const THANK ="https://filipskanails.github.io/filipskanails/thankyou.html";
-  const TITLE ="Доступ до курсу Next Level";
+    /* ===== CONFIG ===== */
+    const WORKER="https://filipskanails-pay.timanov-business.workers.dev";
+    const THANK ="https://filipskanails.github.io/filipskanails/thankyou.html";
+    const TITLE ="Доступ до курсу Next Level";
+    const PROMO_HOURS=5;
+    const GROUP_BASE=2, GROUP_DISC=1, INDIV_BASE=4, INDIV_DISC=2;
+    const MONO_ENDPOINT = WORKER + "/mono/checkout";
 
-  // ЦІНИ (підстав свої)
-  const PROMO_HOURS   = 5;
-  const GROUP_BASE    = 2;   // базовий груповий (грн)
-  const GROUP_DISC    = 1;   // промо груповий (грн)
-  const INDIV_BASE    = 4;   // базовий індивідуальний (грн)
-  const INDIV_DISC    = 2;   // промо індивідуальний (грн)
+    const $=s=>document.querySelector(s);
+    const fmt=n=>new Intl.NumberFormat("uk-UA").format(n);
 
-  const MONO_ENDPOINT = WORKER + "/mono/checkout";
-
-  const $=s=>document.querySelector(s);
-  const fmt=n=>new Intl.NumberFormat("uk-UA").format(n);
-
-  /* ===== стабільний layout HERO ===== */
-  function cssVarNum(el,name,fallback){ const v=getComputedStyle(el).getPropertyValue(name).trim(); const num=parseFloat(v); return Number.isFinite(num)?num:fallback; }
-  function computeHeroLayout(){
-    const stage=$("#hero"), text=stage?.querySelector('.hero-text'), img=stage?.querySelector('.hero-img'), cta=stage?.querySelector('.hero-cta');
-    if(!stage||!text||!img||!cta) return;
-    const GAP=cssVarNum(stage,'--gap',8), BUBBLE=cssVarNum(stage,'--bubble-offset',200), R=cssVarNum(stage,'--cta-ratio',.68), EXTRA=cssVarNum(stage,'--cta-extra',40);
-    const textBottom=text.offsetTop+text.offsetHeight, imgTop=textBottom+GAP; img.style.top=imgTop+"px";
-    const imgH = img.getBoundingClientRect().height || 420;
-    const ctaTop=Math.round(imgTop+imgH*R)+EXTRA, bubbleTop=Math.round(imgTop+BUBBLE), glowTop=Math.round(imgTop+imgH*.52)-220;
-    stage.style.setProperty('--img-top', imgTop+'px'); stage.style.setProperty('--cta-top', ctaTop+'px'); stage.style.setProperty('--bubble-top', bubbleTop+'px'); stage.style.setProperty('--glow-top', Math.max(0,glowTop)+'px');
-    const needH=Math.round(ctaTop + cta.offsetHeight + 24); stage.style.setProperty('--hero-h', needH+'px'); stage.style.height=needH+'px';
-  }
-  const ro=new ResizeObserver(()=>computeHeroLayout());
-  window.addEventListener('DOMContentLoaded', ()=>{
-    const img=$('.hero-img'), text=$('.hero-text'); if(img) ro.observe(img); if(text) ro.observe(text); if(img && !img.complete){ img.addEventListener('load', computeHeroLayout, {once:true}); }
-    computeHeroLayout();
-  });
-  window.addEventListener('orientationchange', computeHeroLayout);
-  window.addEventListener('load', computeHeroLayout);
-
-  /* ===== ТАЙМЕР та логіка промо ===== */
-  const COUNT=$("#countdown");
-  const key="promoEndsAt-v1";
-  const now=Date.now();
-  let ends=parseInt(localStorage.getItem(key)||"0",10);
-  if(!ends||ends<now){ ends=now+PROMO_HOURS*60*60*1000; localStorage.setItem(key,String(ends)); }
-
-  function renderHeroPrice(active, old){
-    const line=$("#priceLine");
-    if(line){
-      line.innerHTML = old && old>active
-        ? `лише ${fmt(active)} грн <span class="oldline">${fmt(old)} грн</span>`
-        : `ціна ${fmt(active)} грн`;
+    /* ===== HERO layout ===== */
+    function cssVarNum(el,name,fallback){ const v=getComputedStyle(el).getPropertyValue(name).trim(); const num=parseFloat(v); return Number.isFinite(num)?num:fallback; }
+    function computeHeroLayout(){
+      const stage=$("#hero"), text=stage?.querySelector('.hero-text'), img=stage?.querySelector('.hero-img'), cta=stage?.querySelector('.hero-cta');
+      if(!stage||!text||!img||!cta) return;
+      const GAP=cssVarNum(stage,'--gap',8), BUBBLE=cssVarNum(stage,'--bubble-offset',200), R=cssVarNum(stage,'--cta-ratio',.68), EXTRA=cssVarNum(stage,'--cta-extra',40);
+      const textBottom=text.offsetTop+text.offsetHeight, imgTop=textBottom+GAP; img.style.top=imgTop+"px";
+      const imgH=img.getBoundingClientRect().height||420;
+      const ctaTop=Math.round(imgTop+imgH*R)+EXTRA, bubbleTop=Math.round(imgTop+BUBBLE), glowTop=Math.round(imgTop+imgH*.52)-220;
+      stage.style.setProperty('--img-top', imgTop+'px'); stage.style.setProperty('--cta-top', ctaTop+'px'); stage.style.setProperty('--bubble-top', bubbleTop+'px'); stage.style.setProperty('--glow-top', Math.max(0,glowTop)+'px');
+      const needH=Math.round(ctaTop + cta.offsetHeight + 24); stage.style.setProperty('--hero-h', needH+'px'); stage.style.height=needH+'px';
     }
-  }
-
-  function setTariffPrices(promo){
-    const gActive = promo ? GROUP_DISC : GROUP_BASE;
-    const iActive = promo ? INDIV_DISC : INDIV_BASE;
-    const gOld    = promo ? GROUP_BASE : null;
-    const iOld    = promo ? INDIV_BASE : null;
-
-    const gP=$("#gPrice"), gO=$("#gOld"), iP=$("#iPrice"), iO=$("#iOld");
-    if(gP) gP.textContent = fmt(gActive) + " грн";
-    if(iP) iP.textContent = fmt(iActive) + " грн";
-    if(gO){ if(gOld){ gO.style.display="block"; gO.textContent=fmt(gOld)+" грн"; } else gO.style.display="none"; }
-    if(iO){ if(iOld){ iO.style.display="block"; iO.textContent=fmt(iOld)+" грн"; } else iO.style.display="none"; }
-
-    renderHeroPrice(gActive, gOld);
-  }
-
-  function tick(){
-    const left=Math.max(0, ends - Date.now());
-    const promoActive = left>0;
-
-    if(COUNT) COUNT.style.display = promoActive ? "flex" : "none";
-    setTariffPrices(promoActive);
-
-    if(!promoActive) return;
-
-    const h=Math.floor(left/3600000), m=Math.floor((left%3600000)/60000), s=Math.floor((left%60000)/1000);
-    const pad=n=>String(n).padStart(2,"0");
-    $("#cd-h").textContent=pad(h); $("#cd-m").textContent=pad(m); $("#cd-s").textContent=pad(s);
-    setTimeout(tick,1000);
-  }
-  tick();
-
-  /* ===== REVIEWS slider (30s, wrap arrows, IO-активація) ===== */
-  (function(){
-    const reel = document.getElementById('reviewsReel');
-    if(!reel) return;
-
-    const AUTOSCROLL_MS = 30000;
-    const slides = Array.from(reel.children);
-    const dotsWrap = document.getElementById('reviewsDots');
-
-    dotsWrap.innerHTML = "";
-    slides.forEach((_,i)=>{
-      const b=document.createElement('button');
-      if(i===0) b.setAttribute('aria-current','true');
-      b.addEventListener('click', ()=>{ stop(); goTo(i); start(); });
-      dotsWrap.appendChild(b);
+    const ro=new ResizeObserver(()=>computeHeroLayout());
+    window.addEventListener('DOMContentLoaded', ()=>{
+      const img=$('.hero-img'), text=$('.hero-text'); if(img) ro.observe(img); if(text) ro.observe(text); if(img && !img.complete){ img.addEventListener('load', computeHeroLayout, {once:true}); }
+      computeHeroLayout();
     });
-    const dots = Array.from(dotsWrap.children);
+    window.addEventListener('orientationchange', computeHeroLayout);
+    window.addEventListener('load', computeHeroLayout);
 
-    const stepW = ()=> (reel.clientWidth*0.86 + 14);
+    /* ===== PROMO timer & prices ===== */
+    const COUNT=$("#countdown");
+    const key="promoEndsAt-v1";
+    const now=Date.now();
+    let ends=parseInt(localStorage.getItem(key)||"0",10);
+    if(!ends||ends<now){ ends=now+PROMO_HOURS*60*60*1000; localStorage.setItem(key,String(ends)); }
 
-    let active = 0;
-    let dir = 1;
-    let timer = null;
+    function renderHeroPrice(active, old){
+      const line=$("#priceLine");
+      if(line){
+        line.innerHTML = old && old>active
+          ? `лише ${fmt(active)}&nbsp;грн <span class="oldline">${fmt(old)}&nbsp;грн</span>`
+          : `ціна ${fmt(active)}&nbsp;грн`;
+      }
+    }
 
-    function updateDots(i){
-      dots.forEach((d,idx)=>{
-        if(idx===i) d.setAttribute('aria-current','true');
-        else d.removeAttribute('aria-current');
+    function setTariffPrices(promo){
+      const gActive = promo ? GROUP_DISC : GROUP_BASE;
+      const iActive = promo ? INDIV_DISC : INDIV_BASE;
+      const gOld    = promo ? GROUP_BASE : null;
+      const iOld    = promo ? INDIV_BASE : null;
+
+      const gP=$("#gPrice"), gO=$("#gOld"), iP=$("#iPrice"), iO=$("#iOld");
+      if(gP) gP.textContent = fmt(gActive);
+      if(iP) iP.textContent = fmt(iActive);
+      if(gO){ if(gOld){ gO.style.display="block"; gO.innerHTML=`${fmt(gOld)}&nbsp;грн`; } else gO.style.display="none"; }
+      if(iO){ if(iOld){ iO.style.display="block"; iO.innerHTML=`${fmt(iOld)}&nbsp;грн`; } else iO.style.display="none"; }
+
+      const gS=$("#gSave"), iS=$("#iSave");
+      if(promo){
+        if(gS){ gS.style.display="inline-flex"; gS.innerHTML = `Економія — <b>${fmt(gOld-gActive)}&nbsp;грн</b>`; }
+        if(iS){ iS.style.display="inline-flex"; iS.innerHTML = `Економія — <b>${fmt(iOld-iActive)}&nbsp;грн</b>`; }
+      }else{
+        if(gS) gS.style.display="none";
+        if(iS) iS.style.display="none";
+      }
+
+      renderHeroPrice(gActive, gOld);
+    }
+
+    function tick(){
+      const left=Math.max(0, ends - Date.now());
+      const promoActive = left>0;
+
+      if(COUNT) COUNT.style.display = promoActive ? "flex" : "none";
+      setTariffPrices(promoActive);
+
+      if(!promoActive) return;
+
+      const h=Math.floor(left/3600000), m=Math.floor((left%3600000)/60000), s=Math.floor((left%60000)/1000);
+      const pad=n=>String(n).padStart(2,"0");
+      $("#cd-h").textContent=pad(h); $("#cd-m").textContent=pad(m); $("#cd-s").textContent=pad(s);
+      setTimeout(tick,1000);
+    }
+    tick();
+
+    /* ===== REVIEWS slider (30s, wrap arrows, IO-активація) ===== */
+    (function(){
+      const reel = document.getElementById('reviewsReel');
+      if(!reel) return;
+
+      const AUTOSCROLL_MS = 30000;
+      const slides = Array.from(reel.children);
+      const dotsWrap = document.getElementById('reviewsDots');
+
+      dotsWrap.innerHTML = "";
+      slides.forEach((_,i)=>{
+        const b=document.createElement('button');
+        if(i===0) b.setAttribute('aria-current','true');
+        b.addEventListener('click', ()=>{ stop(); goTo(i); start(); });
+        dotsWrap.appendChild(b);
+      });
+      const dots = Array.from(dotsWrap.children);
+      const stepW = ()=> (reel.clientWidth*0.86 + 14);
+
+      let active = 0;
+      let dir = 1;
+      let timer = null;
+
+      function updateDots(i){ dots.forEach((d,idx)=>{ if(idx===i) d.setAttribute('aria-current','true'); else d.removeAttribute('aria-current'); }); }
+      function setActive(i){ if(i===active) return; slides[active]?.classList.remove('is-active'); slides[i]?.classList.add('is-active'); active = i; updateDots(i); }
+      function goTo(i){ const clamped = Math.max(0, Math.min(slides.length-1, i)); reel.scrollTo({ left: clamped*stepW(), behavior:'smooth' }); }
+      function autoStep(){ if(dir>0 && active >= slides.length-1) dir = -1; else if(dir<0 && active <= 0) dir = 1; goTo(active + dir); }
+      function start(){ if(timer) return; timer = setInterval(autoStep, AUTOSCROLL_MS); }
+      function stop(){ clearInterval(timer); timer=null; }
+
+      const thresholds = Array.from({length: 41}, (_,i)=> i/40);
+      const ratios = new Array(slides.length).fill(0);
+      const io = new IntersectionObserver((entries)=>{
+        for(const e of entries){
+          const i = slides.indexOf(e.target);
+          if(i>=0) ratios[i] = e.intersectionRatio;
+        }
+        let bestIdx = active, bestRatio = ratios[active];
+        for(let i=0;i<ratios.length;i++){ if(ratios[i] > bestRatio){ bestRatio = ratios[i]; bestIdx = i; } }
+        if(bestRatio >= 0.98){ setActive(bestIdx); }
+      },{ root: reel, threshold: thresholds });
+      slides.forEach(sl => io.observe(sl));
+
+      const prevBtn = document.querySelector('#reviews .prev');
+      const nextBtn = document.querySelector('#reviews .next');
+      if(prevBtn) prevBtn.addEventListener('click', ()=>{ stop(); const t = (active<=0) ? slides.length-1 : active-1; dir = -1; goTo(t); start(); });
+      if(nextBtn) nextBtn.addEventListener('click', ()=>{ stop(); const t = (active>=slides.length-1) ? 0 : active+1; dir = 1; goTo(t); start(); });
+
+      ['pointerdown','touchstart','wheel','keydown','focusin','mouseenter'].forEach(ev=>{ reel.addEventListener(ev, stop, {passive:true}); });
+      ['pointerup','touchend','mouseleave','blur'].forEach(ev=>{ reel.addEventListener(ev, start, {passive:true}); });
+
+      slides[0]?.classList.add('is-active'); updateDots(0); start();
+    })();
+
+    /* ===== Pulse tariffs after scroll ===== */
+    function visibleRatio(el){
+      if(!el) return 0;
+      const r=el.getBoundingClientRect(), vw=innerWidth, vh=innerHeight;
+      const ix=Math.max(0, Math.min(r.right, vw) - Math.min(r.left, vw));
+      const iy=Math.max(0, Math.min(r.bottom, vh) - Math.min(r.top, vh));
+      return (ix*iy) / Math.max(1, r.width*r.height);
+    }
+    function pulseTariffs(){
+      document.querySelectorAll('.tariff').forEach(card=>{
+        card.classList.add('pulse');
+        card.addEventListener('animationend', ()=>card.classList.remove('pulse'), {once:true});
       });
     }
-
-    function setActive(i){
-      if(i===active) return;
-      slides[active]?.classList.remove('is-active');
-      slides[i]?.classList.add('is-active');
-      active = i;
-      updateDots(i);
+    function afterScrollSettledThenPulse(){
+      const card = document.querySelector('#promo .promoCard'); if(!card) return;
+      const ratio = visibleRatio(card);
+      if(ratio >= 0.6){ pulseTariffs(); return; }
+      const io = new IntersectionObserver((entries, obs)=>{
+        const e = entries[0];
+        if(e && e.isIntersecting && e.intersectionRatio >= 0.6){ pulseTariffs(); obs.disconnect(); }
+      }, { threshold: [0.6] });
+      io.observe(card);
     }
-
-    function goTo(i){
-      const clamped = Math.max(0, Math.min(slides.length-1, i));
-      reel.scrollTo({ left: clamped*stepW(), behavior:'smooth' });
+    function waitScrollEnd(callback, idleMs=140, capMs=2000){
+      let t=null, done=false;
+      const onEnd=()=>{ if(done) return; done=true; removeEventListener('scroll', onScroll, {passive:true}); clearTimeout(t); callback(); };
+      const onScroll=()=>{ clearTimeout(t); t=setTimeout(onEnd, idleMs); };
+      addEventListener('scroll', onScroll, {passive:true}); onScroll(); setTimeout(onEnd, capMs);
     }
+    function scrollToPromoAndPulse(){ const promo=$("#promo"); if(!promo) return; promo.scrollIntoView({behavior:'smooth', block:'start'}); waitScrollEnd(afterScrollSettledThenPulse); }
 
-    function autoStep(){
-      if(dir>0 && active >= slides.length-1) dir = -1;
-      else if(dir<0 && active <= 0) dir = 1;
-      goTo(active + dir);
-    }
+    /* ===== floater + hero CTA ===== */
+    (function(){
+      const floatBtn=$("#buyFloat"), topBtn=$("#buyTop");
+      if(floatBtn){ floatBtn.textContent="Отримати доступ до курсу"; floatBtn.addEventListener('click', e=>{ e.preventDefault(); scrollToPromoAndPulse(); }); }
+      if(topBtn){ topBtn.addEventListener('click', e=>{ e.preventDefault(); scrollToPromoAndPulse(); }); }
+    })();
 
-    function start(){ if(timer) return; timer = setInterval(autoStep, AUTOSCROLL_MS); }
-    function stop(){ clearInterval(timer); timer=null; }
+    /* ===== floater show only when hero & promo off-screen ===== */
+    (function(){
+      const hero=$("#hero"), promo=$("#promo"), floater=$("#floatCta");
+      if(!hero||!promo||!floater) return;
+      let heroIn=false, promoIn=false;
+      function update(){ if(heroIn || promoIn){ floater.classList.remove("show"); } else { floater.classList.add("show"); } }
+      const io = new IntersectionObserver((entries)=>{
+        for(const e of entries){ if(e.target===hero) heroIn = e.isIntersecting; if(e.target===promo) promoIn = e.isIntersecting; }
+        update();
+      }, { threshold: 0.12 });
+      io.observe(hero); io.observe(promo); update();
+    })();
 
-    const thresholds = Array.from({length: 41}, (_,i)=> i/40);
-    const ratios = new Array(slides.length).fill(0);
+    /* ===== MODAL + NEW FLOW (first ThankYou, then Monobank from there) ===== */
+    (function(){
+      const backdrop=$("#checkoutBackdrop"), coForm=$("#checkoutForm"), coBtn=$("#coBtn"), coErr=$("#coErr");
+      const bClose=$("#coClose"), bGroup=$("#psGroup"), bIndiv=$("#psIndiv");
+      let selectedPlan="group";
 
-    const io = new IntersectionObserver((entries)=>{
-      for(const e of entries){
-        const i = slides.indexOf(e.target);
-        if(i>=0) ratios[i] = e.intersectionRatio;
+      function currentPromoActive(){ const left=Math.max(0,(parseInt(localStorage.getItem("promoEndsAt-v1")||"0",10))-Date.now()); return left>0; }
+      function getPrices(){ const promo=currentPromoActive(); return { group: promo?GROUP_DISC:GROUP_BASE, indiv: promo?INDIV_DISC:INDIV_BASE }; }
+      function updatePlanUI(){
+        const p=getPrices();
+        $("#psGroupPrice").textContent=fmt(p.group)+" грн";
+        $("#psIndivPrice").textContent=fmt(p.indiv)+" грн";
+        $("#coPay").innerHTML=fmt(selectedPlan==="group"?p.group:p.indiv)+"&nbsp;грн";
+        [bGroup,bIndiv].forEach(btn=>{ const is=btn.dataset.plan===selectedPlan; btn.setAttribute("aria-pressed", String(is)); btn.setAttribute("aria-selected", String(is)); });
       }
-      let bestIdx = active, bestRatio = ratios[active];
-      for(let i=0;i<ratios.length;i++){
-        if(ratios[i] > bestRatio){ bestRatio = ratios[i]; bestIdx = i; }
+      function openCheckout(plan){
+        selectedPlan=plan||"group"; updatePlanUI();
+        ["coFirst","coLast","coEmail","coPhone"].forEach(id=>{ const v=localStorage.getItem(id); if(v) $("#"+id).value=v; });
+        backdrop.classList.add("show"); backdrop.removeAttribute("aria-hidden"); $("#coFirst").focus();
       }
-      if(bestRatio >= 0.98){ setActive(bestIdx); }
-    },{ root: reel, threshold: thresholds });
+      function closeCheckout(){ backdrop.classList.remove("show"); backdrop.setAttribute("aria-hidden","true"); }
 
-    slides.forEach(sl => io.observe(sl));
+      const btnGroup=$("#buyGroup"), btnIndiv=$("#buyIndiv");
+      if(btnGroup) btnGroup.addEventListener("click", e=>{e.preventDefault(); openCheckout("group");});
+      if(btnIndiv) btnIndiv.addEventListener("click", e=>{e.preventDefault(); openCheckout("individual");});
+      bGroup.addEventListener("click", ()=>{ selectedPlan="group"; updatePlanUI(); });
+      bIndiv.addEventListener("click", ()=>{ selectedPlan="individual"; updatePlanUI(); });
+      bClose.addEventListener("click", closeCheckout);
+      backdrop.addEventListener("click", e=>{ if(e.target===backdrop) closeCheckout(); });
+      document.addEventListener("keydown", e=>{ if(e.key==="Escape" && backdrop.classList.contains("show")) closeCheckout(); });
 
-    const prevBtn = document.querySelector('#reviews .prev');
-    const nextBtn = document.querySelector('#reviews .next');
-    if(prevBtn) prevBtn.addEventListener('click', ()=>{
-      stop();
-      const target = (active<=0) ? slides.length-1 : active-1;
-      dir = -1;
-      goTo(target);
-      start();
-    });
-    if(nextBtn) nextBtn.addEventListener('click', ()=>{
-      stop();
-      const target = (active>=slides.length-1) ? 0 : active+1;
-      dir = 1;
-      goTo(target);
-      start();
-    });
+      const isEmail=v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+      const normPhone=v=>v.replace(/[^\d+]/g,"");
 
-    ['pointerdown','touchstart','wheel','keydown','focusin','mouseenter'].forEach(ev=>{
-      reel.addEventListener(ev, stop, {passive:true});
-    });
-    ['pointerup','touchend','mouseleave','blur'].forEach(ev=>{
-      reel.addEventListener(ev, start, {passive:true});
-    });
+      coForm.addEventListener("submit", async e=>{
+        e.preventDefault(); coErr.classList.remove("show"); coErr.textContent="";
+        const firstName=$("#coFirst").value.trim(), lastName=$("#coLast").value.trim(), email=$("#coEmail").value.trim().toLowerCase(), phone=normPhone($("#coPhone").value.trim()), agree=$("#coAgree").checked;
+        if(firstName.length<2 || lastName.length<2){ coErr.textContent="Вкажіть ім’я та прізвище."; coErr.classList.add("show"); return; }
+        if(!isEmail(email)){ coErr.textContent="Некоректний email."; coErr.classList.add("show"); return; }
+        if(phone.length<10){ coErr.textContent="Некоректний телефон."; coErr.classList.add("show"); return; }
+        if(!agree){ coErr.textContent="Підтвердіть згоду з умовами."; coErr.classList.add("show"); return; }
 
-    slides[0]?.classList.add('is-active');
-    updateDots(0);
-    start();
-  })();
+        ["coFirst","coLast","coEmail","coPhone"].forEach(id=>{ const v=$("#"+id).value.trim(); localStorage.setItem(id, v); });
 
-  /* ===== utils для підсвітки тарифів після скролу ===== */
-  function visibleRatio(el){
-    if(!el) return 0;
-    const r = el.getBoundingClientRect();
-    const vw = window.innerWidth, vh = window.innerHeight;
-    const ix = Math.max(0, Math.min(r.right, vw) - Math.min(r.left, vw));
-    const iy = Math.max(0, Math.min(r.bottom, vh) - Math.min(r.top, vh));
-    const interArea = ix * iy;
-    const area = Math.max(1, r.width * r.height);
-    return interArea / area;
-  }
-  function pulseTariffs(){
-    document.querySelectorAll('.tariff').forEach(card=>{
-      card.classList.add('pulse');
-      card.addEventListener('animationend', ()=>card.classList.remove('pulse'), {once:true});
-    });
-  }
-  function afterScrollSettledThenPulse(){
-    const card = document.querySelector('#promo .promoCard');
-    if(!card) return;
-    const ratio = visibleRatio(card);
-    if(ratio >= 0.6){ pulseTariffs(); return; }
-    const io = new IntersectionObserver((entries, obs)=>{
-      const e = entries[0];
-      if(e && e.isIntersecting && e.intersectionRatio >= 0.6){
-        pulseTariffs();
-        obs.disconnect();
-      }
-    }, { threshold: [0.6] });
-    io.observe(card);
-  }
-  function waitScrollEnd(callback, idleMs=140, capMs=2000){
-    let t=null, done=false;
-    const onEnd=()=>{ if(done) return; done=true; window.removeEventListener('scroll', onScroll, {passive:true}); clearTimeout(t); callback(); };
-    const onScroll=()=>{ clearTimeout(t); t=setTimeout(onEnd, idleMs); };
-    window.addEventListener('scroll', onScroll, {passive:true});
-    onScroll();
-    setTimeout(onEnd, capMs);
-  }
-  function scrollToPromoAndPulse(){
-    const promo = $("#promo");
-    if(!promo) return;
-    promo.scrollIntoView({behavior:'smooth', block:'start'});
-    waitScrollEnd(afterScrollSettledThenPulse);
-  }
+        const p=getPrices(); const amountUAH = selectedPlan==="group"?p.group:p.indiv;
+        coBtn.disabled=true; coBtn.textContent="Створюємо платіж…";
 
-  /* ===== плаваюча кнопка + Hero CTA ===== */
-  (function(){
-    const floatBtn=$("#buyFloat"), topBtn=$("#buyTop");
-    if(floatBtn){
-      floatBtn.textContent = "Отримати доступ до курсу";
-      floatBtn.addEventListener('click', (e)=>{ e.preventDefault(); scrollToPromoAndPulse(); });
-    }
-    if(topBtn){
-      topBtn.addEventListener('click', (e)=>{ e.preventDefault(); scrollToPromoAndPulse(); });
-    }
-  })();
-
-  /* ===== Плаваюча кнопка: показувати ЛИШЕ коли Hero і Promo поза екраном ===== */
-  (function(){
-    const hero=$("#hero"), promo=$("#promo"), floater=$("#floatCta");
-    if(!hero || !promo || !floater) return;
-    let heroIn=false, promoIn=false;
-    function update(){ if(heroIn || promoIn){ floater.classList.remove('show'); } else { floater.classList.add('show'); } }
-    const io = new IntersectionObserver((entries)=>{
-      for(const e of entries){
-        if(e.target===hero) heroIn = e.isIntersecting;
-        if(e.target===promo) promoIn = e.isIntersecting;
-      }
-      update();
-    }, { threshold: 0.12 });
-    io.observe(hero); io.observe(promo); update();
-  })();
-
-  /* ===== CHECKOUT MODAL + MONO CHECKOUT (новий flow: спершу Thank You) ===== */
-  (function(){
-    const backdrop = $("#checkoutBackdrop");
-    const coForm   = $("#checkoutForm");
-    const coBtn    = $("#coBtn");
-    const coErr    = $("#coErr");
-    const bClose   = $("#coClose");
-    const bGroup   = $("#psGroup");
-    const bIndiv   = $("#psIndiv");
-    let selectedPlan = "group";
-
-    function currentPromoActive(){
-      const left = Math.max(0, (parseInt(localStorage.getItem("promoEndsAt-v1")||"0",10)) - Date.now());
-      return left>0;
-    }
-    function getPrices(){
-      const promo = currentPromoActive();
-      return { group: promo ? GROUP_DISC : GROUP_BASE, indiv: promo ? INDIV_DISC : INDIV_BASE };
-    }
-    function updatePlanUI(){
-      const prices = getPrices();
-      $("#psGroupPrice").textContent = fmt(prices.group) + " грн";
-      $("#psIndivPrice").textContent = fmt(prices.indiv) + " грн";
-      $("#coPay").textContent = fmt(selectedPlan==="group" ? prices.group : prices.indiv) + " грн";
-      [bGroup,bIndiv].forEach(btn=>{
-        const is = btn.dataset.plan === selectedPlan;
-        btn.setAttribute("aria-pressed", String(is));
-        btn.setAttribute("aria-selected", String(is));
+        try{
+          const res=await fetch(MONO_ENDPOINT,{method:"POST", headers:{"content-type":"application/json"}, body:JSON.stringify({plan:selectedPlan, amountUAH, email, phone, firstName, lastName})});
+          if(!res.ok) throw new Error("Помилка сервера. Спробуйте ще раз.");
+          const data=await res.json(); // { pageUrl, invoiceId, reference }
+          const thankUrl = `${THANK}?ref=${encodeURIComponent(data.reference)}&invoiceId=${encodeURIComponent(data.invoiceId||'')}&pay=${encodeURIComponent(data.pageUrl)}&plan=${encodeURIComponent(selectedPlan)}`;
+          window.location.replace(thankUrl);
+        }catch(err){
+          console.error(err);
+          const isNetwork = (err && String(err.message).toLowerCase().includes('failed to fetch'));
+          coErr.textContent = isNetwork ? "Немає зв’язку з бекендом оплати (можливо, ендпоїнт /mono/checkout ще не розгорнутий або CORS)." : (err.message || "Не вдалося створити платіж.");
+          coErr.classList.add("show");
+          coBtn.disabled=false; coBtn.textContent="Перейти до оплати";
+        }
       });
-    }
-    function openCheckout(plan){
-      selectedPlan = plan || "group";
-      updatePlanUI();
-      ["coFirst","coLast","coEmail","coPhone"].forEach(id=>{
-        const v = localStorage.getItem(id); if(v) $("#"+id).value = v;
-      });
-      backdrop.classList.add("show");
-      backdrop.removeAttribute("aria-hidden");
-      $("#coFirst").focus();
-    }
-    function closeCheckout(){
-      backdrop.classList.remove("show");
-      backdrop.setAttribute("aria-hidden","true");
-    }
-
-    const btnGroup = $("#buyGroup");
-    const btnIndiv = $("#buyIndiv");
-    if(btnGroup) btnGroup.addEventListener("click", (e)=>{ e.preventDefault(); openCheckout("group"); });
-    if(btnIndiv) btnIndiv.addEventListener("click", (e)=>{ e.preventDefault(); openCheckout("individual"); });
-
-    bGroup.addEventListener("click", ()=>{ selectedPlan="group"; updatePlanUI(); });
-    bIndiv.addEventListener("click", ()=>{ selectedPlan="individual"; updatePlanUI(); });
-
-    bClose.addEventListener("click", closeCheckout);
-    backdrop.addEventListener("click", (e)=>{ if(e.target===backdrop) closeCheckout(); });
-    document.addEventListener("keydown",(e)=>{ if(e.key==="Escape" && backdrop.classList.contains("show")) closeCheckout(); });
-
-    const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-    const normPhone = v => v.replace(/[^\d+]/g,"");
-
-    coForm.addEventListener("submit", async (e)=>{
-      e.preventDefault();
-      coErr.classList.remove("show"); coErr.textContent="";
-
-      const firstName = $("#coFirst").value.trim();
-      const lastName  = $("#coLast").value.trim();
-      const email     = $("#coEmail").value.trim().toLowerCase();
-      const phone     = normPhone($("#coPhone").value.trim());
-      const agree     = $("#coAgree").checked;
-
-      if(firstName.length<2 || lastName.length<2){ coErr.textContent="Вкажіть ім’я та прізвище."; coErr.classList.add("show"); return; }
-      if(!isEmail(email)){ coErr.textContent="Некоректний email."; coErr.classList.add("show"); return; }
-      if(phone.length<10){ coErr.textContent="Некоректний телефон."; coErr.classList.add("show"); return; }
-      if(!agree){ coErr.textContent="Підтвердіть згоду з умовами."; coErr.classList.add("show"); return; }
-
-      ["coFirst","coLast","coEmail","coPhone"].forEach(id=>{
-        const v=$("#"+id).value.trim(); localStorage.setItem(id, v);
-      });
-
-      const prices = getPrices();
-      const amountUAH = selectedPlan==="group" ? prices.group : prices.indiv;
-
-      coBtn.disabled = true; coBtn.textContent = "Створюємо платіж…";
-
-      try{
-        const res = await fetch(MONO_ENDPOINT, {
-          method:"POST",
-          headers:{"content-type":"application/json"},
-          body: JSON.stringify({ plan: selectedPlan, amountUAH, email, phone, firstName, lastName })
-        });
-        if(!res.ok) throw new Error("Помилка сервера. Спробуйте ще раз.");
-        const data = await res.json(); // { pageUrl, invoiceId, reference }
-
-        // Новий flow: йдемо на "Дякуємо", де юзер відкриє Monobank
-        const thankUrl = `${THANK}?ref=${encodeURIComponent(data.reference)}&invoiceId=${encodeURIComponent(data.invoiceId||'')}&pay=${encodeURIComponent(data.pageUrl)}&plan=${encodeURIComponent(selectedPlan)}`;
-        window.location.replace(thankUrl);
-
-      }catch(err){
-        console.error(err);
-        const isNetwork = (err && String(err.message).toLowerCase().includes('failed to fetch'));
-        coErr.textContent = isNetwork
-          ? "Немає зв’язку з бекендом оплати (можливо, ендпоїнт /mono/checkout ще не розгорнутий або CORS)."
-          : (err.message || "Не вдалося створити платіж.");
-        coErr.classList.add("show");
-        coBtn.disabled = false; coBtn.textContent = "Перейти до оплати";
-      }
-    });
-  })();
+    })();
   </script>
 </body>
 </html>
