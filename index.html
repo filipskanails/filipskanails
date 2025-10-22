@@ -14,8 +14,7 @@
       --radius:24px; --shadow:0 10px 28px rgba(0,0,0,.24);
       --img-top:320px; --cta-top:560px; --bubble-top:440px; --glow-top:380px; --hero-h:760px;
       --promoOverlap:18px;
-      --cta-extra:72px; /* опустили кнопку в hero */
-      /* Bright pack */
+      --cta-extra:72px;
       --mint:#8EF3C7; --pop:#FFB56B; --pop-2:#FF8A5C; --text-strong:#f3fbf7;
     }
 
@@ -29,7 +28,6 @@
     .accent{color:var(--accent-2);font-weight:900;text-shadow:0 0 8px rgba(var(--accent2-rgb),.32)}
     .nowrap{white-space:nowrap}
 
-    /* === subtle bright bg === */
     body{ position:relative; z-index:0; }
     body::before{
       content:""; position:fixed; inset:-20% -10% -30% -10%; z-index:-1; pointer-events:none;
@@ -131,15 +129,29 @@
       background:radial-gradient(60% 100% at 50% 100%, rgba(var(--accent2-rgb),.14), transparent 60%); filter:blur(12px); pointer-events:none;}
 
     .tHead{ display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:88px; flex-wrap:nowrap; overflow:hidden }
-    /* ACCENTED tariff titles */
+
+    /* ACCENTED tariff titles (white, larger, subtle animations) */
     .tName{
-      font-size:clamp(20px,5.2vw,24px);
+      font-size:clamp(22px,5.8vw,28px);
       font-weight:900;
       letter-spacing:.3px;
-      color:var(--mint);
-      text-shadow:0 0 10px rgba(142,243,199,.18);
+      color:var(--text-strong);
       display:flex; align-items:center; gap:8px; min-width:0;
+      position:relative;
+      transition:transform .18s ease, text-shadow .18s ease;
     }
+    .tName .tLabel{
+      position:relative; display:inline-block;
+    }
+    .tName .tLabel::after{
+      content:""; position:absolute; left:0; right:0; bottom:-2px; height:2px; border-radius:2px;
+      background:linear-gradient(90deg, rgba(142,243,199,.9), rgba(255,181,107,.9));
+      transform:scaleX(0); transform-origin:left; transition:transform .45s ease;
+    }
+    .tariff:hover .tName{ text-shadow:0 0 10px rgba(255,255,255,.12); transform:translateY(-1px); }
+    .tariff:hover .tName .tLabel::after,
+    .tariff:focus-within .tName .tLabel::after{ transform:scaleX(1); }
+
     .tTag{
       font-size:11px; padding:4px 8px; border-radius:999px; letter-spacing:.2px; color:#062217; font-weight:900; text-transform:uppercase; white-space:nowrap;
       background:linear-gradient(135deg, rgba(11,125,71,.95), rgba(0,74,37,.95)); box-shadow:0 6px 18px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.18);
@@ -314,7 +326,11 @@
     }
     summary.tHead::-webkit-details-marker{ display:none }
     .tTitle{ font-weight:900; font-size:18px; display:flex; align-items:center; gap:10px }
-    .tDot{ width:10px; height:10px; border-radius:50%; background:linear-gradient(135deg, var(--mint), var(--pop)); box-shadow:0 0 0 4px rgba(142,243,199,.18); }
+    .tDot{
+      width:10px; height:10px; border-radius:50%;
+      background:linear-gradient(135deg, var(--mint), var(--pop));
+      box-shadow:0 0 0 4px rgba(142,243,199,.18);
+    }
     .tBadge{
       font-size:12px; padding:6px 10px; border-radius:999px; color:#042015; font-weight:900;
       background:linear-gradient(135deg, rgba(142,243,199,.92), rgba(255,181,107,.92));
@@ -469,7 +485,7 @@
           <!-- ГРУПОВИЙ -->
           <article class="tariff" aria-labelledby="t-g-name">
             <div class="tHead">
-              <div class="tName" id="t-g-name">Груповий <span class="tTag">Оптимальний вибір</span></div>
+              <div class="tName" id="t-g-name"><span class="tLabel">Груповий</span> <span class="tTag">Оптимальний вибір</span></div>
               <div class="priceWrap">
                 <div class="priceRow">
                   <div class="pricePill"><span id="gPrice" class="priceNum">—</span><span class="cur">грн</span></div>
@@ -489,7 +505,7 @@
           <!-- ІНДИВІДУАЛЬНИЙ -->
           <article class="tariff" aria-labelledby="t-i-name" style="outline:1px solid rgba(142,243,199,.18)">
             <div class="tHead">
-              <div class="tName" id="t-i-name">Індивідуальний <span class="tTag">ХІТ</span></div>
+              <div class="tName" id="t-i-name"><span class="tLabel">Індивідуальний</span> <span class="tTag">ХІТ</span></div>
               <div class="priceWrap">
                 <div class="priceRow">
                   <div class="pricePill"><span id="iPrice" class="priceNum">—</span><span class="cur">грн</span></div>
@@ -884,11 +900,10 @@
 
     /* ===== floater + hero CTA ===== */
     function scrollToPromoAndPulse(){
-      // Скроллим к самому блоку тарифов, чтобы обе карточки максимально попали в вьюпорт
       const target = document.querySelector('#promo .tariffs') || document.querySelector('#promo');
       if(!target) return;
       const rect = target.getBoundingClientRect();
-      const y = rect.top + window.pageYOffset - 12; // небольшой зазор сверху
+      const y = rect.top + window.pageYOffset - 12;
       window.scrollTo({ top: y, behavior: 'smooth' });
       waitScrollEnd(afterScrollSettledThenPulse);
     }
@@ -950,7 +965,7 @@
         document.body.classList.remove('modal-open');
       }
 
-      const btnGroup=$("#buyGroup"), btnIndiv=$("#buyIndiv");
+      const btnGroup=$("#buyGroup"), btnIndiv=$("#buyIndiv"]);
       if(btnGroup) btnGroup.addEventListener("click", e=>{e.preventDefault(); openCheckout("group");});
       if(btnIndiv) btnIndiv.addEventListener("click", e=>{e.preventDefault(); openCheckout("individual");});
       bGroup.addEventListener("click", ()=>{ selectedPlan="group"; updatePlanUI(); });
