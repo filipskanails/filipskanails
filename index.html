@@ -416,6 +416,20 @@
     /* Заблокувати фон при відкритій модалці + сховати флоатер */
     body.modal-open{ overflow:hidden }
     body.modal-open .floater{ display:none !important; }
+
+    /* === FIX: кнопка раскрытия (tChevron) всегда справа в одной строке === */
+    summary.tHead{ position:relative; padding-right:48px; }         /* резерв под стрелку */
+    .tHead .tChevron{
+      position:absolute; right:16px; top:50%;
+      transform:translateY(-50%);                                    /* центр по высоте */
+    }
+    details[open] .tHead .tChevron{
+      transform:translateY(-50%) rotate(180deg);                      /* поворот с сохранением центра */
+    }
+    @media (max-width:360px){
+      summary.tHead{ padding-right:44px; }
+      .tHead .tChevron{ right:12px; }
+    }
   </style>
 </head>
 <body>
@@ -846,7 +860,7 @@
       if(!el) return 0;
       const r=el.getBoundingClientRect(), vw=innerWidth, vh=innerHeight;
       const ix=Math.max(0, Math.min(r.right, vw) - Math.min(r.left, vw));
-      const iy=Math.max(0, Math.min(r.bottom, vh) - Math.min(r.top, vh));
+      const iy=Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, vh));
       return (ix*iy) / Math.max(1, r.width*r.height);
     }
     function pulseTariffs(){
@@ -972,8 +986,6 @@
         }
       });
     })();
-
-    /* ===== Program auto-toggle (REMOVED): теперь управление только у пользователя ===== */
   </script>
 </body>
 </html>
