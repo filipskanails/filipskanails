@@ -56,11 +56,11 @@
     .promoCard::before{content:""; position:absolute; inset:-20% -10% auto -10%; height:56%; background:
         radial-gradient(60% 100% at 40% 0%, rgba(var(--accent2-rgb),.18), transparent 70%),
         radial-gradient(60% 100% at 80% 20%, rgba(142,243,199,.08), transparent 70%); filter:blur(16px); pointer-events:none;}
-    .promoHead{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px;}
+    .promoHead{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px; flex-wrap:wrap;}
     .promoTitle{ font-size:clamp(22px,6vw,28px); font-weight:900; }
     .promoBadges{ display:flex; gap:8px; flex-wrap:wrap; }
     .pBadge{
-      font-size:12px; padding:6px 10px; border-radius:999px; letter-spacing:.2px; color:#0a2419; font-weight:900;
+      font-size:12px; padding:6px 10px; border-radius:999px; letter-spacing:.2px; color:#0a2419; font-weight:900; white-space:nowrap;
       background:linear-gradient(135deg, rgba(142,243,199,.9), rgba(11,125,71,.85));
       box-shadow:0 8px 22px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.18);
       text-shadow:0 1px 0 rgba(255,255,255,.35);
@@ -83,15 +83,17 @@
     .tariff::after{content:""; position:absolute; inset:auto -12% -22% -12%; height:44%;
       background:radial-gradient(60% 100% at 50% 100%, rgba(var(--accent2-rgb),.14), transparent 60%); filter:blur(12px); pointer-events:none;}
 
-    .tHead{ display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:88px; }
-    .tName{ font-size:18px; font-weight:900; letter-spacing:.2px; display:flex; align-items:center; gap:8px }
+    /* Шапка тарифу */
+    .tHead{ display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:88px; flex-wrap:nowrap; }
+    .tName{ font-size:18px; font-weight:900; letter-spacing:.2px; display:flex; align-items:center; gap:8px; }
     .tTag{
-      font-size:11px; padding:4px 8px; border-radius:999px; letter-spacing:.2px; color:#062217; font-weight:900; text-transform:uppercase;
+      font-size:11px; padding:4px 8px; border-radius:999px; letter-spacing:.2px; color:#062217; font-weight:900; text-transform:uppercase; white-space:nowrap;
       background:linear-gradient(135deg, rgba(11,125,71,.95), rgba(0,74,37,.95)); box-shadow:0 6px 18px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.18);
     }
 
-    .priceWrap{display:grid; gap:6px; justify-items:end}
-    .priceRow{display:flex;align-items:baseline;gap:12px;margin:4px 0 0}
+    /* Ціни */
+    .priceWrap{display:grid; gap:6px; justify-items:end; max-width:100%}
+    .priceRow{display:flex;align-items:baseline;gap:12px;margin:4px 0 0; flex-wrap:nowrap}
     .pricePill{
       display:inline-flex;align-items:baseline;gap:8px;padding:10px 16px;border-radius:999px;white-space:nowrap;
       background:radial-gradient(130% 180% at 50% 0%, rgba(255,255,255,.18), rgba(255,255,255,0) 55%), linear-gradient(135deg,var(--accent-2),var(--accent));
@@ -101,13 +103,17 @@
     .cur{opacity:.95;font-size:clamp(16px,4.8vw,18px);line-height:1;white-space:nowrap}
     .old{color:#95a49b;text-decoration:line-through;font-size:16px;display:none;white-space:nowrap}
     .saveBadge{
-      display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px; font-size:12px; color:#0a2419; font-weight:900;
+      display:inline-block; /* було inline-flex — не переносилося */
+      max-width:100%;
+      padding:6px 10px; border-radius:999px; font-size:12px; color:#0a2419; font-weight:900; line-height:1.2;
       background:linear-gradient(135deg, rgba(142,243,199,.9), rgba(11,125,71,.85));
       box-shadow:0 6px 16px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.22);
       text-shadow:0 1px 0 rgba(255,255,255,.3);
       justify-self:end;
+      word-break:break-word; white-space:normal;
     }
 
+    /* Пункти тарифів */
     .tList{
       list-style:none; padding:0; margin:12px 0 16px;
       display:grid; gap:10px;
@@ -123,11 +129,7 @@
       padding:10px 12px;
       transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
     }
-    .tList li:hover{
-      transform:translateY(-1px);
-      border-color:#2f4a3f;
-      box-shadow:0 8px 22px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.04);
-    }
+    .tList li:hover{ transform:translateY(-1px); border-color:#2f4a3f; box-shadow:0 8px 22px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.04); }
     .tList b{ font-weight:900; color:var(--accent-2); text-shadow:none; }
     .tList li::before{
       content:"";
@@ -141,6 +143,8 @@
       flex:0 0 22px;
       margin-top:2px;
     }
+
+    .tariff .cta{ width:100%; min-height:52px; justify-content:center; text-align:center; margin-top:auto; }
 
     /* ===== ABOUT ===== */
     #about{margin-top:20px;margin-left:-16px;margin-right:-16px;width:calc(100% + 32px)}
@@ -157,7 +161,7 @@
     .aboutItem .icon::after{content:"";position:absolute;left:9px;top:10px;width:11px;height:6px;border-left:3px solid #052d21;border-bottom:3px solid #052d21;transform:rotate(-45deg)}
     .aboutItem .txt{flex:1;min-width:0;word-break:normal;overflow-wrap:anywhere}
 
-    /* ===== REVIEWS (чат-бульбашки, ІМ’Я в іконці) ===== */
+    /* ===== REVIEWS (чат-бульбашки, тільки ім’я) ===== */
     #reviews{ margin:28px 0; margin-left:-16px; margin-right:-16px; width:calc(100% + 32px); }
     #reviews .head{ text-align:center; margin-bottom:12px; }
     #reviews .muted{ color:var(--muted); }
@@ -238,38 +242,37 @@
     .reviewsArrows .next{ right:22px }
     .reviewsArrows .arrow:active{ transform:scale(.98) }
 
-    /* ===== CHECKOUT MODAL ===== */
-    .co-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.5); display:grid; place-items:center; z-index:100; opacity:0; pointer-events:none; transition:opacity .22s ease;}
-    .co-backdrop.show{ opacity:1; pointer-events:auto }
-    .co-modal{ width:min(720px, 96vw); border-radius:22px; background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow), inset 0 0 0 1px rgba(255,255,255,.02); padding:16px; }
-    .co-top{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px }
-    .co-title{ font-weight:900; font-size:20px }
-    .co-close{ width:36px; height:36px; border-radius:999px; border:1px solid var(--line); background:#0f1713; color:#c9ded4; display:grid; place-items:center }
-    .ps{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:10px 0; }
-    .ps button{ border-radius:16px; border:1px solid var(--line); background:#0f1713; padding:10px; text-align:left; }
-    .ps .pname{ font-weight:900 } .ps .pprice{ font-weight:800; margin-top:6px }
-    .ps button[aria-selected="true"]{ background:linear-gradient(135deg,var(--accent-2),var(--accent)); color:#062217; border-color:transparent; box-shadow:0 10px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.16); }
-    .co-grid{ display:grid; gap:10px; grid-template-columns:1fr 1fr; }
-    .co-grid .full{ grid-column:1 / -1 } .field{ display:grid; gap:6px }
-    .field label{ font-size:13px; color:#cfe6dc }
-    .field input[type="text"], .field input[type="email"], .field input[type="tel"]{ width:100%; padding:12px 12px; border-radius:12px; background:#0f1713; border:1px solid #2b4136; color:var(--text); }
-    .agree{ display:flex; gap:10px; align-items:flex-start; font-size:14px; color:#cfe6dc } .agree input{ transform:translateY(2px) }
-    .co-err{ display:none; margin-top:6px; padding:10px; border-radius:10px; background:rgba(255,80,80,.08); border:1px solid rgba(255,80,80,.25); color:#ffbcbc; }
-    .co-err.show{ display:block } .co-actions{ display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:10px }
-    .co-pay{ font-size:14px; color:#cfe6dc }
+    /* ===== Адаптив під вузькі екрани (iPhone 14 Pro та менші) ===== */
+    @media (max-width: 420px){
+      .promoHead{ row-gap:6px }
+      .promoTitle{ flex:1 1 100% }
+      .promoBadges{ flex:1 1 100%; justify-content:center }
+      .pBadge{ font-size:11px; padding:5px 8px; }
 
-    /* footer + floater */
-    footer.footer{margin-top:26px;padding:22px 16px 96px;text-align:center;color:var(--muted);border-top:1px solid var(--line)}
-    .footer .brand{font-size:22px;color:var(--text);margin:0 0 6px;font-weight:700}
-    .footer .legal{font-size:14px;line-height:1.5;max-width:720px;margin:10px auto 0;opacity:.95}
-    .footer .links{margin-top:10px;font-size:14px}
-    .footer .links a{color:var(--muted);text-decoration:underline dotted;margin:0 8px}
-    .footer small.copy{display:block;margin-top:12px;opacity:.7}
-    .floater{position:fixed;left:0;right:0;bottom:12px;z-index:50;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .28s ease,transform .28s ease}
-    .floater.show{opacity:1;transform:translateY(0);pointer-events:auto}
-    .floater-inner{max-width:720px;margin:0 auto;padding:0 16px}
-    .floater .cta{width:100%}
-    @media (prefers-reduced-motion:reduce){ .floater{transition:none} }
+      .tHead{ flex-wrap:wrap; min-height:unset; }
+      .tName{ flex:1 1 100%; margin-bottom:6px }
+      .priceWrap{ justify-items:start; width:100% }
+      .priceRow{ gap:8px; flex-wrap:wrap }
+      .pricePill{ padding:8px 12px }
+      .priceNum{ font-size:20px }
+      .cur{ font-size:14px }
+      .old{ font-size:14px }
+      .saveBadge{ font-size:11.5px; padding:5px 8px; justify-self:start }
+
+      .tList{ font-size:15.5px; line-height:1.45; gap:8px }
+      .tList li{ padding:8px 10px; gap:8px }
+      .tList li::before{ width:20px; height:20px; flex:0 0 20px; }
+    }
+
+    /* Ще більш вузькі (старі iPhone SE і т.п.) */
+    @media (max-width: 360px){
+      .pBadge{ font-size:10px; padding:4px 7px }
+      .priceNum{ font-size:18px }
+      .cur{ font-size:13px }
+      .old{ font-size:13px }
+      .saveBadge{ font-size:11px }
+      .tList{ font-size:15px }
+    }
   </style>
 </head>
 <body>
@@ -534,8 +537,8 @@
 
       const gS=$("#gSave"), iS=$("#iSave");
       if(promo){
-        if(gS){ gS.style.display="inline-flex"; gS.innerHTML = `Економія — <b>${fmt(gOld-gActive)}&nbsp;грн</b>`; }
-        if(iS){ iS.style.display="inline-flex"; iS.innerHTML = `Економія — <b>${fmt(iOld-iActive)}&nbsp;грн</b>`; }
+        if(gS){ gS.style.display="inline-block"; gS.innerHTML = `Економія — <b>${fmt(gOld-gActive)}&nbsp;грн</b>`; }
+        if(iS){ iS.style.display="inline-block"; iS.innerHTML = `Економія — <b>${fmt(iOld-iActive)}&nbsp;грн</b>`; }
       }else{
         if(gS) gS.style.display="none";
         if(iS) iS.style.display="none";
@@ -569,7 +572,7 @@
       const slides = Array.from(reel.children);
       const dotsWrap = document.getElementById('reviewsDots');
 
-      // берeмо лише ім'я (перше слово), без прізвища
+      // тільки перше слово як ім’я
       const firstFrom = name=>{
         if(!name) return "";
         const parts = String(name).trim().split(/\s+/).filter(Boolean);
