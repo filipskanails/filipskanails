@@ -12,21 +12,34 @@
       --text:#e7f0ea; --muted:#a1b3ab;
       --accent:#004a25; --accent-2:#0b7d47; --accent-rgb:0,74,37; --accent2-rgb:11,125,71;
       --radius:24px; --shadow:0 10px 28px rgba(0,0,0,.24);
-
-      /* управляються JS */
       --img-top:320px; --cta-top:560px; --bubble-top:440px; --glow-top:380px; --hero-h:760px;
       --promoOverlap:18px;
-      /* опустили CTA в hero трохи нижче */
-      --cta-extra:72px;
+      --cta-extra:72px; /* опустили кнопку в hero */
+      /* Bright pack */
+      --mint:#8EF3C7; --pop:#FFB56B; --pop-2:#FF8A5C; --text-strong:#f3fbf7;
     }
 
     *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif;overflow-x:hidden}
+    html,body{margin:0;background:var(--bg);color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif;
+      overflow-x:hidden}
     a{color:inherit;text-decoration:none}
     img{max-width:100%;display:block}
     .wrap{max-width:720px;margin:0 auto;padding:16px}
     .accent{color:var(--accent-2);font-weight:900;text-shadow:0 0 8px rgba(var(--accent2-rgb),.32)}
     .nowrap{white-space:nowrap}
+
+    /* === subtle bright bg === */
+    body{ position:relative; z-index:0; }
+    body::before{
+      content:""; position:fixed; inset:-20% -10% -30% -10%; z-index:-1; pointer-events:none;
+      background:
+        radial-gradient(60% 40% at 80% 10%, rgba(255,181,107,.10), transparent 55%),
+        radial-gradient(50% 60% at 15% 20%, rgba(142,243,199,.10), transparent 60%),
+        radial-gradient(40% 40% at 85% 75%, rgba(11,125,71,.18), transparent 70%);
+      filter:blur(28px);
+    }
+    h1,h2,.footer .brand{ color:var(--text-strong); }
 
     /* ===== HERO ===== */
     #hero{margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);position:relative;z-index:1}
@@ -35,47 +48,73 @@
       content:""; position:absolute; right:50%; top:var(--glow-top);
       width:min(120vmin,680px); height:min(120vmin,680px); border-radius:50%;
       background:
-        radial-gradient(circle at 50% 50%, rgba(var(--accent2-rgb),.96) 0%, rgba(var(--accent2-rgb),.64) 28%, rgba(var(--accent-rgb),.34) 60%, rgba(var(--accent-rgb),.14) 78%, rgba(var(--accent-rgb),.06) 90%, transparent 100%),
-        radial-gradient(60% 40% at 50% 0%, rgba(255,255,255,.10), transparent 55%);
+        radial-gradient(circle at 50% 50%, rgba(var(--accent2-rgb),1) 0%,
+          rgba(var(--accent2-rgb),.70) 28%, rgba(var(--accent-rgb),.40) 60%,
+          rgba(var(--accent-rgb),.16) 78%, rgba(var(--accent-rgb),.08) 90%, transparent 100%),
+        radial-gradient(60% 40% at 50% 0%, rgba(255,255,255,.14), transparent 55%);
       filter:blur(16px); transform:translate(50%,-28%); pointer-events:none; z-index:0;
     }
-    .hero-text{position:absolute;top:2%;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:640px;text-align:center;text-shadow:0 1px 0 rgba(0,0,0,.2);z-index:2}
+    .hero-text{position:absolute;top:2%;left:50%;transform:translateX(-50%);
+      width:calc(100% - 32px);max-width:640px;text-align:center;text-shadow:0 1px 0 rgba(0,0,0,.2);z-index:2}
     .eyebrow{font-size:13px;letter-spacing:.06em;color:var(--muted)}
     .hl{font-size:clamp(28px,7vw,38px);line-height:1.18;font-weight:900;margin:10px 0 8px}
     .hl.hl-mix{display:grid;gap:2px}
     .hl.hl-mix .line{display:block}
     .hl.hl-mix .line.r{text-align:right}.hl.hl-mix .line.l{text-align:left}
     .lead{color:var(--muted);margin:0 0 10px;text-align:center}
-    .hero-img{position:absolute;right:50%;transform:translateX(44%);top:var(--img-top); width:min(620px,112vw);object-fit:contain; filter:drop-shadow(0 16px 28px rgba(0,0,0,.35)); z-index:1; pointer-events:none;}
-    .hero-bubble{position:absolute; right:8%; top:var(--bubble-top); max-width:60vw; color:#fff;background:rgba(12,16,14,.58); border:1px solid rgba(var(--accent2-rgb),.28); padding:12px 14px; border-radius:28px; backdrop-filter:blur(8px); box-shadow:0 10px 26px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.10); font-size:14px; line-height:1.35; z-index:2;}
-    .hero-cta{position:absolute;left:50%;transform:translateX(-50%);top:var(--cta-top);display:grid;gap:10px;text-align:center;z-index:3}
+    .hero-img{position:absolute;right:50%;transform:translateX(44%);
+      top:var(--img-top); width:min(620px,112vw);object-fit:contain;
+      filter:drop-shadow(0 16px 28px rgba(0,0,0,.35)); z-index:1; pointer-events:none;}
+    .hero-bubble{position:absolute; right:8%; top:var(--bubble-top); max-width:60vw; color:#fff;
+      background:linear-gradient(180deg, rgba(18,25,21,.66), rgba(18,25,21,.52));
+      border:1px solid rgba(142,243,199,.35); padding:12px 14px; border-radius:28px;
+      backdrop-filter:blur(8px); box-shadow:0 10px 26px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.10);
+      font-size:14px; line-height:1.35; z-index:2;}
+    .hero-cta{position:absolute;left:50%;transform:translateX(-50%);top:var(--cta-top);
+      display:grid;gap:10px;text-align:center;z-index:3}
     .cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 26px;border-radius:999px;background:
-        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.18), rgba(255,255,255,0) 55%), linear-gradient(135deg,var(--accent-2),var(--accent));color:#fff;font-weight:900;text-transform:uppercase;font-size:clamp(18px,5vw,22px);letter-spacing:.3px;white-space:nowrap;box-shadow:var(--shadow), 0 0 0 1px rgba(255,255,255,.06) inset;text-shadow:0 1px 0 rgba(0,0,0,.18);}
+        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.18), rgba(255,255,255,0) 55%),
+        linear-gradient(135deg,var(--accent-2),var(--accent));color:#fff;font-weight:900;text-transform:uppercase;
+      font-size:clamp(18px,5vw,22px);letter-spacing:.3px;white-space:nowrap;box-shadow:var(--shadow), 0 0 0 1px rgba(255,255,255,.06) inset;text-shadow:0 1px 0 rgba(0,0,0,.18);}
+    .cta{ position:relative; overflow:hidden; }
+    .cta::after{
+      content:""; position:absolute; top:-60%; bottom:-60%; left:-120%;
+      width:50%; transform:skewX(-20deg);
+      background:linear-gradient(120deg, transparent 0%, rgba(255,255,255,.28) 50%, transparent 100%);
+      animation:ctaShine 5.5s ease-in-out infinite;
+    }
+    @keyframes ctaShine{ 0%{ left:-120%; } 15%{ left:140%; } 100%{ left:140%; } }
 
     /* ===== PROMO / ТАРИФИ ===== */
-    #promo{margin-top:calc(-1 * var(--promoOverlap));padding-top:var(--promoOverlap);margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);position:relative;z-index:5}
-    .promoCard{position:relative;border-radius:var(--radius); padding:18px; background:var(--card); border:1px solid var(--line); backdrop-filter:blur(6px); box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22); overflow:hidden;}
-    .promoCard::before{content:""; position:absolute; inset:-20% -10% auto -10%; height:56%; background:
-        radial-gradient(60% 100% at 40% 0%, rgba(var(--accent2-rgb),.18), transparent 70%),
-        radial-gradient(60% 100% at 80% 20%, rgba(142,243,199,.08), transparent 70%); filter:blur(16px); pointer-events:none;}
+    #promo{margin-top:calc(-1 * var(--promoOverlap));padding-top:var(--promoOverlap);
+      margin-left:-16px;margin-right:-16px;width:calc(100% + 32px);position:relative;z-index:5}
+    .promoCard{position:relative;border-radius:var(--radius); padding:18px; background:var(--card);
+      border:1px solid var(--line); backdrop-filter:blur(6px);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22); overflow:hidden;}
+    .promoCard::before{content:""; position:absolute; inset:-20% -10% auto -10%; height:56%;
+      background:radial-gradient(60% 100% at 40% 0%, rgba(var(--accent2-rgb),.18), transparent 70%),
+      radial-gradient(60% 100% at 80% 20%, rgba(142,243,199,.08), transparent 70%); filter:blur(16px); pointer-events:none;}
     .promoHead{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px; flex-wrap:wrap;}
-    /* Заголовок «Тарифи» — по центру і трохи більший */
     .promoTitle{
       flex:1 1 100%;
       text-align:center;
       font-size:clamp(26px,6.5vw,32px);
       font-weight:900;
     }
-    .promoBadges{ display:flex; gap:8px; flex-wrap:wrap; }
+    .promoBadges{
+      flex:1 1 100%;
+      display:flex; gap:8px; flex-wrap:wrap; justify-content:center; /* відцентрували */
+    }
     .pBadge{
       font-size:12px; padding:6px 10px; border-radius:999px; letter-spacing:.2px; color:#0a2419; font-weight:900; white-space:nowrap;
-      background:linear-gradient(135deg, rgba(142,243,199,.9), rgba(11,125,71,.85));
+      background:linear-gradient(135deg, rgba(142,243,199,.92), rgba(255,181,107,.92));
       box-shadow:0 8px 22px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.18);
       text-shadow:0 1px 0 rgba(255,255,255,.35);
     }
 
     .countdown{display:flex;gap:10px;justify-content:space-between;margin:10px 0 6px}
-    .countbox{flex:1 1 0;border:1px solid #2b4136;border-radius:14px;background:#0f1713;padding:14px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+    .countbox{flex:1 1 0;border:1px solid #2b4136;border-radius:14px;background:#0f1713;padding:14px 8px;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
     .countbox .n{font-size:clamp(22px,8vw,36px);font-weight:900;line-height:1;white-space:nowrap}
     .countbox .t{color:var(--muted);margin-top:6px;font-size:clamp(12px,3.6vw,15px);white-space:nowrap}
 
@@ -83,9 +122,9 @@
     @media (min-width:740px){ .tariffs{ grid-template-columns:1fr 1fr; } }
 
     .tariff{position:relative; border-radius:22px; padding:16px; overflow:hidden;
-      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));
-      border:1px solid var(--line);
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), 0 10px 26px rgba(0,0,0,.22);
+      background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,0)), #111713;
+      border:1px solid #2b3e36;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.028), 0 14px 34px rgba(0,0,0,.28);
       display:flex; flex-direction:column; will-change:transform, box-shadow;
     }
     .tariff::after{content:""; position:absolute; inset:auto -12% -22% -12%; height:44%;
@@ -102,8 +141,10 @@
     .priceRow{display:flex;align-items:baseline;gap:12px;margin:4px 0 0; flex-wrap:nowrap; min-width:0 }
     .pricePill{
       display:inline-flex;align-items:baseline;gap:8px;padding:10px 16px;border-radius:999px;white-space:nowrap;
-      background:radial-gradient(130% 180% at 50% 0%, rgba(255,255,255,.18), rgba(255,255,255,0) 55%), linear-gradient(135deg,var(--accent-2),var(--accent));
-      color:#e6fff3;font-weight:900;box-shadow:0 10px 28px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12)
+      background:
+        radial-gradient(130% 180% at 50% 0%, rgba(255,255,255,.22), rgba(255,255,255,0) 55%),
+        linear-gradient(135deg, var(--accent-2), var(--accent));
+      color:#e6fff3;font-weight:900;box-shadow:0 12px 32px rgba(0,0,0,.32), 0 0 0 1px rgba(255,255,255,.06) inset
     }
     .priceNum{font-size:clamp(20px,6vw,26px);font-weight:900;line-height:1;white-space:nowrap}
     .cur{opacity:.95;font-size:clamp(16px,4.8vw,18px);line-height:1;white-space:nowrap}
@@ -111,11 +152,10 @@
     .saveBadge{
       display:inline-block; max-width:100%;
       padding:6px 10px; border-radius:999px; font-size:12px; color:#0a2419; font-weight:900; line-height:1.2;
-      background:linear-gradient(135deg, rgba(142,243,199,.9), rgba(11,125,71,.85));
+      background:linear-gradient(135deg, rgba(142,243,199,.95), rgba(255,181,107,.92));
       box-shadow:0 6px 16px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.22);
       text-shadow:0 1px 0 rgba(255,255,255,.3);
-      justify-self:end;
-      word-break:break-word; white-space:normal;
+      justify-self:end; word-break:break-word; white-space:normal;
     }
 
     .tList{
@@ -127,14 +167,14 @@
     .tList li{
       position:relative;
       display:flex; gap:10px; align-items:flex-start;
-      background:rgba(12,16,14,.55);
-      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(14,20,17,.62), rgba(14,20,17,.50));
+      border:1px solid #30463b;
       border-radius:14px;
       padding:10px 12px;
       transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
     }
     .tList li:hover{ transform:translateY(-1px); border-color:#2f4a3f; box-shadow:0 8px 22px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.04); }
-    .tList b{ font-weight:900; color:var(--accent-2); text-shadow:none; }
+    .tList b{ font-weight:900; color:var(--mint); text-shadow:none; }
     .tList li::before{
       content:"";
       width:22px; height:22px; border-radius:50%;
@@ -147,15 +187,18 @@
       flex:0 0 22px;
       margin-top:2px;
     }
-
     .tariff .cta{ width:100%; min-height:52px; justify-content:center; text-align:center; margin-top:auto; }
 
     /* ===== ABOUT ===== */
     #about{margin-top:20px;margin-left:-16px;margin-right:-16px;width:calc(100% + 32px)}
     #about h2{text-align:center;margin-bottom:10px}
     .aboutLead{text-align:center;color:var(--muted);margin:0 0 18px}
-    .aboutCard{position:relative;border-radius:var(--radius);padding:18px 14px;background:var(--card); border:1px solid var(--line);backdrop-filter:blur(6px); box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22)}
-    .aboutCard::before{content:"";position:absolute;inset:-10% -8% auto -8%;height:44%; background:radial-gradient(60% 100% at 50% 0%, rgba(var(--accent2-rgb),.18), transparent 70%); filter:blur(10px);pointer-events:none;border-radius:var(--radius) var(--radius) 0 0;}
+    .aboutCard{position:relative;border-radius:var(--radius);padding:18px 14px;background:var(--card);
+      border:1px solid var(--line);backdrop-filter:blur(6px);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22)}
+    .aboutCard::before{content:"";position:absolute;inset:-10% -8% auto -8%;height:44%;
+      background:radial-gradient(60% 100% at 50% 0%, rgba(var(--accent2-rgb),.18), transparent 70%);
+      filter:blur(10px);pointer-events:none;border-radius:var(--radius) var(--radius) 0 0;}
     .aboutList{list-style:none;padding:0;margin:0;display:grid;gap:14px}
     .aboutItem{display:flex;align-items:center;gap:12px;line-height:1.45;border-radius:16px;padding:6px 0}
     .aboutItem .icon{position:relative;width:32px;height:32px;border-radius:50%;flex:0 0 32px;
@@ -165,18 +208,13 @@
     .aboutItem .icon::after{content:"";position:absolute;left:9px;top:10px;width:11px;height:6px;border-left:3px solid #052d21;border-bottom:3px solid #052d21;transform:rotate(-45deg)}
     .aboutItem .txt{flex:1;min-width:0;word-break:normal;overflow-wrap:anywhere}
 
-    /* ===== REVIEWS (чат-бульбашки з іменами) ===== */
+    /* ===== REVIEWS ===== */
     #reviews{ margin:28px 0; margin-left:-16px; margin-right:-16px; width:calc(100% + 32px); }
     #reviews .head{ text-align:center; margin-bottom:12px; }
     #reviews .muted{ color:var(--muted); }
-
-    .reel{
-      position:relative;
-      overflow-x:auto; overflow-y:visible;
+    .reel{ position:relative; overflow-x:auto; overflow-y:visible;
       display:grid; grid-auto-flow:column; grid-auto-columns:86%;
-      gap:14px; padding:6px 16px 12px;
-      scroll-snap-type:x mandatory;
-      -webkit-overflow-scrolling:touch;
+      gap:14px; padding:6px 16px 12px; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
       mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
     }
     .slide{ scroll-snap-align:center; position:relative; padding:4px; }
@@ -184,21 +222,20 @@
     .avatar{
       width:44px; height:44px; flex:0 0 44px; border-radius:50%;
       background:
-        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.20), transparent 55%),
-        linear-gradient(135deg, var(--accent-2), var(--accent));
-      box-shadow: 0 0 0 3px rgba(11,125,71,.18);
+        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.24), transparent 55%),
+        linear-gradient(135deg, var(--accent-2), var(--accent)),
+        linear-gradient(135deg, rgba(255,181,107,.6), transparent);
+      box-shadow: 0 0 0 3px rgba(142,243,199,.22);
       display:grid; place-items:center; color:#062217; font-weight:900;
     }
     .avatar .name{
       font-size:12px; line-height:1.05; padding:0 6px; text-align:center;
       max-width:40px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-      text-transform:none; letter-spacing:.2px; user-select:none;
     }
     .bubble{
       position:relative; flex:1;
-      background:rgba(16,23,19,.72);
-      border:1px solid var(--line);
-      border-radius:18px;
+      background:linear-gradient(180deg, rgba(18,25,21,.75), rgba(18,25,21,.65));
+      border:1px solid #2e4439; border-radius:18px;
       padding:14px 14px 12px;
       box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 18px 40px rgba(0,0,0,.28);
       transition:transform .28s ease, opacity .28s ease;
@@ -206,14 +243,13 @@
     .bubble::after{
       content:""; position:absolute; left:-8px; bottom:12px; width:16px; height:16px;
       transform:rotate(45deg);
-      background:rgba(16,23,19,.72);
-      border-left:1px solid var(--line); border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(18,25,21,.75), rgba(18,25,21,.65));
+      border-left:1px solid #2e4439; border-bottom:1px solid #2e4439;
       filter:blur(.2px);
     }
     .quote{ font-size:16px; line-height:1.5; }
     .b-foot{ display:flex; align-items:center; justify-content:space-between; margin-top:10px; gap:10px; }
     .stars{ font-size:14px; letter-spacing:1px; opacity:.9 }
-
     @keyframes fadeUp { from { opacity:0; transform: translateY(6px) } to { opacity:1; transform:none } }
     .bubble .quote, .bubble .b-foot { opacity:0 }
     .slide.is-active .bubble{ transform:translateY(-2px) }
@@ -223,25 +259,91 @@
       .bubble .quote, .bubble .b-foot { opacity:1; animation:none !important; transform:none !important }
       .slide.is-active .bubble{ transform:none; }
     }
-
     .navDots{display:flex; justify-content:center; gap:8px; margin-top:10px}
-    .navDots button{
-      width:8px; height:8px; border-radius:999px; border:none; padding:0;
-      background:#2a3a34; opacity:.7;
-    }
+    .navDots button{ width:8px; height:8px; border-radius:999px; border:none; padding:0; background:#2a3a34; opacity:.7; }
     .navDots button[aria-current="true"]{ background:var(--accent-2); opacity:1; }
-
     .reviewsArrows{position:relative; height:0}
     .reviewsArrows .arrow{
-      position:absolute; top:-86px; z-index:2;
-      width:34px; height:34px; border-radius:999px; border:1px solid var(--line);
-      background:rgba(12,16,14,.7);
-      display:grid; place-items:center;
-      box-shadow: 0 8px 22px rgba(0,0,0,.25);
+      position:absolute; top:-86px; z-index:2; width:34px; height:34px; border-radius:999px; border:1px solid var(--line);
+      background:rgba(12,16,14,.7); display:grid; place-items:center; box-shadow: 0 8px 22px rgba(0,0,0,.25);
     }
-    .reviewsArrows .prev{ left:22px }
-    .reviewsArrows .next{ right:22px }
+    .reviewsArrows .prev{ left:22px } .reviewsArrows .next{ right:22px }
     .reviewsArrows .arrow:active{ transform:scale(.98) }
+
+    /* ===== PROGRAM (новий розділ) ===== */
+    #program{ margin:28px 0; margin-left:-16px; margin-right:-16px; width:calc(100% + 32px); position:relative; }
+    #program .head{ text-align:center; margin-bottom:12px; position:relative; }
+    #program .head .sub{ color:var(--muted); }
+    /* кольорові хвилі позаду */
+    #program::before{
+      content:""; position:absolute; inset:-6% 0 auto 0; height:42%;
+      background:
+        radial-gradient(60% 130% at 10% 0%, rgba(142,243,199,.18), transparent 60%),
+        radial-gradient(50% 120% at 90% 30%, rgba(255,181,107,.16), transparent 65%),
+        radial-gradient(40% 100% at 50% 0%, rgba(11,125,71,.22), transparent 70%);
+      filter:blur(18px); pointer-events:none; z-index:0;
+    }
+    .trackGrid{
+      position:relative; z-index:1;
+      display:grid; gap:14px; grid-template-columns:1fr; padding:0 16px;
+    }
+    @media (min-width:740px){ .trackGrid{ grid-template-columns:1fr 1fr 1fr; } }
+
+    details.track{
+      border-radius:22px; background:rgba(16,23,19,.65); border:1px solid #2e4439;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), 0 16px 36px rgba(0,0,0,.28);
+      overflow:hidden; position:relative;
+    }
+    /* неон-стрічка */
+    details.track::before{
+      content:""; position:absolute; left:-40%; top:-18px; width:180%; height:38px;
+      background:linear-gradient(90deg, rgba(142,243,199,.0), rgba(142,243,199,.55) 22%, rgba(255,181,107,.5) 50%, rgba(142,243,199,.55) 78%, rgba(142,243,199,.0));
+      filter:blur(6px); transform:rotate(-2deg);
+      pointer-events:none;
+    }
+    summary.tHead{
+      list-style:none; cursor:pointer; user-select:none;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:14px 16px; position:relative; z-index:1;
+    }
+    summary.tHead::-webkit-details-marker{ display:none }
+    .tTitle{ font-weight:900; font-size:18px; display:flex; align-items:center; gap:10px }
+    .tDot{
+      width:10px; height:10px; border-radius:50%;
+      background:linear-gradient(135deg, var(--mint), var(--pop));
+      box-shadow:0 0 0 4px rgba(142,243,199,.18);
+    }
+    .tBadge{
+      font-size:12px; padding:6px 10px; border-radius:999px; color:#042015; font-weight:900;
+      background:linear-gradient(135deg, rgba(142,243,199,.92), rgba(255,181,107,.92));
+      box-shadow:0 8px 20px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.18);
+    }
+    .tChevron{
+      width:26px; height:26px; border-radius:999px; border:1px solid #2e4439; display:grid; place-items:center;
+      background:#0f1713; color:#cfe6dc; font-weight:900; transition:transform .25s ease;
+    }
+    details[open] .tChevron{ transform:rotate(180deg) }
+
+    .tListPro{
+      counter-reset: step;
+      margin:0; padding:6px 14px 14px; display:grid; gap:10px;
+    }
+    .tListPro li{
+      list-style:none; display:grid; grid-template-columns:auto 1fr; gap:10px; align-items:flex-start;
+      background:linear-gradient(180deg, rgba(14,20,17,.62), rgba(14,20,17,.50));
+      border:1px solid #30463b; border-radius:14px; padding:10px 12px;
+    }
+    .tListPro li .num{
+      counter-increment: step;
+      width:26px; height:26px; border-radius:50%; display:grid; place-items:center; font-size:12px; font-weight:900; color:#062217;
+      background:
+        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.22), rgba(255,255,255,0) 55%),
+        linear-gradient(135deg, var(--accent-2), var(--accent));
+      box-shadow:0 0 0 3px rgba(142,243,199,.18);
+    }
+    .tListPro li .num::after{ content: counter(step) }
+    .tListPro li .txt{ font-size:clamp(15.5px,4.2vw,18px); line-height:1.5; }
+    .tListPro b{ color:var(--mint); }
 
     /* ===== FOOTER ===== */
     footer.footer{margin-top:26px;padding:22px 16px 96px;text-align:center;color:var(--muted);border-top:1px solid var(--line)}
@@ -278,16 +380,16 @@
     .co-err.show{ display:block } .co-actions{ display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:10px }
     .co-pay{ font-size:14px; color:#cfe6dc }
 
-    /* ===== PULSE (підсвічування тарифів) ===== */
+    /* States */
     @keyframes tariffPulse{
       0%{ transform:scale(1); box-shadow:0 10px 26px rgba(0,0,0,.22); }
-      35%{ transform:scale(1.015); box-shadow:0 16px 40px rgba(0,0,0,.35), 0 0 0 2px rgba(142,243,199,.22) inset; }
+      35%{ transform:scale(1.02); box-shadow:0 20px 46px rgba(0,0,0,.38), 0 0 0 2px rgba(142,243,199,.24) inset; }
       100%{ transform:scale(1); box-shadow:0 10px 26px rgba(0,0,0,.22); }
     }
     .tariff.pulse{ animation: tariffPulse .7s ease; }
     @media (prefers-reduced-motion:reduce){ .tariff.pulse{ animation:none } }
 
-    /* ===== Адаптив під вузькі екрани ===== */
+    /* Адаптив */
     @media (max-width: 420px){
       .promoHead{ row-gap:6px }
       .promoBadges{ justify-content:center }
@@ -306,100 +408,14 @@
       .tList{ font-size:15.5px; line-height:1.45; gap:8px }
       .tList li{ padding:8px 10px; gap:8px }
       .tList li::before{ width:20px; height:20px; flex:0 0 20px; }
-    }
-    @media (max-width: 360px){
-      .pBadge{ font-size:10px; padding:4px 7px }
-      .priceNum{ font-size:18px }
-      .cur{ font-size:13px }
-      .old{ font-size:13px }
-      .saveBadge{ font-size:11px }
-      .tList{ font-size:15px }
+
+      /* program: за замовчуванням згорнуто на вузьких */
+      .tListPro li .txt{ font-size:15.5px }
     }
 
     /* Заблокувати фон при відкритій модалці + сховати флоатер */
     body.modal-open{ overflow:hidden }
     body.modal-open .floater{ display:none !important; }
-
-    /* === BRIGHT PACK (як раніше) === */
-    :root{ --mint:#8EF3C7; --pop:#FFB56B; --pop-2:#FF8A5C; --text-strong:#f3fbf7; }
-    body{ position:relative; z-index:0; }
-    body::before{
-      content:""; position:fixed; inset:-20% -10% -30% -10%; z-index:-1; pointer-events:none;
-      background:
-        radial-gradient(60% 40% at 80% 10%, rgba(255,181,107,.10), transparent 55%),
-        radial-gradient(50% 60% at 15% 20%, rgba(142,243,199,.10), transparent 60%),
-        radial-gradient(40% 40% at 85% 75%, rgba(11,125,71,.18), transparent 70%);
-      filter:blur(28px);
-    }
-    h1,h2,.footer .brand{ color:var(--text-strong); }
-    .hero-stage::after{
-      background:
-        radial-gradient(circle at 50% 50%,
-          rgba(var(--accent2-rgb),1) 0%,
-          rgba(var(--accent2-rgb),.70) 28%,
-          rgba(var(--accent-rgb),.40) 60%,
-          rgba(var(--accent-rgb),.16) 78%,
-          rgba(var(--accent-rgb),.08) 90%,
-          transparent 100%),
-        radial-gradient(60% 40% at 50% 0%, rgba(255,255,255,.14), transparent 55%);
-    }
-    .hero-bubble{
-      background:linear-gradient(180deg, rgba(18,25,21,.66), rgba(18,25,21,.52));
-      border-color:rgba(142,243,199,.35);
-      box-shadow:0 12px 28px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12);
-    }
-    .cta{ position:relative; overflow:hidden; }
-    .cta::after{
-      content:""; position:absolute; top:-60%; bottom:-60%; left:-120%;
-      width:50%; transform:skewX(-20deg);
-      background:linear-gradient(120deg, transparent 0%, rgba(255,255,255,.28) 50%, transparent 100%);
-      animation:ctaShine 5.5s ease-in-out infinite;
-    }
-    @keyframes ctaShine{ 0%{ left:-120%; } 15%{ left:140%; } 100%{ left:140%; } }
-    .cta:hover{ box-shadow:var(--shadow), 0 0 0 1px rgba(255,255,255,.08) inset, 0 8px 28px rgba(142,243,199,.22); }
-    .promoCard{
-      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.00)), var(--card);
-      border-color:#2b3e36;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.03), 0 16px 40px rgba(0,0,0,.28);
-    }
-    .promoCard::before{
-      background:
-        radial-gradient(60% 100% at 40% 0%, rgba(142,243,199,.22), transparent 70%),
-        radial-gradient(60% 100% at 80% 20%, rgba(255,181,107,.18), transparent 70%);
-      filter:blur(18px);
-    }
-    .pBadge{ background:linear-gradient(135deg, rgba(142,243,199,.92), rgba(255,181,107,.92)); color:#042015; text-shadow:0 1px 0 rgba(255,255,255,.35); }
-    .pricePill{
-      background:
-        radial-gradient(130% 180% at 50% 0%, rgba(255,255,255,.22), rgba(255,255,255,0) 55%),
-        linear-gradient(135deg, var(--accent-2), var(--accent));
-      box-shadow:0 12px 32px rgba(0,0,0,.32), 0 0 0 1px rgba(255,255,255,.06) inset;
-    }
-    .saveBadge{ background:linear-gradient(135deg, rgba(142,243,199,.95), rgba(255,181,107,.92)); color:#031b12; }
-    .tariff{
-      background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,0)), #111713;
-      border-color:#2b3e36;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.028), 0 14px 34px rgba(0,0,0,.28);
-    }
-    .tList li{ background:linear-gradient(180deg, rgba(14,20,17,.62), rgba(14,20,17,.50)); border-color:#30463b; }
-    .tList b{ color:var(--mint); }
-    .avatar{
-      background:
-        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.24), transparent 55%),
-        linear-gradient(135deg, var(--accent-2), var(--accent)),
-        linear-gradient(135deg, rgba(255,181,107,.6), transparent);
-      box-shadow:0 0 0 3px rgba(142,243,199,.22);
-    }
-    .bubble{
-      background:linear-gradient(180deg, rgba(18,25,21,.75), rgba(18,25,21,.65));
-      border-color:#2e4439;
-    }
-    .bubble::after{ background:linear-gradient(180deg, rgba(18,25,21,.75), rgba(18,25,21,.65)); border-left-color:#2e4439; border-bottom-color:#2e4439; }
-    @keyframes tariffPulse{
-      0%{ transform:scale(1); box-shadow:0 10px 26px rgba(0,0,0,.22); }
-      35%{ transform:scale(1.02); box-shadow:0 20px 46px rgba(0,0,0,.38), 0 0 0 2px rgba(142,243,199,.24) inset; }
-      100%{ transform:scale(1); box-shadow:0 10px 26px rgba(0,0,0,.22); }
-    }
   </style>
 </head>
 <body>
@@ -416,12 +432,9 @@
         </h1>
         <p class="lead">Цей курс - твоя можливість перейти з "майстра базовика" у впевнену, сильну майстриню з власним стилем і високим прайсом.<br>Next Level - коли твої роботи говорять самі за себе.</p>
       </div>
-
       <div class="hero-bubble" id="heroBubble">Клієнти шукають сучасних і професійних майстрів. Не втрачай свій шанс бути серед кращих!</div>
-
       <div class="hero-cta">
         <a id="buyTop" class="cta" href="#promo">Придбати курс</a>
-        <!-- цену под кнопкой удалили по запросу -->
       </div>
     </section>
 
@@ -504,20 +517,78 @@
       </div>
     </section>
 
+    <!-- ===== PROGRAM (новий, яскравий) ===== -->
+    <section id="program" class="section">
+      <div class="head">
+        <h2>Програма курсу</h2>
+        <div class="sub">Три доріжки: від комбінованого манікюру — до роботи з твердими матеріалами та гелевої техніки</div>
+      </div>
+
+      <div class="trackGrid">
+        <!-- 1. Комбінований манікюр -->
+        <details class="track" open>
+          <summary class="tHead">
+            <div class="tTitle"><span class="tDot"></span> Комбінований манікюр</div>
+            <div class="tBadge">5 модулів</div>
+            <div class="tChevron">⌄</div>
+          </summary>
+          <ol class="tListPro">
+            <li><div class="num"></div><div class="txt">Вибір <b>інструменту</b></div></li>
+            <li><div class="num"></div><div class="txt">Про <b>фрези</b></div></li>
+            <li><div class="num"></div><div class="txt"><b>Робота з фрезою</b></div></li>
+            <li><div class="num"></div><div class="txt"><b>Зріз</b> ножицями</div></li>
+            <li><div class="num"></div><div class="txt"><b>Підготовка</b> нігтів до покриття</div></li>
+          </ol>
+        </details>
+
+        <!-- 2. Тверді матеріали -->
+        <details class="track" open>
+          <summary class="tHead">
+            <div class="tTitle"><span class="tDot"></span> Тверді матеріали</div>
+            <div class="tBadge">9 модулів</div>
+            <div class="tChevron">⌄</div>
+          </summary>
+          <ol class="tListPro">
+            <li><div class="num"></div><div class="txt"><b>Зняття</b> матеріалу</div></li>
+            <li><div class="num"></div><div class="txt"><b>Класифікація</b> твердих матеріалів</div></li>
+            <li><div class="num"></div><div class="txt"><b>Підбір</b> матеріалу під тип нігтьової пластини</div></li>
+            <li><div class="num"></div><div class="txt"><b>Укріплення</b> квадрату</div></li>
+            <li><div class="num"></div><div class="txt"><b>Опил</b> чіткого квадрату</div></li>
+            <li><div class="num"></div><div class="txt"><b>Випилювання</b> зворотної сторони нігтя</div></li>
+            <li><div class="num"></div><div class="txt">Укріплення нігтів <b>в нуль</b></div></li>
+            <li><div class="num"></div><div class="txt"><b>Реставрація</b> чіткого квадрату</div></li>
+            <li><div class="num"></div><div class="txt">Реставрація <b>клюючих</b> нігтів</div></li>
+          </ol>
+        </details>
+
+        <!-- 3. Техніка роботи з гелем -->
+        <details class="track" open>
+          <summary class="tHead">
+            <div class="tTitle"><span class="tDot"></span> Техніка роботи з гелем</div>
+            <div class="tBadge">4 модулі</div>
+            <div class="tChevron">⌄</div>
+          </summary>
+          <ol class="tListPro">
+            <li><div class="num"></div><div class="txt"><b>Схема</b> викладки гелю</div></li>
+            <li><div class="num"></div><div class="txt">Робота <b>гелем-желе</b> та полігелем</div></li>
+            <li><div class="num"></div><div class="txt"><b>Схеми френчу</b> на різних формах і довжинах</div></li>
+            <li><div class="num"></div><div class="txt"><b>Ідеальне покриття</b> під кутикулу</div></li>
+          </ol>
+        </details>
+      </div>
+    </section>
+
     <!-- ===== REVIEWS ===== -->
     <section id="reviews" class="section">
       <div class="head">
         <h2>Відгуки</h2>
         <div class="muted">Результати та враження після Next Level</div>
       </div>
-
       <div class="reviewsArrows">
         <button class="arrow prev" type="button" aria-label="Попередній">‹</button>
         <button class="arrow next" type="button" aria-label="Наступний">›</button>
       </div>
-
       <div class="reel" id="reviewsReel" aria-label="Слайдер відгуків">
-        <!-- 1 -->
         <article class="slide" data-name="Оля">
           <div class="msg">
             <div class="avatar" title="Оля"><span class="name">Оля</span></div>
@@ -527,8 +598,6 @@
             </div>
           </div>
         </article>
-
-        <!-- 2 -->
         <article class="slide" data-name="Марія">
           <div class="msg">
             <div class="avatar" title="Марія"><span class="name">Марія</span></div>
@@ -538,8 +607,6 @@
             </div>
           </div>
         </article>
-
-        <!-- 3 -->
         <article class="slide" data-name="Ірина">
           <div class="msg">
             <div class="avatar" title="Ірина"><span class="name">Ірина</span></div>
@@ -550,7 +617,6 @@
           </div>
         </article>
       </div>
-
       <div class="navDots" id="reviewsDots" aria-hidden="true"></div>
     </section>
 
@@ -558,7 +624,8 @@
     <footer class="footer">
       <div class="brand">Анна Філіпська</div>
       <div class="links"><a href="#offer">Договір оферти</a> · <a href="#privacy">Політика конфіденційності</a></div>
-      <p class="legal">Умови повернення: згідно із Законом України «Про захист прав споживачів» гарантуємо повернення коштів протягом 14 днів, якщо курс вам не підійде.</p>
+      <p class="legal">Умови повернення: згідно із Законом України «Про захист прав споживачів» гарантуємо повернення коштів
+        протягом 14 днів, якщо курс вам не підійде.</p>
       <small class="copy">© Created by | All rights Reserved</small>
     </footer>
   </div>
@@ -575,7 +642,6 @@
         <div class="co-title" id="coTitle">Оформлення доступу</div>
         <button id="coClose" class="co-close" aria-label="Закрити">✕</button>
       </div>
-
       <div class="ps" role="tablist" aria-label="Вибір тарифу">
         <button id="psGroup" data-plan="group" role="tab" aria-selected="true" aria-pressed="true">
           <div class="pname">Груповий</div>
@@ -586,7 +652,6 @@
           <div class="pprice" id="psIndivPrice">— грн</div>
         </button>
       </div>
-
       <form id="checkoutForm" novalidate>
         <div class="co-grid">
           <div class="field"><label for="coFirst">Ім’я</label><input id="coFirst" type="text" autocomplete="given-name" placeholder="Анна"></div>
@@ -644,7 +709,6 @@
     if(!ends||ends<now){ ends=now+PROMO_HOURS*60*60*1000; localStorage.setItem(key,String(ends)); }
 
     function renderHeroPrice(active, old){
-      /* строку цены під кнопкою в hero прибрали — ця функція залишена на майбутнє, нічого не робить якщо блока нема */
       const line=$("#priceLine");
       if(line){
         line.innerHTML = old && old>active
@@ -777,7 +841,7 @@
       slides[0]?.classList.add('is-active'); updateDots(0); start();
     })();
 
-    /* ===== Pulse tariffs after scroll (robust) ===== */
+    /* ===== Pulse tariffs after scroll (trigger only when promo settled) ===== */
     function visibleRatio(el){
       if(!el) return 0;
       const r=el.getBoundingClientRect(), vw=innerWidth, vh=innerHeight;
@@ -842,7 +906,7 @@
       addEventListener('resize', updateNow);
     })();
 
-    /* ===== MODAL ===== */
+    /* ===== MODAL (checkout) ===== */
     (function(){
       const backdrop=$("#checkoutBackdrop"), coForm=$("#checkoutForm"), coBtn=$("#coBtn"), coErr=$("#coErr");
       const bClose=$("#coClose"), bGroup=$("#psGroup"), bIndiv=$("#psIndiv");
@@ -907,6 +971,17 @@
           coBtn.disabled=false; coBtn.textContent="Перейти до оплати";
         }
       });
+    })();
+
+    /* ===== Program: за замовчуванням відкрито на десктопі, згорнуто на мобільному ===== */
+    (function(){
+      const tracks = document.querySelectorAll('#program details.track');
+      function apply(){
+        const wide = matchMedia('(min-width:740px)').matches;
+        tracks.forEach(d=>{ if(wide) d.setAttribute('open',''); else d.removeAttribute('open'); });
+      }
+      addEventListener('resize', apply);
+      apply();
     })();
   </script>
 </body>
