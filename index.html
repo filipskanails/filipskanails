@@ -14,13 +14,11 @@
       --radius:24px; --shadow:0 10px 28px rgba(0,0,0,.24);
       --img-top:320px; --cta-top:560px; --bubble-top:440px; --glow-top:380px; --hero-h:760px;
       --promoOverlap:18px; --cta-extra:72px;
-      --mint:#8EF3C7; --pop:#FFB56B; --pop-2:#FF8A5C; --text-strong:#f3fbf7;
+      --mint:#8EF3C7; --text-strong:#f3fbf7;
     }
-
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif;
-      overflow-x:hidden}
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif; overflow-x:hidden}
     a{color:inherit;text-decoration:none}
     img{max-width:100%;display:block}
     .wrap{max-width:720px;margin:0 auto;padding:16px}
@@ -31,9 +29,8 @@
     body::before{
       content:""; position:fixed; inset:-20% -10% -30% -10%; z-index:-1; pointer-events:none;
       background:
-        radial-gradient(60% 40% at 80% 10%, rgba(255,181,107,.10), transparent 55%),
-        radial-gradient(50% 60% at 15% 20%, rgba(142,243,199,.10), transparent 60%),
-        radial-gradient(40% 40% at 85% 75%, rgba(11,125,71,.18), transparent 70%);
+        radial-gradient(60% 40% at 80% 10%, rgba(142,243,199,.10), transparent 55%),
+        radial-gradient(50% 60% at 15% 20%, rgba(11,125,71,.12), transparent 60%);
       filter:blur(28px);
     }
     h1,h2,.footer .brand{ color:var(--text-strong); }
@@ -93,20 +90,13 @@
       radial-gradient(60% 100% at 80% 20%, rgba(142,243,199,.08), transparent 70%); filter:blur(16px); pointer-events:none;}
     .promoHead{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px; flex-wrap:wrap;}
     .promoTitle{ flex:1 1 100%; text-align:center; font-size:clamp(26px,6.5vw,32px); font-weight:900; }
-    .promoBadges{ flex:1 1 100%; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+    .promoBadges{ flex:1 1 100%; display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-start; } /* повернули зліва */
     .pBadge{
       font-size:12px; padding:6px 10px; border-radius:999px; letter-spacing:.2px; color:#0a2419; font-weight:900; white-space:nowrap;
-      background:linear-gradient(135deg, rgba(142,243,199,.92), rgba(255,181,107,.92));
+      background:linear-gradient(135deg, rgba(142,243,199,.92), rgba(142,243,199,.72));
       box-shadow:0 8px 22px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.18);
       text-shadow:0 1px 0 rgba(255,255,255,.35);
     }
-    .promoAnchor{
-      margin:10px auto 0; display:inline-flex; align-items:center; gap:10px;
-      padding:10px 16px; border-radius:999px; border:1px dashed #355346;
-      background:#0f1713; color:#dff5ea; font-weight:800;
-      box-shadow:0 10px 22px rgba(0,0,0,.24);
-    }
-    .promoAnchor:hover{ transform:translateY(-1px) }
 
     .countdown{display:flex;gap:10px;justify-content:space-between;margin:10px 0 6px}
     .countbox{flex:1 1 0;border:1px solid #2b4136;border-radius:14px;background:#0f1713;padding:14px 8px;
@@ -125,6 +115,8 @@
     }
     .tariff::after{content:""; position:absolute; inset:auto -12% -22% -12%; height:44%;
       background:radial-gradient(60% 100% at 50% 100%, rgba(var(--accent2-rgb),.14), transparent 60%); filter:blur(12px); pointer-events:none;}
+    @keyframes tPulse { 0%{transform:scale(1)} 35%{transform:scale(1.02)} 70%{transform:scale(0.998)} 100%{transform:scale(1)} }
+    .tariff.pulse{ animation:tPulse .55s ease }
 
     .tHead{ display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:88px; flex-wrap:nowrap; overflow:hidden }
     .tName{ font-size:18px; font-weight:900; letter-spacing:.2px; display:flex; align-items:center; gap:8px; min-width:0 }
@@ -148,14 +140,14 @@
     .saveBadge{
       display:inline-block; max-width:100%;
       padding:6px 10px; border-radius:999px; font-size:12px; color:#0a2419; font-weight:900; line-height:1.2;
-      background:linear-gradient(135deg, rgba(142,243,199,.95), rgba(255,181,107,.92));
+      background:linear-gradient(135deg, rgba(142,243,199,.95), rgba(142,243,199,.8));
       box-shadow:0 6px 16px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.22);
       text-shadow:0 1px 0 rgba(255,255,255,.3);
       justify-self:end; word-break:break-word; white-space:normal;
     }
 
     .tList{ list-style:none; padding:0; margin:12px 0 16px; display:grid; gap:10px;
-      font-size:clamp(16px,4.4vw,19px); line-height:1.55; }
+      font-size:clamp(16.5px,4.4vw,19.5px); line-height:1.55; }
     .tList li{
       position:relative; display:flex; gap:10px; align-items:flex-start;
       background:linear-gradient(180deg, rgba(14,20,17,.62), rgba(14,20,17,.50));
@@ -195,7 +187,50 @@
     .aboutItem .icon::after{content:"";position:absolute;left:9px;top:10px;width:11px;height:6px;border-left:3px solid #052d21;border-bottom:3px solid #052d21;transform:rotate(-45deg)}
     .aboutItem .txt{flex:1;min-width:0;word-break:normal;overflow-wrap:anywhere}
 
-    /* ===== REVIEWS (чат-бульбашки з іменами) ===== */
+    /* ===== PROGRAM (без іконок, без авто-open) ===== */
+    #program{ margin:28px 0; margin-left:-16px; margin-right:-16px; width:calc(100% + 32px); position:relative; scroll-margin-top:16px; }
+    #program .head{ text-align:center; margin-bottom:12px; position:relative; }
+    #program .head .sub{ color:var(--muted); }
+
+    .trackGrid{ position:relative; z-index:1; display:grid; gap:14px; grid-template-columns:1fr; padding:0 16px; }
+    @media (min-width:740px){ .trackGrid{ grid-template-columns:1fr 1fr 1fr; } }
+
+    details.track{
+      border-radius:22px; background:rgba(16,23,19,.65); border:1px solid #2e4439;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), 0 16px 36px rgba(0,0,0,.28);
+      overflow:hidden; position:relative;
+    }
+    summary.tHead{
+      list-style:none; cursor:pointer; user-select:none;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:14px 16px; position:relative; z-index:1;
+    }
+    summary.tHead::-webkit-details-marker{ display:none }
+    .tTitle{ font-weight:900; font-size:18px; display:flex; align-items:center; gap:10px }
+    .tDot{ width:10px; height:10px; border-radius:50%; background:linear-gradient(135deg, var(--mint), #FFB56B); box-shadow:0 0 0 4px rgba(142,243,199,.18); }
+    .tBadge{ font-size:12px; padding:6px 10px; border-radius:999px; color:#042015; font-weight:900; background:linear-gradient(135deg, rgba(142,243,199,.92), rgba(142,243,199,.72)); box-shadow:0 8px 20px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.18); }
+    .tChevron{ width:26px; height:26px; border-radius:999px; border:1px solid #2e4439; display:grid; place-items:center; background:#0f1713; color:#cfe6dc; font-weight:900; transition:transform .25s ease; }
+    details[open] .tChevron{ transform:rotate(180deg) }
+
+    .tListPro{ counter-reset: step; margin:0; padding:6px 14px 14px; display:grid; gap:10px; }
+    .tListPro li{
+      list-style:none; display:grid; grid-template-columns:auto 1fr; gap:10px; align-items:flex-start;
+      background:linear-gradient(180deg, rgba(14,20,17,.62), rgba(14,20,17,.50));
+      border:1px solid #30463b; border-radius:14px; padding:10px 12px;
+    }
+    .tListPro li .num{
+      counter-increment: step;
+      width:26px; height:26px; border-radius:50%; display:grid; place-items:center; font-size:12px; font-weight:900; color:#062217;
+      background:
+        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.22), rgba(255,255,255,0) 55%),
+        linear-gradient(135deg, var(--accent-2), var(--accent));
+      box-shadow:0 0 0 3px rgba(142,243,199,.18);
+    }
+    .tListPro li .num::after{ content: counter(step) }
+    .tListPro li .txt{ font-size:clamp(15.5px,4.2vw,18px); line-height:1.5; }
+    .tListPro b{ color:var(--mint); }
+
+    /* ===== REVIEWS (чат-бульбашки) ===== */
     #reviews{ margin:28px 0; margin-left:-16px; margin-right:-16px; width:calc(100% + 32px); }
     #reviews .head{ text-align:center; margin-bottom:12px; }
     #reviews .muted{ color:var(--muted); }
@@ -212,8 +247,7 @@
       width:44px; height:44px; flex:0 0 44px; border-radius:50%;
       background:
         radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.24), transparent 55%),
-        linear-gradient(135deg, var(--accent-2), var(--accent)),
-        linear-gradient(135deg, rgba(255,181,107,.6), transparent);
+        linear-gradient(135deg, var(--accent-2), var(--accent));
       box-shadow: 0 0 0 3px rgba(142,243,199,.22);
       display:grid; place-items:center; color:#062217; font-weight:900;
     }
@@ -255,77 +289,6 @@
     .reviewsArrows .prev{ left:22px } .reviewsArrows .next{ right:22px }
     .reviewsArrows .arrow:active{ transform:scale(.98) }
 
-    /* ===== PROGRAM ===== */
-    #program{ margin:28px 0; margin-left:-16px; margin-right:-16px; width:calc(100% + 32px); position:relative; scroll-margin-top:16px; }
-    #program .head{ text-align:center; margin-bottom:12px; position:relative; }
-    #program .head .sub{ color:var(--muted); }
-    #program::before{
-      content:""; position:absolute; inset:-6% 0 auto 0; height:42%;
-      background:
-        radial-gradient(60% 130% at 10% 0%, rgba(142,243,199,.18), transparent 60%),
-        radial-gradient(50% 120% at 90% 30%, rgba(255,181,107,.16), transparent 65%),
-        radial-gradient(40% 100% at 50% 0%, rgba(11,125,71,.22), transparent 70%);
-      filter:blur(18px); pointer-events:none; z-index:0;
-    }
-    .trackGrid{ position:relative; z-index:1; display:grid; gap:14px; grid-template-columns:1fr; padding:0 16px; }
-    @media (min-width:740px){ .trackGrid{ grid-template-columns:1fr 1fr 1fr; } }
-
-    details.track{
-      border-radius:22px; background:rgba(16,23,19,.65); border:1px solid #2e4439;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), 0 16px 36px rgba(0,0,0,.28);
-      overflow:hidden; position:relative;
-    }
-    details.track::before{
-      content:""; position:absolute; left:-40%; top:-18px; width:180%; height:38px;
-      background:linear-gradient(90deg, rgba(142,243,199,.0), rgba(142,243,199,.55) 22%, rgba(255,181,107,.5) 50%, rgba(142,243,199,.55) 78%, rgba(142,243,199,.0));
-      filter:blur(6px); transform:rotate(-2deg); pointer-events:none;
-    }
-    summary.tHead{
-      list-style:none; cursor:pointer; user-select:none;
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding:14px 16px; position:relative; z-index:1;
-    }
-    summary.tHead::-webkit-details-marker{ display:none }
-    .tTitle{ font-weight:900; font-size:18px; display:flex; align-items:center; gap:10px }
-    .tDot{ width:10px; height:10px; border-radius:50%; background:linear-gradient(135deg, var(--mint), var(--pop)); box-shadow:0 0 0 4px rgba(142,243,199,.18); }
-    .tBadge{ font-size:12px; padding:6px 10px; border-radius:999px; color:#042015; font-weight:900; background:linear-gradient(135deg, rgba(142,243,199,.92), rgba(255,181,107,.92)); box-shadow:0 8px 20px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.18); }
-    .tChevron{ width:26px; height:26px; border-radius:999px; border:1px solid #2e4439; display:grid; place-items:center; background:#0f1713; color:#cfe6dc; font-weight:900; transition:transform .25s ease; }
-    details[open] .tChevron{ transform:rotate(180deg) }
-
-    .tListPro{ counter-reset: step; margin:0; padding:6px 14px 14px; display:grid; gap:10px; }
-    .tListPro li{
-      list-style:none; display:grid; grid-template-columns:auto 20px 1fr; gap:10px; align-items:flex-start;
-      background:linear-gradient(180deg, rgba(14,20,17,.62), rgba(14,20,17,.50));
-      border:1px solid #30463b; border-radius:14px; padding:10px 12px;
-    }
-    .tListPro li .num{
-      counter-increment: step;
-      width:26px; height:26px; border-radius:50%; display:grid; place-items:center; font-size:12px; font-weight:900; color:#062217;
-      background:
-        radial-gradient(120% 180% at 50% 0%, rgba(255,255,255,.22), rgba(255,255,255,0) 55%),
-        linear-gradient(135deg, var(--accent-2), var(--accent));
-      box-shadow:0 0 0 3px rgba(142,243,199,.18);
-    }
-    .tListPro li .num::after{ content: counter(step) }
-    .tListPro li .ico{ width:18px; height:18px; margin-top:3px; background-repeat:no-repeat; background-size:18px 18px; opacity:.95; }
-    .tListPro li .txt{ font-size:clamp(15.5px,4.2vw,18px); line-height:1.5; }
-    .tListPro b{ color:var(--mint); }
-
-    /* ІКОНИ (inline SVG як data URI) */
-    .ico-tools{   background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="%238EF3C7" d="M21 7l-4 4-4-4 1.4-1.4 1.6 1.6 2.6-2.6L21 7zM3 17l6-6 4 4-6 6H3v-4z"/></svg>'); }
-    .ico-bit{     background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="%238EF3C7" d="M7 2h6l1 3-3 3 3 11H9L6 8l3-3L7 2z"/></svg>'); }
-    .ico-scissors{background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="%238EF3C7" d="M9 12l3-3 8 8-1.5 1.5L10.5 10.5 9 12zM6 4a2 2 0 110 4 2 2 0 010-4zm0 12a2 2 0 110 4 2 2 0 010-4z"/></svg>'); }
-    .ico-prep{    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="%238EF3C7" d="M3 12l9-9 9 9-9 9-9-9zm9-5l5 5-5 5-5-5 5-5z"/></svg>'); }
-    .ico-class{   background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="%238EF3C7" d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 0h6v6h-6v-6z"/></svg>'); }
-    .ico-square{  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" stroke="%238EF3C7" fill="none" stroke-width="2"/></svg>'); }
-    .ico-file{    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="%238EF3C7" d="M3 12h18v2H3v-2z"/></svg>'); }
-    .ico-drill{   background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="%238EF3C7" d="M2 10h13l2 2-2 2H2v-4zm19 0h1v4h-1l-2-2 2-2z"/></svg>'); }
-    .ico-zero{    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="6" ry="9" stroke="%238EF3C7" fill="none" stroke-width="2"/></svg>'); }
-    .ico-restore{ background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="%238EF3C7" d="M12 5V1L7 6l5 5V7a5 5 0 110 10 5 5 0 110-10z"/></svg>'); }
-    .ico-gel{     background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="%238EF3C7" d="M8 3h8l1 3-5 5-5-5 1-3zm0 8h8v10H8V11z"/></svg>'); }
-    .ico-french{  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="%238EF3C7" d="M4 4h16v12a8 8 0 01-16 0V4zm8 14a6 6 0 006-6H6a6 6 0 006 6z"/></svg>'); }
-    .ico-brush{   background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="%238EF3C7" d="M20 4l-2-2-9 9 2 2 9-9zM4 20a4 4 0 005-3H6a2 2 0 00-2 2v1z"/></svg>'); }
-
     /* ===== FOOTER & FLOATER ===== */
     footer.footer{margin-top:26px;padding:22px 16px 96px;text-align:center;color:var(--muted);border-top:1px solid var(--line)}
     .footer .brand{font-size:22px;color:var(--text);margin:0 0 6px;font-weight:700}
@@ -340,7 +303,7 @@
     .floater .cta{width:100%}
     @media (prefers-reduced-motion:reduce){ .floater{transition:none} }
 
-    /* CHECKOUT (залишив як було у тебе) */
+    /* CHECKOUT (твоя модалка) */
     .co-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.5); display:grid; place-items:center; z-index:9999; opacity:0; pointer-events:none; transition:opacity .22s ease;}
     .co-backdrop.show{ opacity:1; pointer-events:auto }
     .co-modal{ width:min(720px, 96vw); max-height:96vh; overflow:auto; border-radius:22px; background:var(--card); border:1px solid var(--line); box-shadow:0 30px 60px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.02); padding:16px; position:relative; z-index:10000 }
@@ -388,7 +351,6 @@
             <span class="pBadge">Активна знижка</span>
             <span class="pBadge">Оптимальний прайс</span>
           </div>
-          <a class="promoAnchor" href="#program" id="toProgram">Дивитися програму курсу ⤵</a>
         </div>
 
         <div class="countdown" id="countdown" aria-live="polite">
@@ -459,15 +421,13 @@
       </div>
     </section>
 
-    <!-- PROGRAM -->
+    <!-- PROGRAM (є, але без іконок/якоря/авто-open) -->
     <section id="program" class="section">
       <div class="head">
         <h2>Програма курсу</h2>
         <div class="sub">Три доріжки: від комбінованого манікюру — до твердих матеріалів і гелевої техніки</div>
       </div>
-
       <div class="trackGrid">
-        <!-- 1 -->
         <details class="track">
           <summary class="tHead">
             <div class="tTitle"><span class="tDot"></span> Комбінований манікюр</div>
@@ -475,15 +435,14 @@
             <div class="tChevron">⌄</div>
           </summary>
           <ol class="tListPro">
-            <li><div class="num"></div><div class="ico ico-tools"></div><div class="txt">Вибір <b>інструменту</b></div></li>
-            <li><div class="num"></div><div class="ico ico-bit"></div><div class="txt">Про <b>фрези</b></div></li>
-            <li><div class="num"></div><div class="ico ico-bit"></div><div class="txt"><b>Робота з фрезою</b></div></li>
-            <li><div class="num"></div><div class="ico ico-scissors"></div><div class="txt"><b>Зріз</b> ножицями</div></li>
-            <li><div class="num"></div><div class="ico ico-prep"></div><div class="txt"><b>Підготовка</b> нігтів до покриття</div></li>
+            <li><div class="num"></div><div class="txt">Вибір <b>інструменту</b></div></li>
+            <li><div class="num"></div><div class="txt">Про <b>фрези</b></div></li>
+            <li><div class="num"></div><div class="txt"><b>Робота з фрезою</b></div></li>
+            <li><div class="num"></div><div class="txt"><b>Зріз</b> ножицями</div></li>
+            <li><div class="num"></div><div class="txt"><b>Підготовка</b> нігтів до покриття</div></li>
           </ol>
         </details>
 
-        <!-- 2 -->
         <details class="track">
           <summary class="tHead">
             <div class="tTitle"><span class="tDot"></span> Тверді матеріали</div>
@@ -491,19 +450,18 @@
             <div class="tChevron">⌄</div>
           </summary>
           <ol class="tListPro">
-            <li><div class="num"></div><div class="ico ico-bit"></div><div class="txt"><b>Зняття</b> матеріалу</div></li>
-            <li><div class="num"></div><div class="ico ico-class"></div><div class="txt"><b>Класифікація</b> твердих матеріалів</div></li>
-            <li><div class="num"></div><div class="ico ico-class"></div><div class="txt"><b>Підбір</b> матеріалу під тип нігтьової пластини</div></li>
-            <li><div class="num"></div><div class="ico ico-square"></div><div class="txt"><b>Укріплення</b> квадрату</div></li>
-            <li><div class="num"></div><div class="ico ico-file"></div><div class="txt"><b>Опил</b> чіткого квадрату</div></li>
-            <li><div class="num"></div><div class="ico ico-drill"></div><div class="txt"><b>Випилювання</b> зворотної сторони нігтя</div></li>
-            <li><div class="num"></div><div class="ico ico-zero"></div><div class="txt">Укріплення нігтів <b>в нуль</b></div></li>
-            <li><div class="num"></div><div class="ico ico-restore"></div><div class="txt"><b>Реставрація</b> чіткого квадрату</div></li>
-            <li><div class="num"></div><div class="ico ico-restore"></div><div class="txt">Реставрація <b>клюючих</b> нігтів</div></li>
+            <li><div class="num"></div><div class="txt"><b>Зняття</b> матеріалу</div></li>
+            <li><div class="num"></div><div class="txt"><b>Класифікація</b> твердих матеріалів</div></li>
+            <li><div class="num"></div><div class="txt"><b>Підбір</b> матеріалу під тип нігтьової пластини</div></li>
+            <li><div class="num"></div><div class="txt"><b>Укріплення</b> квадрату</div></li>
+            <li><div class="num"></div><div class="txt"><b>Опил</b> чіткого квадрату</div></li>
+            <li><div class="num"></div><div class="txt"><b>Випилювання</b> зворотної сторони нігтя</div></li>
+            <li><div class="num"></div><div class="txt">Укріплення нігтів <b>в нуль</b></div></li>
+            <li><div class="num"></div><div class="txt"><b>Реставрація</b> чіткого квадрату</div></li>
+            <li><div class="num"></div><div class="txt">Реставрація <b>клюючих</b> нігтів</div></li>
           </ol>
         </details>
 
-        <!-- 3 -->
         <details class="track">
           <summary class="tHead">
             <div class="tTitle"><span class="tDot"></span> Техніка роботи з гелем</div>
@@ -511,10 +469,10 @@
             <div class="tChevron">⌄</div>
           </summary>
           <ol class="tListPro">
-            <li><div class="num"></div><div class="ico ico-gel"></div><div class="txt"><b>Схема</b> викладки гелю</div></li>
-            <li><div class="num"></div><div class="ico ico-gel"></div><div class="txt">Робота <b>гелем-желе</b> та полігелем</div></li>
-            <li><div class="num"></div><div class="ico ico-french"></div><div class="txt"><b>Схеми френчу</b> на різних формах і довжинах</div></li>
-            <li><div class="num"></div><div class="ico ico-brush"></div><div class="txt"><b>Ідеальне покриття</b> під кутикулу</div></li>
+            <li><div class="num"></div><div class="txt"><b>Схема</b> викладки гелю</div></li>
+            <li><div class="num"></div><div class="txt">Робота <b>гелем-желе</b> та полігелем</div></li>
+            <li><div class="num"></div><div class="txt"><b>Схеми френчу</b> на різних формах і довжинах</div></li>
+            <li><div class="num"></div><div class="txt"><b>Ідеальне покриття</b> під кутикулу</div></li>
           </ol>
         </details>
       </div>
@@ -577,7 +535,7 @@
     <div class="floater-inner"><a id="buyFloat" class="cta">Отримати доступ до курсу</a></div>
   </div>
 
-  <!-- CHECKOUT MODAL (без змін логіки) -->
+  <!-- CHECKOUT MODAL (як було) -->
   <div class="co-backdrop" id="checkoutBackdrop" aria-hidden="true">
     <div class="co-modal" role="dialog" aria-modal="true" aria-labelledby="coTitle">
       <div class="co-top">
@@ -682,18 +640,6 @@
     }
     tick();
 
-    /* Smooth anchor to Program from promo */
-    (function(){
-      const a = $("#toProgram");
-      if(!a) return;
-      a.addEventListener("click", (e)=>{
-        e.preventDefault();
-        const prog = $("#program");
-        if(!prog) return;
-        prog.scrollIntoView({behavior:"smooth", block:"start"});
-      });
-    })();
-
     /* Reviews slider (30s ping-pong) */
     (function(){
       const reel = document.getElementById('reviewsReel');
@@ -701,12 +647,14 @@
       const AUTOSCROLL_MS = 30000;
       const slides = Array.from(reel.children);
       const dotsWrap = document.getElementById('reviewsDots');
+
       const firstFrom = name=>{ if(!name) return ""; const parts=String(name).trim().split(/\s+/).filter(Boolean); return (parts[0]||"").trim(); };
       slides.forEach(sl=>{
         const raw = sl.getAttribute('data-name')||""; const first = firstFrom(raw);
         sl.querySelector('.avatar .name')?.textContent = first || "“";
         sl.querySelector('.avatar')?.setAttribute('title', first || "");
       });
+
       dotsWrap.innerHTML = "";
       slides.forEach((_,i)=>{
         const b=document.createElement('button');
@@ -716,13 +664,17 @@
       });
       const dots = Array.from(dotsWrap.children);
       const stepW = ()=> (reel.clientWidth*0.86 + 14);
+
       let active = 0, dir = 1, timer = null;
+
       function updateDots(i){ dots.forEach((d,idx)=>{ if(idx===i) d.setAttribute('aria-current','true'); else d.removeAttribute('aria-current'); }); }
       function setActive(i){ if(i===active) return; slides[active]?.classList.remove('is-active'); slides[i]?.classList.add('is-active'); active=i; updateDots(i); }
       function goTo(i){ const N=slides.length; let t=i; if(i<0) t=N-1; else if(i>=N) t=0; reel.scrollTo({ left: t*stepW(), behavior:'smooth' }); }
       function autoStep(){ if(dir>0 && active>=slides.length-1) dir=-1; else if(dir<0 && active<=0) dir=1; goTo(active+dir); }
+
       function start(){ if(timer) return; timer=setInterval(autoStep, AUTOSCROLL_MS); }
       function stop(){ clearInterval(timer); timer=null; }
+
       const thresholds = Array.from({length:41},(_,i)=> i/40);
       const ratios = new Array(slides.length).fill(0);
       const io = new IntersectionObserver((entries)=>{
@@ -732,14 +684,17 @@
         if(bestRatio>=0.96){ setActive(bestIdx); }
       },{ root: reel, threshold: thresholds });
       slides.forEach(sl => io.observe(sl));
+
       document.querySelector('#reviews .prev')?.addEventListener('click', ()=>{ stop(); dir=-1; goTo(active-1); start(); });
       document.querySelector('#reviews .next')?.addEventListener('click', ()=>{ stop(); dir=+1; goTo(active+1); start(); });
+
       ['pointerdown','touchstart','wheel','keydown','focusin','mouseenter'].forEach(ev=>{ reel.addEventListener(ev, stop, {passive:true}); });
       ['pointerup','touchend','mouseleave','blur'].forEach(ev=>{ reel.addEventListener(ev, start, {passive:true}); });
+
       slides[0]?.classList.add('is-active'); updateDots(0); start();
     })();
 
-    /* Pulse tariffs after scroll (same) */
+    /* Pulse tariffs after scroll helper (використовується кнопками) */
     function visibleRatio(el){
       if(!el) return 0;
       const r=el.getBoundingClientRect(), vw=innerWidth, vh=innerHeight;
@@ -769,7 +724,7 @@
       const onScroll=()=>{ clearTimeout(t); t=setTimeout(onEnd, idleMs); };
       addEventListener('scroll', onScroll, {passive:true}); onScroll(); setTimeout(onEnd, capMs);
     }
-    function scrollToPromoAndPulse(){ const promo=$("#promo"); if(!promo) return; promo.scrollIntoView({behavior:'smooth', block:'start'}); waitScrollEnd(afterScrollSettledThenPulse); }
+    function scrollToPromoAndPulse(){ const promo=$("#promo"); if(!promo) return; promo.scrollIntoView({behavior:"smooth", block:"start"}); waitScrollEnd(afterScrollSettledThenPulse); }
 
     /* Floater & hero CTA */
     (function(){
@@ -798,7 +753,7 @@
       updateNow(); addEventListener('scroll', updateNow, {passive:true}); addEventListener('resize', updateNow);
     })();
 
-    /* CHECKOUT MODAL (як було) */
+    /* CHECKOUT MODAL */
     (function(){
       const backdrop=$("#checkoutBackdrop"), coForm=$("#checkoutForm"), coBtn=$("#coBtn"), coErr=$("#coErr");
       const bClose=$("#coClose"), bGroup=$("#psGroup"), bIndiv=$("#psIndiv");
@@ -856,20 +811,6 @@
           coBtn.disabled=false; coBtn.textContent="Перейти до оплати";
         }
       });
-    })();
-
-    /* PROGRAM: ініціалізація open без авто-закриття */
-    (function(){
-      const tracks = document.querySelectorAll('#program details.track');
-      const mq = matchMedia('(min-width:740px)');
-      function initOpen(){
-        if(mq.matches){ tracks.forEach(d=> d.open = true); }
-      }
-      mq.addEventListener('change', e=>{
-        if(e.matches){ tracks.forEach(d=> d.open = true); } // при переході на десктоп — відкриваємо
-        // при зменшенні ширини НІЧОГО не робимо — не згортаємо, щоб не було «підёргування»
-      });
-      initOpen();
     })();
   </script>
 </body>
