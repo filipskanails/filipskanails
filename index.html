@@ -965,7 +965,7 @@
         document.body.classList.remove('modal-open');
       }
 
-      const btnGroup=$("#buyGroup"), btnIndiv=$("#buyIndiv"]);
+      const btnGroup=$("#buyGroup"), btnIndiv=$("#buyIndiv");
       if(btnGroup) btnGroup.addEventListener("click", e=>{e.preventDefault(); openCheckout("group");});
       if(btnIndiv) btnIndiv.addEventListener("click", e=>{e.preventDefault(); openCheckout("individual");});
       bGroup.addEventListener("click", ()=>{ selectedPlan="group"; updatePlanUI(); });
