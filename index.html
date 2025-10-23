@@ -701,7 +701,7 @@
   <script>
     /* ===== CONFIG ===== */
     const WORKER="https://filipskanails-pay.timanov-business.workers.dev";
-    const THANK ="https://filipskanails.github.io/filipskanails/thankyou.html";
+    const THANK = new URL('thankyou.html', location.href).href;
     const TITLE ="Доступ до курсу Next Level";
     const PROMO_HOURS=5;
     const GROUP_BASE=2, GROUP_DISC=1, INDIV_BASE=4, INDIV_DISC=2;
@@ -1013,8 +1013,14 @@
           const res=await fetch(MONO_ENDPOINT,{method:"POST", headers:{"content-type":"application/json"}, body:JSON.stringify({plan:selectedPlan, amountUAH, email, phone, firstName, lastName})});
           if(!res.ok) throw new Error("Помилка сервера. Спробуйте ще раз.");
           const data=await res.json(); // { pageUrl, invoiceId, reference }
-          const thankUrl = `${THANK}?ref=${encodeURIComponent(data.reference)}&invoiceId=${encodeURIComponent(data.invoiceId||'')}&pay=${encodeURIComponent(data.pageUrl)}&plan=${encodeURIComponent(selectedPlan)}`;
-          window.location.replace(thankUrl);
+          const home = new URL('./', location.href).href; // базовый адрес текущего окружения (стейдж/прод)
+          const thank = new URL(THANK);
+          thank.searchParams.set('ref', data.reference);
+          thank.searchParams.set('invoiceId', data.invoiceId || '');
+          thank.searchParams.set('pay', data.pageUrl);
+          thank.searchParams.set('plan', selectedPlan);
+          thank.searchParams.set('home', home);
+          window.location.replace(thank.toString());
         }catch(err){
           console.error(err);
           const isNetwork = (err && String(err.message).toLowerCase().includes('failed to fetch'));

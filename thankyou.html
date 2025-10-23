@@ -20,7 +20,6 @@
     .row{display:flex;gap:10px;flex-wrap:wrap}
     .row .cta{flex:1;min-width:220px}
     .box{padding:12px;border:1px dashed var(--line);border-radius:14px;background:rgba(255,255,255,.02)}
-    .kbd{padding:2px 8px;border-radius:6px;background:#0f1713;border:1px solid #27382f}
   </style>
 </head>
 <body>
@@ -48,7 +47,7 @@
         <h2>Оплата успішна ✅</h2>
         <p class="muted">Дякуємо за довіру! Далі:</p>
         <ul style="margin-top:8px">
-          <li>Ми надішлемо доступи та інструкції на ваш email (<span id="emailEcho">—</span>).</li>
+          <li>Ми надішлемо доступи та інструкції на ваш email.</li>
           <li>Тут з’явиться кнопка з інвайтом до Telegram (залежно від тарифу).</li>
         </ul>
         <div class="row" style="margin-top:10px">
@@ -75,34 +74,46 @@
     const invoiceId = params.get('invoiceId');
     const ref       = params.get('ref');
     const pay       = params.get('pay');
-    const plan      = params.get('plan'); // "group" | "individual" (на майбутнє)
-    const homeParam = params.get('home'); // (необов'язково) явна адреса куди повертатись
+    const homeParam = params.get('home'); // явный адрес возврата (по возможности передаём с лендинга)
 
     $('#ref').textContent = ref || '—';
 
-    // Підтягувати email з localStorage більше не будемо (дані не зберігаємо з міркувань приватності)
-    // Залишимо прочерк, або можна передавати email у параметрі ?email=...
-    const emailFromUrl = params.get('email');
-    if (emailFromUrl) { $('#emailEcho').textContent = emailFromUrl; }
-
     // Кнопка "Відкрити оплату"
     const aPay = $('#openPay');
-    if (pay) {
-      aPay.href = pay;
-    } else {
-      // Якщо немає посилання на оплату — сховати кнопку
-      aPay.style.display = 'none';
+    if (pay) { aPay.href = pay; } else { aPay.style.display = 'none'; }
+
+    // --- Надёжное вычисление LANDING для обоих окружений ---
+    // Допустимые имена репозиториев GitHub Pages (стейдж/прод)
+    const REPOS = new Set(['filipskanails','filipska-nails']);
+
+    function baseFromUrl(u){
+      try{
+        const url = new URL(u);
+        const parts = url.pathname.split('/').filter(Boolean);
+        const repo = parts[0] || '';
+        if (REPOS.has(repo)) return `${url.origin}/${repo}/`;
+        // фолбэк — корень домена (если вдруг файл лежит вне /repo/)
+        return `${url.origin}/`;
+      }catch{ return location.origin + '/'; }
     }
 
-    // Обчислюємо безпечний "дім" для повернення:
-    // 1) якщо передали ?home=..., використовуємо його (нормалізуємо відносно поточного URL)
-    // 2) інакше беремо поточний каталог (https://.../filipskanails/) від thankyou.html
     function computeLanding(){
-      try{
-        if (homeParam) return new URL(homeParam, location.href).href;
-      }catch{}
-      return new URL('./', location.href).href; // каталог, де лежить ця сторінка
+      // 1) явный параметр home
+      if (homeParam) {
+        try { return new URL(homeParam, location.href).href; } catch {}
+      }
+      // 2) пробуем вытащить окружение из реферера (страница-источник)
+      if (document.referrer) {
+        const fromRef = baseFromUrl(document.referrer);
+        if (fromRef) return fromRef;
+      }
+      // 3) берём текущее местоположение (thankyou размещён в нужном репозитории)
+      const fromHere = baseFromUrl(location.href);
+      if (fromHere) return fromHere;
+      // 4) запасной вариант
+      return location.origin + '/';
     }
+
     const LANDING = computeLanding();
 
     // Статус UI
@@ -113,7 +124,7 @@
       badge.className = cls;
     }
 
-    // Перевірка статусу
+    // Опитування статусу
     let pollTimer = null;
     async function checkStatus(){
       try{
@@ -126,7 +137,7 @@
           setStatus('успішно', 'ok');
           $('#actions').style.display = 'none';
           $('#afterSuccess').style.display = 'block';
-          return; // зупиняємо опитування
+          return;
         }
         if(st === 'failure' || st === 'expired' || st === 'reversed'){
           setStatus(st, 'err');
@@ -142,14 +153,12 @@
     }
     function schedule(){ clearTimeout(pollTimer); pollTimer = setTimeout(checkStatus, 5000); }
 
-    // "Перевірити статус зараз"
+    // Кнопки
     $('#checkNow').addEventListener('click', (e)=>{ e.preventDefault(); clearTimeout(pollTimer); checkStatus(); });
-
-    // Якщо вкладка знову стала видимою — одразу перевіримо
     document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkStatus(); });
 
-    // "Повернутись на сайт" — відправляємо в обчислений LANDING
-    $('#toHome').addEventListener('click', (e)=>{ e.preventDefault(); location.assign(LANDING); });
+    // Возврат на сайт — заменяем историю, чтобы не оставлять thankyou в back-стеке
+    $('#toHome').addEventListener('click', (e)=>{ e.preventDefault(); location.replace(LANDING); });
 
     // Старт
     checkStatus();
