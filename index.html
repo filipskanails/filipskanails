@@ -28,7 +28,7 @@
     .accent{color:var(--accent-2);font-weight:900;text-shadow:0 0 8px rgba(var(--accent2-rgb),.32)}
     .nowrap{white-space:nowrap}
 
-    /* Ленивая отрисовка секций вне экрана (поддерживается в современных браузерах) */
+    /* Ленивая отрисовка секций */
     .section{ content-visibility:auto; contain-intrinsic-size: 1px 800px; }
 
     /* subtle bright bg */
@@ -120,7 +120,6 @@
       border:1px solid #2b3e36;
       box-shadow:inset 0 0 0 1px rgba(255,255,255,.028), 0 14px 34px rgba(0,0,0,.28);
       display:flex; flex-direction:column;
-      /* убрали will-change по умолчанию — иногда перегружает композитор */
     }
     .tariff::after{content:""; position:absolute; inset:auto -12% -22% -12%; height:44%;
       background:radial-gradient(60% 100% at 50% 100%, rgba(var(--accent2-rgb),.14), transparent 60%); filter:blur(12px); pointer-events:none;}
@@ -142,17 +141,19 @@
       font-weight:900; letter-spacing:.2px; color: var(--text-strong); line-height:1.1; white-space:nowrap;
       text-shadow: 0 1px 0 rgba(0,0,0,.35);
     }
+    /* лёгкий "неон": бегущий градиент фона */
     #promo .tLabel::after{
       content:""; position:absolute; left:0; right:0; bottom:-4px; height:2px; border-radius:2px;
-      background:linear-gradient(90deg, transparent 0%, rgba(142,243,199,.95) 30%, rgba(255,181,107,.95) 70%, transparent 100%);
-      opacity:.85; transform:translateX(-60%);
-      animation:tNameGlow 3.8s ease-in-out infinite;
+      background:linear-gradient(90deg,
+        transparent 0%, rgba(142,243,199,.95) 25%, rgba(255,181,107,.95) 50%, rgba(142,243,199,.95) 75%, transparent 100%);
+      background-size:200% 100%;
+      animation:tNameGlowBg 4.5s linear infinite;
+      opacity:.85;
       pointer-events:none;
     }
-    @keyframes tNameGlow{
-      0%{ transform:translateX(-60%); opacity:.18 }
-      40%{ opacity:.9 }
-      100%{ transform:translateX(60%); opacity:.18 }
+    @keyframes tNameGlowBg{
+      0%{ background-position:0% 0; }
+      100%{ background-position:200% 0; }
     }
 
     .tTag{
@@ -382,7 +383,7 @@
     .co-err.show{ display:block } .co-actions{ display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:10px }
     .co-pay{ font-size:14px; color:#cfe6dc }
 
-    /* ===== PERF-LITE (меньше эффектов на слабых девайсах) ===== */
+    /* ===== PERF-LITE ===== */
     .perf-lite body::before{ display:none; }
     .perf-lite .promoCard{ backdrop-filter:none; box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), 0 6px 16px rgba(0,0,0,.22) }
     .perf-lite .promoCard::before{ display:none; }
@@ -390,8 +391,7 @@
     .perf-lite .tariff::after{ display:none; }
     .perf-lite #program::before{ display:none; }
     .perf-lite .aboutCard{ backdrop-filter:none; }
-    .perf-lite #promo .tLabel::after{ animation:none; opacity:.25 }
-    .perf-lite .reel{ -webkit-mask-image:none; mask-image:none; }
+    .perf-lite #promo .tLabel::after{ animation:none; opacity:.35 }
 
     @keyframes tariffPulse{
       0%{ transform:scale(1); box-shadow:0 10px 26px rgba(0,0,0,.22); }
@@ -781,7 +781,7 @@
     }
     tick();
 
-    /* ===== REVIEWS slider (30s ping-pong) ===== */
+    /* ===== REVIEWS slider ===== */
     (function(){
       const reel = document.getElementById('reviewsReel');
       if(!reel) return;
@@ -832,7 +832,7 @@
       slides[0]?.classList.add('is-active'); updateDots(0); start();
     })();
 
-    /* ===== Pulse tariffs after scroll (облегчил) ===== */
+    /* ===== Pulse tariffs after scroll ===== */
     function visibleRatio(el){
       if(!el) return 0;
       const r=el.getBoundingClientRect(), vw=innerWidth, vh=innerHeight;
@@ -843,7 +843,7 @@
     function pulseTariffs(){
       const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const lite = document.documentElement.classList.contains('perf-lite');
-      if(reduced || lite) return; // отключаем на слабых/при reduce motion
+      if(reduced || lite) return;
       document.querySelectorAll('.tariff').forEach(card=>{
         card.classList.add('pulse');
         card.addEventListener('animationend', ()=>card.classList.remove('pulse'), {once:true});
@@ -865,6 +865,8 @@
       const onScroll=()=>{ clearTimeout(t); t=setTimeout(onEnd, idleMs); };
       addEventListener('scroll', onScroll, {passive:true}); onScroll(); setTimeout(onEnd, capMs);
     }
+
+    /* Смарт-скролл к тарифам: ~8% поля сверху, чтобы влезав «Індивідуальний» */
     function scrollToTariffsSmart(){
       const promo=$("#promo"); if(!promo) return;
       const tariffs = promo.querySelector('.tariffs') || promo;
@@ -872,16 +874,10 @@
       const rect = tariffs.getBoundingClientRect();
       const currentY = window.scrollY || document.documentElement.scrollTop || 0;
       const vh = innerHeight;
-      const blockHeight = rect.height;
 
-      let offset;
-      if (blockHeight <= vh * 0.9) {
-        offset = Math.max(12, (vh - blockHeight) / 2);
-      } else {
-        offset = Math.max(12, vh * 0.22);
-      }
-
+      const offset = Math.max(12, Math.round(vh * 0.08)); // ~8% экрана сверху
       const y = currentY + rect.top - offset;
+
       window.scrollTo({ top: Math.max(0, y), behavior:'smooth' });
       waitScrollEnd(afterScrollSettledThenPulse);
     }
@@ -893,7 +889,7 @@
       if(topBtn){ topBtn.addEventListener('click', e=>{ e.preventDefault(); scrollToTariffsSmart(); }); }
     })();
 
-    /* ===== floater shows only when hero & promo off-screen (без постоянного onscroll) ===== */
+    /* ===== floater visibility на IO (без постоянного scroll) ===== */
     (function(){
       const hero=$("#hero"), promo=$("#promo"), floater=$("#floatCta");
       if(!hero||!promo||!floater) return;
@@ -921,7 +917,6 @@
       const io = new IntersectionObserver(()=>updateNow(), { threshold:[0, .1, .2, .5, .8, 1], rootMargin:"0px" });
       io.observe(hero); io.observe(promo);
       updateNow();
-      // убрали постоянный scroll-listener; resize оставили
       addEventListener('resize', updateNow);
     })();
 
