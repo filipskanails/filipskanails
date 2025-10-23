@@ -130,7 +130,7 @@
 
     .tHead{ display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:88px; flex-wrap:nowrap; overflow:hidden }
 
-    /* ACCENTED tariff titles (white, larger, subtle animations) */
+    /* АКЦЕНТНЫЕ заголовки тарифов (белые, крупнее, с лёгкой анимацией) */
     .tName{
       font-size:clamp(22px,5.8vw,28px);
       font-weight:900;
@@ -226,7 +226,6 @@
     .aboutItem .icon::after{content:"";position:absolute;left:9px;top:10px;width:11px;height:6px;border-left:3px solid #052d21;border-bottom:3px solid #052d21;transform:rotate(-45deg)}
     .aboutItem .txt{
       flex:1;min-width:0;word-break:normal;overflow-wrap:anywhere;
-      /* ↑ увеличили кегль блоков в «Про мене» */
       font-size:clamp(17px,4.8vw,20px);
       line-height:1.5;
     }
@@ -681,12 +680,13 @@
           <div class="pprice" id="psIndivPrice">— грн</div>
         </button>
       </div>
-      <form id="checkoutForm" novalidate>
+      <!-- ВАЖНО: отключили автозаполнение и не используем name для избежания автоподстановок браузера -->
+      <form id="checkoutForm" autocomplete="off" novalidate>
         <div class="co-grid">
-          <div class="field"><label for="coFirst">Ім’я</label><input id="coFirst" type="text" autocomplete="given-name" placeholder="Анна"></div>
-          <div class="field"><label for="coLast">Прізвище</label><input id="coLast" type="text" autocomplete="family-name" placeholder="Філіпська"></div>
-          <div class="field full"><label for="coEmail">Email</label><input id="coEmail" type="email" autocomplete="email" placeholder="name@email.com"></div>
-          <div class="field full"><label for="coPhone">Телефон (для зв’язку)</label><input id="coPhone" type="tel" inputmode="tel" placeholder="+380"></div>
+          <div class="field"><label for="coFirst">Ім’я</label><input id="coFirst" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Анна"></div>
+          <div class="field"><label for="coLast">Прізвище</label><input id="coLast" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Філіпська"></div>
+          <div class="field full"><label for="coEmail">Email</label><input id="coEmail" type="email" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="name@email.com"></div>
+          <div class="field full"><label for="coPhone">Телефон (для зв’язку)</label><input id="coPhone" type="tel" inputmode="tel" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="+380"></div>
         </div>
         <div class="agree" style="margin-top:10px"><input id="coAgree" type="checkbox"><label for="coAgree">Погоджуюсь з <a href="#offer">офертою</a> і <a href="#privacy">політикою конфіденційності</a>.</label></div>
         <div id="coErr" class="co-err" role="alert"></div>
@@ -906,7 +906,7 @@
       const target = document.querySelector('#promo .tariffs') || document.querySelector('#promo');
       if(!target) return;
       const rect = target.getBoundingClientRect();
-      const y = rect.top + window.pageYOffset - 12; // чуть ниже шапки промо
+      const y = rect.top + window.pageYOffset - 12;
       window.scrollTo({ top: y, behavior: 'smooth' });
       waitScrollEnd(afterScrollSettledThenPulse);
     }
@@ -948,8 +948,10 @@
       const bClose=$("#coClose"), bGroup=$("#psGroup"), bIndiv=$("#psIndiv");
       let selectedPlan="group";
 
+      // Безопасные цены (не касаются персональных данных)
       function currentPromoActive(){ const left=Math.max(0,(parseInt(localStorage.getItem("promoEndsAt-v1")||"0",10))-Date.now()); return left>0; }
       function getPrices(){ const promo=currentPromoActive(); return { group: promo?GROUP_DISC:GROUP_BASE, indiv: promo?INDIV_DISC:INDIV_BASE }; }
+
       function updatePlanUI(){
         const p=getPrices();
         $("#psGroupPrice").textContent=fmt(p.group)+" грн";
@@ -957,18 +959,31 @@
         $("#coPay").innerHTML=fmt(selectedPlan==="group"?p.group:p.indiv)+"&nbsp;грн";
         [bGroup,bIndiv].forEach(btn=>{ const is=btn.dataset.plan===selectedPlan; btn.setAttribute("aria-pressed", String(is)); btn.setAttribute("aria-selected", String(is)); });
       }
+
+      function resetCheckoutForm(){
+        if(coForm){ coForm.reset(); }
+        // На всякий случай принудительно очищаем значения
+        ["coFirst","coLast","coEmail","coPhone"].forEach(id=>{ const el=$("#"+id); if(el){ el.value=""; el.defaultValue=""; } });
+        $("#coAgree")?.removeAttribute("checked");
+        $("#coErr")?.classList.remove("show");
+        if(coBtn){ coBtn.disabled=false; coBtn.textContent="Перейти до оплати"; }
+      }
+
       function openCheckout(plan){
-        selectedPlan=plan||"group"; updatePlanUI();
-        ["coFirst","coLast","coEmail","coPhone"].forEach(id=>{ const v=localStorage.getItem(id); if(v) $("#"+id).value=v; });
+        selectedPlan=plan||"group";
+        resetCheckoutForm();
+        updatePlanUI();
         document.body.classList.add('modal-open');
-        backdrop.classList.add("show"); backdrop.removeAttribute("aria-hidden"); $("#coFirst").focus();
+        backdrop.classList.add("show"); backdrop.removeAttribute("aria-hidden");
+        $("#coFirst")?.focus();
       }
       function closeCheckout(){
         backdrop.classList.remove("show"); backdrop.setAttribute("aria-hidden","true");
         document.body.classList.remove('modal-open');
+        resetCheckoutForm();
       }
 
-      const btnGroup=$("#buyGroup"), btnIndiv=$("#buyIndiv"); /* ← FIX: убрал лишнюю ']' */
+      const btnGroup=$("#buyGroup"), btnIndiv=$("#buyIndiv");
       if(btnGroup) btnGroup.addEventListener("click", e=>{e.preventDefault(); openCheckout("group");});
       if(btnIndiv) btnIndiv.addEventListener("click", e=>{e.preventDefault(); openCheckout("individual");});
       bGroup.addEventListener("click", ()=>{ selectedPlan="group"; updatePlanUI(); });
@@ -976,6 +991,9 @@
       bClose.addEventListener("click", closeCheckout);
       backdrop.addEventListener("click", e=>{ if(e.target===backdrop) closeCheckout(); });
       document.addEventListener("keydown", e=>{ if(e.key==="Escape" && backdrop.classList.contains("show")) closeCheckout(); });
+
+      // Если пользователь вернулся по back/forward cache — очистим форму
+      window.addEventListener('pageshow', ()=>{ resetCheckoutForm(); });
 
       const isEmail=v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
       const normPhone=v=>v.replace(/[^\d+]/g,"");
@@ -987,8 +1005,6 @@
         if(!isEmail(email)){ coErr.textContent="Некоректний email."; coErr.classList.add("show"); return; }
         if(phone.length<10){ coErr.textContent="Некоректний телефон."; coErr.classList.add("show"); return; }
         if(!agree){ coErr.textContent="Підтвердіть згоду з умовами."; coErr.classList.add("show"); return; }
-
-        ["coFirst","coLast","coEmail","coPhone"].forEach(id=>{ const v=$("#"+id).value.trim(); localStorage.setItem(id, v); });
 
         const p=getPrices(); const amountUAH = selectedPlan==="group"?p.group:p.indiv;
         coBtn.disabled=true; coBtn.textContent="Створюємо платіж…";
