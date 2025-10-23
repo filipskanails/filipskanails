@@ -40,7 +40,7 @@
       </div>
 
       <div id="actions" class="row" style="margin:14px 0">
-        <a id="openPay" class="cta" target="_blank" rel="noopener">Відкрити оплату в Monobank</a>
+        <a id="openPay" class="cta" target="_blank" rel="noopener noreferrer">Відкрити оплату в Monobank</a>
         <a id="checkNow" class="cta" href="#">Перевірити статус зараз</a>
       </div>
 
@@ -69,7 +69,6 @@
 
     // Константи
     const WORKER  = 'https://filipskanails-pay.timanov-business.workers.dev';
-    const LANDING = 'https://filipskanails.github.io/filipskanails/';
 
     // Параметри URL
     const params    = new URLSearchParams(location.search);
@@ -77,17 +76,34 @@
     const ref       = params.get('ref');
     const pay       = params.get('pay');
     const plan      = params.get('plan'); // "group" | "individual" (на майбутнє)
+    const homeParam = params.get('home'); // (необов'язково) явна адреса куди повертатись
+
     $('#ref').textContent = ref || '—';
 
-    // Виведемо email, якщо збережений у локальному сховищі
-    try {
-      const email = localStorage.getItem('coEmail');
-      if (email) $('#emailEcho').textContent = email;
-    } catch {}
+    // Підтягувати email з localStorage більше не будемо (дані не зберігаємо з міркувань приватності)
+    // Залишимо прочерк, або можна передавати email у параметрі ?email=...
+    const emailFromUrl = params.get('email');
+    if (emailFromUrl) { $('#emailEcho').textContent = emailFromUrl; }
 
-    // Прив’язуємо кнопку "Відкрити оплату"
+    // Кнопка "Відкрити оплату"
     const aPay = $('#openPay');
-    if (pay) aPay.href = pay;
+    if (pay) {
+      aPay.href = pay;
+    } else {
+      // Якщо немає посилання на оплату — сховати кнопку
+      aPay.style.display = 'none';
+    }
+
+    // Обчислюємо безпечний "дім" для повернення:
+    // 1) якщо передали ?home=..., використовуємо його (нормалізуємо відносно поточного URL)
+    // 2) інакше беремо поточний каталог (https://.../filipskanails/) від thankyou.html
+    function computeLanding(){
+      try{
+        if (homeParam) return new URL(homeParam, location.href).href;
+      }catch{}
+      return new URL('./', location.href).href; // каталог, де лежить ця сторінка
+    }
+    const LANDING = computeLanding();
 
     // Статус UI
     function setStatus(txt, cls){
@@ -110,12 +126,11 @@
           setStatus('успішно', 'ok');
           $('#actions').style.display = 'none';
           $('#afterSuccess').style.display = 'block';
-          // тут пізніше вставимо кнопки Telegram за тарифом
           return; // зупиняємо опитування
         }
         if(st === 'failure' || st === 'expired' || st === 'reversed'){
           setStatus(st, 'err');
-          return; // теж зупинимо
+          return;
         }
 
         setStatus(st || 'очікується', 'wait');
@@ -127,14 +142,14 @@
     }
     function schedule(){ clearTimeout(pollTimer); pollTimer = setTimeout(checkStatus, 5000); }
 
-    // Кнопка "Перевірити статус зараз"
+    // "Перевірити статус зараз"
     $('#checkNow').addEventListener('click', (e)=>{ e.preventDefault(); clearTimeout(pollTimer); checkStatus(); });
 
     // Якщо вкладка знову стала видимою — одразу перевіримо
     document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkStatus(); });
 
-    // Кнопка "Повернутись на сайт"
-    $('#toHome').addEventListener('click', (e)=>{ e.preventDefault(); window.location.href = LANDING + '#top'; });
+    // "Повернутись на сайт" — відправляємо в обчислений LANDING
+    $('#toHome').addEventListener('click', (e)=>{ e.preventDefault(); location.assign(LANDING); });
 
     // Старт
     checkStatus();
