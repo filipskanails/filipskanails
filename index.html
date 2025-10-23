@@ -130,7 +130,7 @@
 
     .tHead{ display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:88px; flex-wrap:nowrap; overflow:hidden }
 
-    /* АКЦЕНТНЫЕ заголовки тарифов (белые, крупнее, с лёгкой анимацией) */
+    /* Заголовки тарифов (белые, крупнее, с мягким акцентом-линией при ховере) */
     .tName{
       font-size:clamp(22px,5.8vw,28px);
       font-weight:900;
@@ -325,6 +325,8 @@
       list-style:none; cursor:pointer; user-select:none;
       display:flex; align-items:center; justify-content:space-between; gap:10px;
       padding:14px 16px; position:relative; z-index:1;
+      /* фиксим перенос стрелки — всегда справа в одну линию */
+      padding-right:48px;
     }
     summary.tHead::-webkit-details-marker{ display:none }
     .tTitle{ font-weight:900; font-size:18px; display:flex; align-items:center; gap:10px }
@@ -341,8 +343,13 @@
     .tChevron{
       width:26px; height:26px; border-radius:999px; border:1px solid #2e4439; display:grid; place-items:center;
       background:#0f1713; color:#cfe6dc; font-weight:900; transition:transform .25s ease;
+      position:absolute; right:16px; top:50%; transform:translateY(-50%);
     }
-    details[open] .tChevron{ transform:rotate(180deg) }
+    details[open] .tChevron{ transform:translateY(-50%) rotate(180deg) }
+    @media (max-width:360px){
+      summary.tHead{ padding-right:44px; }
+      .tChevron{ right:12px; }
+    }
 
     .tListPro{
       counter-reset: step;
@@ -435,15 +442,6 @@
     /* Заблокувати фон при відкритій модалці + сховати флоатер */
     body.modal-open{ overflow:hidden }
     body.modal-open .floater{ display:none !important; }
-
-    /* FIX: стрелка раскрытия всегда справа в одной строке */
-    summary.tHead{ position:relative; padding-right:48px; }
-    .tHead .tChevron{ position:absolute; right:16px; top:50%; transform:translateY(-50%); }
-    details[open] .tHead .tChevron{ transform:translateY(-50%) rotate(180deg); }
-    @media (max-width:360px){
-      summary.tHead{ padding-right:44px; }
-      .tHead .tChevron{ right:12px; }
-    }
   </style>
 </head>
 <body>
@@ -680,7 +678,6 @@
           <div class="pprice" id="psIndivPrice">— грн</div>
         </button>
       </div>
-      <!-- ВАЖНО: отключили автозаполнение и не используем name для избежания автоподстановок браузера -->
       <form id="checkoutForm" autocomplete="off" novalidate>
         <div class="co-grid">
           <div class="field"><label for="coFirst">Ім’я</label><input id="coFirst" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Анна"></div>
@@ -701,11 +698,12 @@
   <script>
     /* ===== CONFIG ===== */
     const WORKER="https://filipskanails-pay.timanov-business.workers.dev";
-    const THANK = new URL('thankyou.html', location.href).href;
     const TITLE ="Доступ до курсу Next Level";
     const PROMO_HOURS=5;
     const GROUP_BASE=2, GROUP_DISC=1, INDIV_BASE=4, INDIV_DISC=2;
     const MONO_ENDPOINT = WORKER + "/mono/checkout";
+    // thankyou относительно текущего окружения
+    const THANK = new URL('thankyou.html', location.href).href;
 
     const $=s=>document.querySelector(s);
     const fmt=n=>new Intl.NumberFormat("uk-UA").format(n);
@@ -737,15 +735,6 @@
     let ends=parseInt(localStorage.getItem(key)||"0",10);
     if(!ends||ends<now){ ends=now+PROMO_HOURS*60*60*1000; localStorage.setItem(key,String(ends)); }
 
-    function renderHeroPrice(active, old){
-      const line=$("#priceLine");
-      if(line){
-        line.innerHTML = old && old>active
-          ? `лише ${fmt(active)}&nbsp;грн <span class="oldline">${fmt(old)}&nbsp;грн</span>`
-          : `ціна ${fmt(active)}&nbsp;грн`;
-      }
-    }
-
     function setTariffPrices(promo){
       const gActive = promo ? GROUP_DISC : GROUP_BASE;
       const iActive = promo ? INDIV_DISC : INDIV_BASE;
@@ -766,8 +755,6 @@
         if(gS) gS.style.display="none";
         if(iS) iS.style.display="none";
       }
-
-      renderHeroPrice(gActive, gOld);
     }
 
     function tick(){
@@ -903,10 +890,11 @@
 
     /* ===== floater + hero CTA ===== */
     function scrollToPromoAndPulse(){
+      // Скроллим к блоку с тарифами, чтобы оба тарифа были в зоне видимости
       const target = document.querySelector('#promo .tariffs') || document.querySelector('#promo');
       if(!target) return;
       const rect = target.getBoundingClientRect();
-      const y = rect.top + window.pageYOffset - 12;
+      const y = rect.top + window.pageYOffset - 12; // маленький отступ
       window.scrollTo({ top: y, behavior: 'smooth' });
       waitScrollEnd(afterScrollSettledThenPulse);
     }
@@ -948,7 +936,7 @@
       const bClose=$("#coClose"), bGroup=$("#psGroup"), bIndiv=$("#psIndiv");
       let selectedPlan="group";
 
-      // Безопасные цены (не касаются персональных данных)
+      // Цены (без ПДн)
       function currentPromoActive(){ const left=Math.max(0,(parseInt(localStorage.getItem("promoEndsAt-v1")||"0",10))-Date.now()); return left>0; }
       function getPrices(){ const promo=currentPromoActive(); return { group: promo?GROUP_DISC:GROUP_BASE, indiv: promo?INDIV_DISC:INDIV_BASE }; }
 
@@ -962,7 +950,6 @@
 
       function resetCheckoutForm(){
         if(coForm){ coForm.reset(); }
-        // На всякий случай принудительно очищаем значения
         ["coFirst","coLast","coEmail","coPhone"].forEach(id=>{ const el=$("#"+id); if(el){ el.value=""; el.defaultValue=""; } });
         $("#coAgree")?.removeAttribute("checked");
         $("#coErr")?.classList.remove("show");
@@ -992,11 +979,17 @@
       backdrop.addEventListener("click", e=>{ if(e.target===backdrop) closeCheckout(); });
       document.addEventListener("keydown", e=>{ if(e.key==="Escape" && backdrop.classList.contains("show")) closeCheckout(); });
 
-      // Если пользователь вернулся по back/forward cache — очистим форму
-      window.addEventListener('pageshow', ()=>{ resetCheckoutForm(); });
-
       const isEmail=v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
       const normPhone=v=>v.replace(/[^\d+]/g,"");
+
+      // Вычисляем базу окружения строго на github.io (чтобы thankyou умел вернуться правильно)
+      function computeGhHome(){
+        const path = location.pathname;
+        let repo = 'filipska-nails'; // по умолчанию прод
+        if (/\/filipskanails\//.test(path)) repo = 'filipskanails';
+        if (/\/filipska-nails\//.test(path)) repo = 'filipska-nails';
+        return `https://filipskanails.github.io/${repo}/`;
+      }
 
       coForm.addEventListener("submit", async e=>{
         e.preventDefault(); coErr.classList.remove("show"); coErr.textContent="";
@@ -1013,13 +1006,14 @@
           const res=await fetch(MONO_ENDPOINT,{method:"POST", headers:{"content-type":"application/json"}, body:JSON.stringify({plan:selectedPlan, amountUAH, email, phone, firstName, lastName})});
           if(!res.ok) throw new Error("Помилка сервера. Спробуйте ще раз.");
           const data=await res.json(); // { pageUrl, invoiceId, reference }
-          const home = new URL('./', location.href).href; // базовый адрес текущего окружения (стейдж/прод)
+
+          // Формируем URL «спасибо» и явно передаём home на github.io (стейдж/прод)
           const thank = new URL(THANK);
           thank.searchParams.set('ref', data.reference);
           thank.searchParams.set('invoiceId', data.invoiceId || '');
           thank.searchParams.set('pay', data.pageUrl);
           thank.searchParams.set('plan', selectedPlan);
-          thank.searchParams.set('home', home);
+          thank.searchParams.set('home', computeGhHome());
           window.location.replace(thank.toString());
         }catch(err){
           console.error(err);
@@ -1031,7 +1025,7 @@
       });
     })();
 
-    /* ===== Program auto-toggle (REMOVED): управление только у пользователя ===== */
+    /* === ВАЖНО: никакого автосворачивания/автораскрытия «Програма курсу» — управляет только пользователь === */
   </script>
 </body>
 </html>

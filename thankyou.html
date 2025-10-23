@@ -74,7 +74,7 @@
     const invoiceId = params.get('invoiceId');
     const ref       = params.get('ref');
     const pay       = params.get('pay');
-    const homeParam = params.get('home'); // явный адрес возврата (по возможности передаём с лендинга)
+    const homeParam = params.get('home'); // явне «куди повертатись»
 
     $('#ref').textContent = ref || '—';
 
@@ -82,39 +82,43 @@
     const aPay = $('#openPay');
     if (pay) { aPay.href = pay; } else { aPay.style.display = 'none'; }
 
-    // --- Надёжное вычисление LANDING для обоих окружений ---
-    // Допустимые имена репозиториев GitHub Pages (стейдж/прод)
+    // --- LANDING: завжди github.io, незалежно від редиректів на custom domain ---
     const REPOS = new Set(['filipskanails','filipska-nails']);
+    function toGhBase(repo){ return `https://filipskanails.github.io/${repo}/`; }
 
-    function baseFromUrl(u){
-      try{
-        const url = new URL(u);
-        const parts = url.pathname.split('/').filter(Boolean);
-        const repo = parts[0] || '';
-        if (REPOS.has(repo)) return `${url.origin}/${repo}/`;
-        // фолбэк — корень домена (если вдруг файл лежит вне /repo/)
-        return `${url.origin}/`;
-      }catch{ return location.origin + '/'; }
+    function normalizeHome(u){
+      // Нет home → пробуем определить из текущего URL
+      if (!u) {
+        // если мы уже на github.io — забираем имя репозитория из пути
+        if (location.hostname.endsWith('github.io')) {
+          const m = location.pathname.match(/^\/(filipskanails|filipska-nails)\//);
+          if (m) return toGhBase(m[1]);
+        }
+        // иначе — дефолт на прод-репозиторий
+        return toGhBase('filipska-nails');
+      }
+
+      let url;
+      try { url = new URL(u, location.href); } catch { return toGhBase('filipska-nails'); }
+
+      // Если пришёл github.io и путь содержит нужный репозиторий — оставляем
+      if (url.hostname.endsWith('github.io')) {
+        const m = url.pathname.match(/^\/(filipskanails|filipska-nails)\//);
+        if (m) return toGhBase(m[1]);
+        // нет имени — по умолчанию прод
+        return toGhBase('filipska-nails');
+      }
+
+      // Если пришёл custom domain — пытаемся вытащить имя репозитория из пути
+      const parts = url.pathname.split('/').filter(Boolean);
+      const repo = parts.find(p => REPOS.has(p));
+      if (repo) return toGhBase(repo);
+
+      // Совсем без подсказок — по умолчанию прод
+      return toGhBase('filipska-nails');
     }
 
-    function computeLanding(){
-      // 1) явный параметр home
-      if (homeParam) {
-        try { return new URL(homeParam, location.href).href; } catch {}
-      }
-      // 2) пробуем вытащить окружение из реферера (страница-источник)
-      if (document.referrer) {
-        const fromRef = baseFromUrl(document.referrer);
-        if (fromRef) return fromRef;
-      }
-      // 3) берём текущее местоположение (thankyou размещён в нужном репозитории)
-      const fromHere = baseFromUrl(location.href);
-      if (fromHere) return fromHere;
-      // 4) запасной вариант
-      return location.origin + '/';
-    }
-
-    const LANDING = computeLanding();
+    const LANDING = normalizeHome(homeParam);
 
     // Статус UI
     function setStatus(txt, cls){
@@ -157,7 +161,7 @@
     $('#checkNow').addEventListener('click', (e)=>{ e.preventDefault(); clearTimeout(pollTimer); checkStatus(); });
     document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkStatus(); });
 
-    // Возврат на сайт — заменяем историю, чтобы не оставлять thankyou в back-стеке
+    // Возврат на сайт — строго на github.io базу
     $('#toHome').addEventListener('click', (e)=>{ e.preventDefault(); location.replace(LANDING); });
 
     // Старт
