@@ -19,8 +19,9 @@
     .row{display:flex;gap:10px;flex-wrap:wrap}
     .row .cta{flex:1;min-width:220px}
     .box{padding:12px;border:1px dashed var(--line);border-radius:14px;background:rgba(255,255,255,.02)}
-    .kbd{padding:2px 8px;border-radius:6px;background:#0f1713;border:1px solid #27382f}
     .btn-secondary{background:#0f1713;color:var(--text);border:1px solid #2b4136}
+    .note{font-size:14px;color:var(--muted);margin-top:8px}
+    .kbd{padding:2px 8px;border-radius:6px;background:#0f1713;border:1px solid #27382f}
   </style>
 </head>
 <body>
@@ -46,13 +47,14 @@
 
       <div id="afterSuccess" style="display:none; margin-top:16px">
         <h2>Оплата успішна ✅</h2>
-        <p class="muted">Дякуємо за довіру! Далі:</p>
-        <ul style="margin-top:8px">
-          <li>Увійдіть до Telegram відповідно до вашого тарифу або через бота.</li>
-        </ul>
+        <p class="muted" id="nextSteps">
+          Далі перейдіть у наш Telegram-бот, щоб отримати доступ до відео-уроків
+          <span id="planHint"></span>. Якщо у вас індивідуальний тариф — надсилайте домашні завдання прямо в боті, викладач відповість там же.
+        </p>
         <div class="row" style="margin-top:10px" id="tgButtons">
-          <!-- Кнопки підставляться скриптом: інвайт (за тарифом) + перехід до бота -->
+          <!-- Сюди підставиться кнопка "Продовжити в Telegram-боті" -->
         </div>
+        <p class="note">Якщо кнопка не відкриває застосунок, скористайтесь посиланням у браузері: <span id="botLinkEcho" class="kbd"></span></p>
         <div class="row" style="margin-top:10px">
           <a id="toHome" class="cta btn-secondary" href="#">Повернутись на сайт</a>
         </div>
@@ -69,9 +71,9 @@
   (function(){
     const $ = s => document.querySelector(s);
 
-    // ===== КОНФІГ (підстав ПРОСТО ЮЗЕРНЕЙМ бота, без @) =====
-    const BOT_HANDLE = "FilipskaBot"; // ← заміни на дійсний username бота (без @)
-    const WORKER  = 'https://filipskanails-pay.timanov-business.workers.dev';
+    // ===== Налаштування (ім'я бота без @) =====
+    const BOT_HANDLE = "NailSchoolFilipskabot";
+    const WORKER = "https://filipskanails-pay.timanov-business.workers.dev";
 
     // Параметри URL
     const params    = new URLSearchParams(location.search);
@@ -83,12 +85,9 @@
 
     $('#ref').textContent = ref || '—';
 
-    // Вирахуємо HOME (куди повертати)
+    // Нормалізація та вибір правильного HOME (щоб повернутись на те саме оточення)
     function normalizeHome(h){
-      try{
-        const u=new URL(h);
-        return u.origin + u.pathname.replace(/\/?$/, '/');
-      }catch{ return null; }
+      try{ const u=new URL(h); return u.origin + u.pathname.replace(/\/?$/, '/'); }catch{ return null; }
     }
     const ALLOWED = new Set([
       "https://filipskanails.github.io/filipskanails/",
@@ -96,13 +95,17 @@
     ]);
     let HOME = normalizeHome(homeParam);
     if(!HOME || !ALLOWED.has(HOME)){
-      // якщо параметр відсутній — беремо з поточного URL (папка сторінки)
+      // fallback: базуємося на поточному шляху (працює і на stage, і на prod)
       HOME = location.origin + location.pathname.replace(/thankyou\.html.*$/,'');
     }
 
-    // Прив’язуємо кнопку "Відкрити оплату"
+    // Кнопка оплатити (відкриває сторінку Mono)
     if (pay) $('#openPay').href = pay;
     else $('#openPay').style.display = 'none';
+
+    // Відмалювати підказку за тарифом
+    const hint = (plan === 'individual') ? 'та надсилати ДЗ' : '';
+    $('#planHint').textContent = hint ? ` (${hint})` : '';
 
     // Статус UI
     function setStatus(txt, cls){
@@ -112,47 +115,34 @@
       badge.className = cls;
     }
 
-    // Після успіху — показати Telegram-кнопки
-    function renderTelegramButtons(){
+    // Побудова кнопки в бота (без JS-хаков — проста <a>, працює на мобільному)
+    function renderTelegramButton(){
       const wrap = $('#tgButtons');
       wrap.innerHTML = '';
 
-      // 1) Інвайт за тарифом (якщо план відомий)
-      const INV_GROUP = "https://t.me/+ncOaqO_X2McwMGE6";
-      const INV_INDIV = "https://t.me/+bHCb6xvzV-UyMjgy";
-
-      if (plan === 'group' && INV_GROUP){
-        const a = document.createElement('a');
-        a.className = 'cta';
-        a.textContent = 'Груповий — увійти в Telegram';
-        a.href = INV_GROUP;
-        a.target = '_blank';
-        a.rel = 'noopener';
-        wrap.appendChild(a);
-      } else if (plan === 'individual' && INV_INDIV){
-        const a = document.createElement('a');
-        a.className = 'cta';
-        a.textContent = 'Індивідуальний — увійти в Telegram';
-        a.href = INV_INDIV;
-        a.target = '_blank';
-        a.rel = 'noopener';
-        wrap.appendChild(a);
+      if (!BOT_HANDLE || !ref) {
+        const p = document.createElement('p');
+        p.className = 'muted';
+        p.textContent = 'Посилання на бота тимчасово недоступне. Спробуйте оновити сторінку або зверніться до підтримки.';
+        wrap.appendChild(p);
+        return;
       }
 
-      // 2) Перейти до бота (без JS-хаков і алертів) — проста посилання
-      if (BOT_HANDLE && ref){
-        const botHref = `https://t.me/${BOT_HANDLE}?start=${encodeURIComponent(ref)}`;
-        const a2 = document.createElement('a');
-        a2.className = 'cta btn-secondary';
-        a2.textContent = 'Продовжити в Telegram-боті';
-        a2.href = botHref;
-        a2.target = '_blank';
-        a2.rel = 'noopener';
-        wrap.appendChild(a2);
-      }
+      const botHref = `https://t.me/${BOT_HANDLE}?start=${encodeURIComponent(ref)}`;
+
+      const a = document.createElement('a');
+      a.className = 'cta';
+      a.textContent = 'Продовжити в Telegram-боті';
+      a.href = botHref;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      wrap.appendChild(a);
+
+      // дублікат-ехо для копіювання вручну (на випадок обмежень системи)
+      $('#botLinkEcho').textContent = botHref;
     }
 
-    // Перевірка статусу
+    // Опитування статусу інвойсу
     let pollTimer = null;
     async function checkStatus(){
       try{
@@ -169,7 +159,7 @@
           setStatus('успішно', 'ok');
           $('#actions').style.display = 'none';
           $('#afterSuccess').style.display = 'block';
-          renderTelegramButtons();
+          renderTelegramButton();
           return; // зупиняємо опитування
         }
         if(st === 'failure' || st === 'expired' || st === 'reversed'){
@@ -192,7 +182,7 @@
     // Якщо вкладка знову стала видимою — одразу перевіримо
     document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkStatus(); });
 
-    // Кнопка "Повернутись на сайт"
+    // "Повернутись на сайт" — завжди в поточне оточення
     $('#toHome').addEventListener('click', (e)=>{ e.preventDefault(); location.href = HOME + '#top'; });
 
     // Старт
