@@ -7,20 +7,20 @@
   <meta name="color-scheme" content="dark">
   <style>
     :root{ --bg:#0c100e; --card:#121614; --line:#223129; --text:#e7f0ea; --muted:#a1b3ab; --accent:#004a25; --accent-2:#0b7d47; }
-    *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif}
     .wrap{max-width:800px;margin:0 auto;padding:24px 16px}
     .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22)}
     h1{font-size:26px;margin:0 0 8px}
     h2{font-size:20px;margin:16px 0 8px}
     .muted{color:var(--muted)}
-    .ok{color:#c7f5d2}
-    .wait{color:#ffe3a3}
-    .err{color:#ffb4b4}
+    .ok{color:#c7f5d2}.wait{color:#ffe3a3}.err{color:#ffb4b4}
     .cta{display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border-radius:999px;background:linear-gradient(135deg,var(--accent-2),var(--accent));color:#062217;font-weight:900;text-transform:uppercase;box-shadow:0 10px 28px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12);text-decoration:none}
     .row{display:flex;gap:10px;flex-wrap:wrap}
     .row .cta{flex:1;min-width:220px}
     .box{padding:12px;border:1px dashed var(--line);border-radius:14px;background:rgba(255,255,255,.02)}
     .kbd{padding:2px 8px;border-radius:6px;background:#0f1713;border:1px solid #27382f}
+    .btn-secondary{background:#0f1713;color:var(--text);border:1px solid #2b4136}
   </style>
 </head>
 <body>
@@ -41,19 +41,20 @@
 
       <div id="actions" class="row" style="margin:14px 0">
         <a id="openPay" class="cta" target="_blank" rel="noopener">Відкрити оплату в Monobank</a>
-        <a id="checkNow" class="cta" href="#">Перевірити статус зараз</a>
+        <a id="checkNow" class="cta btn-secondary" href="#">Перевірити статус зараз</a>
       </div>
 
       <div id="afterSuccess" style="display:none; margin-top:16px">
         <h2>Оплата успішна ✅</h2>
         <p class="muted">Дякуємо за довіру! Далі:</p>
         <ul style="margin-top:8px">
-          <li>Ми надішлемо доступи та інструкції на ваш email (<span id="emailEcho">—</span>).</li>
-          <li>Натисніть «Продовжити в Telegram», щоб отримати персональне посилання для вашого тарифу.</li>
+          <li>Увійдіть до Telegram відповідно до вашого тарифу або через бота.</li>
         </ul>
+        <div class="row" style="margin-top:10px" id="tgButtons">
+          <!-- Кнопки підставляться скриптом: інвайт (за тарифом) + перехід до бота -->
+        </div>
         <div class="row" style="margin-top:10px">
-          <a id="toTG" class="cta" href="#">Продовжити в Telegram</a>
-          <a id="toHome" class="cta" href="#">Повернутись на сайт</a>
+          <a id="toHome" class="cta btn-secondary" href="#">Повернутись на сайт</a>
         </div>
       </div>
 
@@ -68,35 +69,40 @@
   (function(){
     const $ = s => document.querySelector(s);
 
-    // Константи
+    // ===== КОНФІГ (підстав ПРОСТО ЮЗЕРНЕЙМ бота, без @) =====
+    const BOT_HANDLE = "YOUR_BOT_USERNAME"; // ← заміни на дійсний username бота (без @)
     const WORKER  = 'https://filipskanails-pay.timanov-business.workers.dev';
-    // Определяем stage/prod для кнопки «Назад на сайт», а также передаем в /onboard/start
-    function detectHome(){
-      const p = location.pathname;
-      if (p.includes('/filipskanails/')) return 'https://filipskanails.github.io/filipskanails/';
-      if (p.includes('/filipska-nails/')) return 'https://filipskanails.github.io/filipska-nails/';
-      return location.origin + '/';
-    }
 
     // Параметри URL
     const params    = new URLSearchParams(location.search);
-    const invoiceId = params.get('invoiceId');
-    const ref       = params.get('ref');
-    const pay       = params.get('pay');
-    const plan      = params.get('plan'); // "group" | "individual" (на майбутнє)
-    const home      = params.get('home') || detectHome();
+    const invoiceId = params.get('invoiceId') || "";
+    const ref       = params.get('ref') || "";
+    const pay       = params.get('pay') || "";
+    const plan      = (params.get('plan') || "").toLowerCase(); // "group" | "individual"
+    const homeParam = params.get('home') || "";
 
     $('#ref').textContent = ref || '—';
 
-    // Виведемо email, якщо збережений у локальному сховищі
-    try {
-      const email = localStorage.getItem('coEmail');
-      if (email) $('#emailEcho').textContent = email;
-    } catch {}
+    // Вирахуємо HOME (куди повертати)
+    function normalizeHome(h){
+      try{
+        const u=new URL(h);
+        return u.origin + u.pathname.replace(/\/?$/, '/');
+      }catch{ return null; }
+    }
+    const ALLOWED = new Set([
+      "https://filipskanails.github.io/filipskanails/",
+      "https://filipskanails.github.io/filipska-nails/",
+    ]);
+    let HOME = normalizeHome(homeParam);
+    if(!HOME || !ALLOWED.has(HOME)){
+      // якщо параметр відсутній — беремо з поточного URL (папка сторінки)
+      HOME = location.origin + location.pathname.replace(/thankyou\.html.*$/,'');
+    }
 
     // Прив’язуємо кнопку "Відкрити оплату"
-    const aPay = $('#openPay');
-    if (pay) aPay.href = pay;
+    if (pay) $('#openPay').href = pay;
+    else $('#openPay').style.display = 'none';
 
     // Статус UI
     function setStatus(txt, cls){
@@ -106,11 +112,55 @@
       badge.className = cls;
     }
 
+    // Після успіху — показати Telegram-кнопки
+    function renderTelegramButtons(){
+      const wrap = $('#tgButtons');
+      wrap.innerHTML = '';
+
+      // 1) Інвайт за тарифом (якщо план відомий)
+      const INV_GROUP = "https://t.me/+ncOaqO_X2McwMGE6";
+      const INV_INDIV = "https://t.me/+bHCb6xvzV-UyMjgy";
+
+      if (plan === 'group' && INV_GROUP){
+        const a = document.createElement('a');
+        a.className = 'cta';
+        a.textContent = 'Груповий — увійти в Telegram';
+        a.href = INV_GROUP;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        wrap.appendChild(a);
+      } else if (plan === 'individual' && INV_INDIV){
+        const a = document.createElement('a');
+        a.className = 'cta';
+        a.textContent = 'Індивідуальний — увійти в Telegram';
+        a.href = INV_INDIV;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        wrap.appendChild(a);
+      }
+
+      // 2) Перейти до бота (без JS-хаков і алертів) — проста посилання
+      if (BOT_HANDLE && ref){
+        const botHref = `https://t.me/${BOT_HANDLE}?start=${encodeURIComponent(ref)}`;
+        const a2 = document.createElement('a');
+        a2.className = 'cta btn-secondary';
+        a2.textContent = 'Продовжити в Telegram-боті';
+        a2.href = botHref;
+        a2.target = '_blank';
+        a2.rel = 'noopener';
+        wrap.appendChild(a2);
+      }
+    }
+
     // Перевірка статусу
     let pollTimer = null;
     async function checkStatus(){
       try{
-        if(!invoiceId){ setStatus('очікується (без invoiceId)', 'wait'); schedule(); return; }
+        if(!invoiceId){
+          setStatus('очікується (без invoiceId)', 'wait');
+          schedule();
+          return;
+        }
         const r = await fetch(`${WORKER}/mono/status?invoiceId=${encodeURIComponent(invoiceId)}`);
         const data = await r.json();
         const st = String(data.status || '').toLowerCase();
@@ -119,11 +169,12 @@
           setStatus('успішно', 'ok');
           $('#actions').style.display = 'none';
           $('#afterSuccess').style.display = 'block';
+          renderTelegramButtons();
           return; // зупиняємо опитування
         }
         if(st === 'failure' || st === 'expired' || st === 'reversed'){
           setStatus(st, 'err');
-          return; // теж зупинимо
+          return;
         }
 
         setStatus(st || 'очікується', 'wait');
@@ -142,22 +193,7 @@
     document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkStatus(); });
 
     // Кнопка "Повернутись на сайт"
-    $('#toHome').addEventListener('click', (e)=>{ e.preventDefault(); window.location.href = home + '#top'; });
-
-    // Кнопка "Продовжити в Telegram"
-    $('#toTG').addEventListener('click', async (e)=>{
-      e.preventDefault();
-      if(!ref){ alert('Немає номеру замовлення (ref). Спробуйте оновити сторінку.'); return; }
-      try{
-        const r = await fetch(`${WORKER}/onboard/start?ref=${encodeURIComponent(ref)}&home=${encodeURIComponent(home)}`);
-        const j = await r.json();
-        if(!j || !j.ok || !j.deeplink){ alert('Не вдалося отримати посилання Telegram. Якщо оплата щойно пройшла — зачекайте кілька секунд і спробуйте знову.'); return; }
-        // відкриємо у тій же вкладці (Telegram клієнт/веб відкриє бот)
-        window.location.href = j.deeplink;
-      }catch(err){
-        alert('Тимчасова помилка. Спробуйте ще раз.');
-      }
-    });
+    $('#toHome').addEventListener('click', (e)=>{ e.preventDefault(); location.href = HOME + '#top'; });
 
     // Старт
     checkStatus();
