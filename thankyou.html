@@ -20,6 +20,7 @@
     .row{display:flex;gap:10px;flex-wrap:wrap}
     .row .cta{flex:1;min-width:220px}
     .box{padding:12px;border:1px dashed var(--line);border-radius:14px;background:rgba(255,255,255,.02)}
+    .kbd{padding:2px 8px;border-radius:6px;background:#0f1713;border:1px solid #27382f}
   </style>
 </head>
 <body>
@@ -39,7 +40,7 @@
       </div>
 
       <div id="actions" class="row" style="margin:14px 0">
-        <a id="openPay" class="cta" target="_blank" rel="noopener noreferrer">Відкрити оплату в Monobank</a>
+        <a id="openPay" class="cta" target="_blank" rel="noopener">Відкрити оплату в Monobank</a>
         <a id="checkNow" class="cta" href="#">Перевірити статус зараз</a>
       </div>
 
@@ -47,10 +48,11 @@
         <h2>Оплата успішна ✅</h2>
         <p class="muted">Дякуємо за довіру! Далі:</p>
         <ul style="margin-top:8px">
-          <li>Ми надішлемо доступи та інструкції на ваш email.</li>
-          <li>Тут з’явиться кнопка з інвайтом до Telegram (залежно від тарифу).</li>
+          <li>Ми надішлемо доступи та інструкції на ваш email (<span id="emailEcho">—</span>).</li>
+          <li>Натисніть «Продовжити в Telegram», щоб отримати персональне посилання для вашого тарифу.</li>
         </ul>
         <div class="row" style="margin-top:10px">
+          <a id="toTG" class="cta" href="#">Продовжити в Telegram</a>
           <a id="toHome" class="cta" href="#">Повернутись на сайт</a>
         </div>
       </div>
@@ -68,57 +70,33 @@
 
     // Константи
     const WORKER  = 'https://filipskanails-pay.timanov-business.workers.dev';
+    // Определяем stage/prod для кнопки «Назад на сайт», а также передаем в /onboard/start
+    function detectHome(){
+      const p = location.pathname;
+      if (p.includes('/filipskanails/')) return 'https://filipskanails.github.io/filipskanails/';
+      if (p.includes('/filipska-nails/')) return 'https://filipskanails.github.io/filipska-nails/';
+      return location.origin + '/';
+    }
 
     // Параметри URL
     const params    = new URLSearchParams(location.search);
     const invoiceId = params.get('invoiceId');
     const ref       = params.get('ref');
     const pay       = params.get('pay');
-    const homeParam = params.get('home'); // явне «куди повертатись»
+    const plan      = params.get('plan'); // "group" | "individual" (на майбутнє)
+    const home      = params.get('home') || detectHome();
 
     $('#ref').textContent = ref || '—';
 
-    // Кнопка "Відкрити оплату"
+    // Виведемо email, якщо збережений у локальному сховищі
+    try {
+      const email = localStorage.getItem('coEmail');
+      if (email) $('#emailEcho').textContent = email;
+    } catch {}
+
+    // Прив’язуємо кнопку "Відкрити оплату"
     const aPay = $('#openPay');
-    if (pay) { aPay.href = pay; } else { aPay.style.display = 'none'; }
-
-    // --- LANDING: завжди github.io, незалежно від редиректів на custom domain ---
-    const REPOS = new Set(['filipskanails','filipska-nails']);
-    function toGhBase(repo){ return `https://filipskanails.github.io/${repo}/`; }
-
-    function normalizeHome(u){
-      // Нет home → пробуем определить из текущего URL
-      if (!u) {
-        // если мы уже на github.io — забираем имя репозитория из пути
-        if (location.hostname.endsWith('github.io')) {
-          const m = location.pathname.match(/^\/(filipskanails|filipska-nails)\//);
-          if (m) return toGhBase(m[1]);
-        }
-        // иначе — дефолт на прод-репозиторий
-        return toGhBase('filipska-nails');
-      }
-
-      let url;
-      try { url = new URL(u, location.href); } catch { return toGhBase('filipska-nails'); }
-
-      // Если пришёл github.io и путь содержит нужный репозиторий — оставляем
-      if (url.hostname.endsWith('github.io')) {
-        const m = url.pathname.match(/^\/(filipskanails|filipska-nails)\//);
-        if (m) return toGhBase(m[1]);
-        // нет имени — по умолчанию прод
-        return toGhBase('filipska-nails');
-      }
-
-      // Если пришёл custom domain — пытаемся вытащить имя репозитория из пути
-      const parts = url.pathname.split('/').filter(Boolean);
-      const repo = parts.find(p => REPOS.has(p));
-      if (repo) return toGhBase(repo);
-
-      // Совсем без подсказок — по умолчанию прод
-      return toGhBase('filipska-nails');
-    }
-
-    const LANDING = normalizeHome(homeParam);
+    if (pay) aPay.href = pay;
 
     // Статус UI
     function setStatus(txt, cls){
@@ -128,7 +106,7 @@
       badge.className = cls;
     }
 
-    // Опитування статусу
+    // Перевірка статусу
     let pollTimer = null;
     async function checkStatus(){
       try{
@@ -141,11 +119,11 @@
           setStatus('успішно', 'ok');
           $('#actions').style.display = 'none';
           $('#afterSuccess').style.display = 'block';
-          return;
+          return; // зупиняємо опитування
         }
         if(st === 'failure' || st === 'expired' || st === 'reversed'){
           setStatus(st, 'err');
-          return;
+          return; // теж зупинимо
         }
 
         setStatus(st || 'очікується', 'wait');
@@ -157,12 +135,29 @@
     }
     function schedule(){ clearTimeout(pollTimer); pollTimer = setTimeout(checkStatus, 5000); }
 
-    // Кнопки
+    // Кнопка "Перевірити статус зараз"
     $('#checkNow').addEventListener('click', (e)=>{ e.preventDefault(); clearTimeout(pollTimer); checkStatus(); });
+
+    // Якщо вкладка знову стала видимою — одразу перевіримо
     document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkStatus(); });
 
-    // Возврат на сайт — строго на github.io базу
-    $('#toHome').addEventListener('click', (e)=>{ e.preventDefault(); location.replace(LANDING); });
+    // Кнопка "Повернутись на сайт"
+    $('#toHome').addEventListener('click', (e)=>{ e.preventDefault(); window.location.href = home + '#top'; });
+
+    // Кнопка "Продовжити в Telegram"
+    $('#toTG').addEventListener('click', async (e)=>{
+      e.preventDefault();
+      if(!ref){ alert('Немає номеру замовлення (ref). Спробуйте оновити сторінку.'); return; }
+      try{
+        const r = await fetch(`${WORKER}/onboard/start?ref=${encodeURIComponent(ref)}&home=${encodeURIComponent(home)}`);
+        const j = await r.json();
+        if(!j || !j.ok || !j.deeplink){ alert('Не вдалося отримати посилання Telegram. Якщо оплата щойно пройшла — зачекайте кілька секунд і спробуйте знову.'); return; }
+        // відкриємо у тій же вкладці (Telegram клієнт/веб відкриє бот)
+        window.location.href = j.deeplink;
+      }catch(err){
+        alert('Тимчасова помилка. Спробуйте ще раз.');
+      }
+    });
 
     // Старт
     checkStatus();
