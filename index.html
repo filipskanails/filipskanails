@@ -832,7 +832,7 @@
       const gOld    = promo ? GROUP_BASE : null;
       const iOld    = promo ? INDIV_BASE : null;
 
-      const gP=$("#gPrice"), gO=$("#gOld"), iP=$("#iPrice"), iO=$("#iOld"]);
+      const gP=$("#gPrice"), gO=$("#gOld"), iP=$("#iPrice"), iO=$("#iOld");
       if(gP) gP.textContent = fmt(gActive);
       if(iP) iP.textContent = fmt(iActive);
       if(gO){ if(gOld){ gO.style.display="block"; gO.innerHTML=`${fmt(gOld)}&nbsp;грн`; } else gO.style.display="none"; }
