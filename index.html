@@ -58,7 +58,7 @@
     }
     .hero-text{position:absolute;top:2%;left:50%;transform:translateX(-50%);
       width:calc(100% - 32px);max-width:640px;text-align:center;text-shadow:0 1px 0 rgba(0,0,0,.2);z-index:2}
-    .eyebrow{font-size:13px;letter-spacing:.06ем;color:var(--muted)}
+    .eyebrow{font-size:13px;letter-spacing:.06em;color:var(--muted)}
     .hl{font-size:clamp(28px,7vw,38px);line-height:1.18;font-weight:900;margin:10px 0 8px}
     .hl.hl-mix{display:grid;gap:2px}
     .hl.hl-mix .line{display:block}
@@ -285,7 +285,7 @@
       position:absolute; top:-86px; z-index:2; width:34px; height:34px; border-radius:999px; border:1px solid var(--line);
       background:rgba(12,16,14,.7); display:grid; place-items:center; box-shadow: 0 8px 22px rgba(0,0,0,.25);
     }
-    .reviewsArrows .prev{ left:22px } .reviewsArrows .next{ right:22px } 
+    .reviewsArrows .prev{ left:22px } .reviewsArrows .next{ right:22px }
     .reviewsArrows .arrow:active{ transform:scale(.98) }
 
     /* ===== PROGRAM ===== */
@@ -313,13 +313,15 @@
       background:linear-gradient(90deg, rgba(142,243,199,.0), rgba(142,243,199,.55) 22%, rgba(255,181,107,.5) 50%, rgba(142,243,199,.55) 78%, rgba(142,243,199,.0));
       filter:blur(6px); transform:rotate(-2deg); pointer-events:none;
     }
+
+    /* Спочатку базові стилі summary (залишаємо на випадок спадкування) */
     summary.tHead{
       list-style:none; cursor:pointer; user-select:none;
       display:flex; align-items:center; justify-content:space-between; gap:10px;
       padding:14px 16px; position:relative; z-index:1; flex-wrap:nowrap;
     }
     summary.tHead::-webkit-details-marker{ display:none }
-    .tTitle{ font-weight:900; font-size:18px; display:flex; align-items:center; gap:10px; min-width:0; flex:1 1 auto; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .tTitle{ font-weight:900; font-size:18px; display:flex; align-items:center; gap:10px; min-width:0; }
     .tDot{ width:10px; height:10px; border-radius:50%; background:linear-gradient(135deg, var(--mint), var(--pop)); box-shadow:0 0 0 4px rgba(142,243,199,.18); flex:0 0 10px; }
     .tBadge{ font-size:12px; padding:6px 10px; border-radius:999px; color:#042015; font-weight:900; white-space:nowrap; flex:0 0 auto;
       background:linear-gradient(135deg, rgba(142,243,199,.92), rgba(255,181,107,.92));
@@ -347,6 +349,41 @@
     .tListPro li .txt{ font-size:clamp(15.5px,4.2vw,18px); line-height:1.5; }
     .tListPro b{ color:var(--mint); }
 
+    /* === ПАТЧ: флекс → грід у summary для довгих заголовків === */
+    #program summary.tHead{
+      display:grid;
+      grid-template-columns: 1fr auto 26px; /* title | badge | chevron */
+      align-items:center;
+      column-gap:10px;
+    }
+    #program .tTitle{
+      min-width:0;                 /* для ellipsis у grid */
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    #program .tBadge{
+      white-space:nowrap;
+      max-width:100%;
+    }
+    #program .tChevron{ justify-self:center }
+
+    /* На вузьких — бейдж під заголовком */
+    @media (max-width: 520px){
+      #program summary.tHead{
+        grid-template-columns: 1fr 26px;   /* title | chevron */
+        grid-auto-rows:auto;
+        row-gap:6px;
+      }
+      #program .tBadge{
+        grid-column: 1 / -1;
+        justify-self:start;
+      }
+    }
+    @media (max-width: 380px){
+      #program .tBadge{ font-size:11px; padding:5px 8px; }
+    }
+
     /* ===== FOOTER ===== */
     footer.footer{margin-top:26px;padding:22px 16px 96px;text-align:center;color:var(--muted);border-top:1px solid var(--line)}
     .footer .brand{font-size:22px;color:var(--text);margin:0 0 6px;font-weight:700}
@@ -362,12 +399,13 @@
     .floater .cta{width:100%}
     @media (prefers-reduced-motion:reduce){ .floater{transition:none} }
 
-    /* ===== CHECKOUT MODAL — только НОВЫЙ дизайн (совместим с твоим JS) ===== */
+    /* ===== CHECKOUT MODAL ===== */
     .co-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.55); display:grid; place-items:center; z-index:9999; opacity:0; pointer-events:none; transition:opacity .22s ease;}
     .co-backdrop.show{ opacity:1; pointer-events:auto }
     .co-modal{
       width:min(760px, 96vw); max-height:96vh; overflow:auto; position:relative;
-      border-radius:26px; padding:0; background:linear-gradient(180deg, rgba(18,25,21,.85), rgba(18,25,21,.75)), #101713;
+      border-radius:26px; padding:0;
+      background:linear-gradient(180deg, rgba(18,25,21,.88), rgba(18,25,21,.72)), #101713;
       border:1px solid rgba(142,243,199,.28);
       box-shadow:0 40px 90px rgba(0,0,0,.65), 0 0 0 1px rgba(255,255,255,.05) inset;
       isolation:isolate;
@@ -381,7 +419,7 @@
       position:sticky; top:0; z-index:2;
       display:flex; align-items:center; justify-content:space-between; gap:8px;
       padding:14px 16px;
-      background:linear-gradient(180deg, rgba(20,28,24,.9), rgba(20,28,24,.7)), radial-gradient(120% 220% at 0% 0%, rgba(142,243,199,.06), transparent 60%);
+      background:linear-gradient(180deg, rgba(20,28,24,.9), rgba(20,28,24,.72)), radial-gradient(120% 220% at 0% 0%, rgba(142,243,199,.06), transparent 60%);
       border-bottom:1px solid #2b4136; backdrop-filter:blur(10px);
     }
     .co-title{ font-weight:900; font-size:20px; display:flex; align-items:center; gap:10px }
@@ -428,8 +466,6 @@
     .co-grid .full{ grid-column:1 / -1 }
     .field{ display:grid; gap:6px; position:relative }
     .field label{ font-size:13px; color:#cfe6dc }
-    .req{ font-size:11px; padding:2px 6px; border-radius:999px; margin-left:6px;
-      background:linear-gradient(135deg, rgba(255,181,107,.95), rgba(142,243,199,.95)); color:#062217; font-weight:900; }
     .hint{ font-size:12px; color:#a8cbbd }
 
     .inp{ width:100%; padding:14px 14px 14px 42px; border-radius:14px; background:#0f1713; border:1px solid #2b4136; color:var(--text); outline:none;
@@ -461,6 +497,45 @@
     @media (max-width:740px){
       .co-grid{ grid-template-columns:1fr }
       .iconL{ top:31px }
+    }
+
+    /* ===== PERF-LITE ===== */
+    .perf-lite body::before{ display:none; }
+    .perf-lite .promoCard{ backdrop-filter:none; box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), 0 6px 16px rgba(0,0,0,.22) }
+    .perf-lite .promoCard::before{ display:none; }
+    .perf-lite .tariff{ box-shadow:inset 0 0 0 1px rgba(255,255,255,.028), 0 8px 18px rgba(0,0,0,.22) }
+    .perf-lite .tariff::after{ display:none; }
+    .perf-lite #program::before{ display:none; }
+    .perf-lite .aboutCard{ backdrop-filter:none; }
+    .perf-lite #promo .tLabel::after{ animation:none; opacity:.35 }
+
+    @keyframes tariffPulse{
+      0%{ transform:scale(1); box-shadow:0 10px 26px rgba(0,0,0,.22); }
+      35%{ transform:scale(1.02); box-shadow:0 20px 46px rgba(0,0,0,.38), 0 0 0 2px rgba(142,243,199,.24) inset; }
+      100%{ transform:scale(1); box-shadow:0 10px 26px rgba(0,0,0,.22); }
+    }
+    .tariff.pulse{ animation: tariffPulse .7s ease; }
+    @media (prefers-reduced-motion:reduce){
+      .tariff.pulse{ animation:none }
+      #promo .tLabel::after{ animation:none; }
+    }
+
+    @media (max-width: 420px){
+      .promoHead{ row-gap:6px }
+      .promoBadges{ justify-content:center }
+      .pBadge{ font-size:11px; padding:5px 8px; }
+
+      #promo .tHead{ grid-template-columns:1fr; gap:6px }
+      #promo .tName{ flex-wrap:nowrap }
+      #promo .tLabel{ font-size: clamp(22px, 7vw, 26px); }
+      .priceRow{ justify-content:flex-start; text-align:left }
+      .saveBadge{ justify-self:start; text-align:left }
+
+      .tList{ font-size:15.5px; line-height:1.45; gap:8px }
+      .tList li{ padding:8px 10px; gap:8px }
+      .tList li::before{ width:20px; height:20px; flex:0 0 20px; }
+
+      .tListPro li .txt{ font-size:15.5px }
     }
 
     body.modal-open{ overflow:hidden }
@@ -572,7 +647,7 @@
       </div>
     </section>
 
-    <!-- ===== PROGRAM (твоя обновленная версия) ===== -->
+    <!-- ===== PROGRAM ===== -->
     <section id="program" class="section">
       <div class="head">
         <h2>Програма курсу “Next Level”</h2>
@@ -694,7 +769,7 @@
     <div class="floater-inner"><a id="buyFloat" class="cta">Отримати доступ до курсу</a></div>
   </div>
 
-  <!-- CHECKOUT MODAL — только новая разметка (ID сохранены) -->
+  <!-- CHECKOUT MODAL -->
   <div class="co-backdrop" id="checkoutBackdrop" aria-hidden="true">
     <div class="co-modal" role="dialog" aria-modal="true" aria-labelledby="coTitle">
       <div class="co-top">
@@ -728,24 +803,22 @@
         <form id="checkoutForm" novalidate>
           <div class="co-grid">
             <div class="field">
-              <label for="coFirst">Ім’я <span class="req">обов’язково</span></label>
+              <label for="coFirst">Ім’я</label>
               <div class="iconL">👤</div>
               <input id="coFirst" class="inp" type="text" autocomplete="given-name" placeholder="Анна">
             </div>
             <div class="field">
-              <label for="coLast">Прізвище <span class="req">обов’язково</span></label>
+              <label for="coLast">Прізвище</label>
               <div class="iconL">📝</div>
               <input id="coLast" class="inp" type="text" autocomplete="family-name" placeholder="Філіпська">
             </div>
-
             <div class="field full">
-              <label for="coEmail">Email <span class="req">обов’язково</span></label>
+              <label for="coEmail">Email</label>
               <div class="iconL">✉️</div>
               <input id="coEmail" class="inp" type="email" autocomplete="email" placeholder="name@email.com">
             </div>
-
             <div class="field full">
-              <label for="coPhone">Телефон <span class="req">обов’язково</span></label>
+              <label for="coPhone">Телефон (для зв’язку)</label>
               <div class="iconL">📞</div>
               <input id="coPhone" class="inp" type="tel" inputmode="tel" placeholder="+380">
             </div>
@@ -917,12 +990,12 @@
       slides[0]?.classList.add('is-active'); updateDots(0); start();
     })();
 
-    /* ===== floater ===== */
+    /* ===== Pulse tariffs after scroll ===== */
     function visibleRatio(el){
       if(!el) return 0;
       const r=el.getBoundingClientRect(), vw=innerWidth, vh=innerHeight;
       const ix=Math.max(0, Math.min(r.right, vw) - Math.min(r.left, vw));
-      const iy=Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
+      const iy=Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, vh));
       return (ix*iy) / Math.max(1, r.width*r.height);
     }
     function pulseTariffs(){
@@ -950,6 +1023,7 @@
       const onScroll=()=>{ clearTimeout(t); t=setTimeout(onEnd, idleMs); };
       addEventListener('scroll', onScroll, {passive:true}); onScroll(); setTimeout(onEnd, capMs);
     }
+
     function scrollToTariffsSmart(){
       const promo=$("#promo"); if(!promo) return;
       const tariffs = promo.querySelector('.tariffs') || promo;
@@ -964,13 +1038,46 @@
       window.scrollTo({ top: Math.max(0, y), behavior:'smooth' });
       waitScrollEnd(afterScrollSettledThenPulse);
     }
+
+    /* ===== floater + hero CTA ===== */
     (function(){
       const floatBtn=$("#buyFloat"), topBtn=$("#buyTop");
       if(floatBtn){ floatBtn.textContent="Отримати доступ до курсу"; floatBtn.addEventListener('click', e=>{ e.preventDefault(); scrollToTariffsSmart(); }); }
       if(topBtn){ topBtn.addEventListener('click', e=>{ e.preventDefault(); scrollToTariffsSmart(); }); }
     })();
 
-    /* ===== MODAL (checkout) — логика из твоего файла, ID совпадают ===== */
+    /* ===== floater visibility ===== */
+    (function(){
+      const hero=$("#hero"), promo=$("#promo"), floater=$("#floatCta");
+      if(!hero||!promo||!floater) return;
+
+      function computeInView(el){
+        const r = el.getBoundingClientRect();
+        const vh = innerHeight, vw = innerWidth;
+        const vert = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
+        const hor  = Math.max(0, Math.min(r.right, vw) - Math.max(r.left, 0));
+        const area = (vert*hor) / Math.max(1, r.width*r.height);
+        return area > 0.12;
+      }
+      let rafScheduled=false;
+      function updateNow(){
+        if(rafScheduled) return;
+        rafScheduled=true;
+        requestAnimationFrame(()=>{
+          const heroIn = computeInView(hero);
+          const promoIn = computeInView(promo);
+          if(heroIn || promoIn){ floater.classList.remove("show"); }
+          else{ floater.classList.add("show"); }
+          rafScheduled=false;
+        });
+      }
+      const io = new IntersectionObserver(()=>updateNow(), { threshold:[0, .1, .2, .5, .8, 1], rootMargin:"0px" });
+      io.observe(hero); io.observe(promo);
+      updateNow();
+      addEventListener('resize', updateNow);
+    })();
+
+    /* ===== MODAL (checkout) ===== */
     (function(){
       const backdrop=$("#checkoutBackdrop"), coForm=$("#checkoutForm"), coBtn=$("#coBtn"), coErr=$("#coErr");
       const bClose=$("#coClose"), bGroup=$("#psGroup"), bIndiv=$("#psIndiv");
@@ -1037,6 +1144,25 @@
           coErr.classList.add("show");
           coBtn.disabled=false; coBtn.textContent="Перейти до оплати";
         }
+      });
+    })();
+
+    /* ===== PROGRAM: авто-кількість модулів у бейджах ===== */
+    (function(){
+      function uaDecl(n, one, few, many){
+        n = Math.abs(n)%100; const n1 = n%10;
+        if(n>10 && n<20) return many;
+        if(n1>1 && n1<5) return few;
+        if(n1===1) return one;
+        return many;
+      }
+      const tracks = document.querySelectorAll('#program details.track');
+      tracks.forEach(track=>{
+        const items = track.querySelectorAll('ol.tListPro > li');
+        const badge = track.querySelector('.tBadge');
+        if(!badge) return;
+        const n = items.length;
+        badge.textContent = `${n} ${uaDecl(n,'модуль','модулі','модулів')}`;
       });
     })();
 
