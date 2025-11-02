@@ -58,12 +58,8 @@
       border:1px solid color-mix(in oklab, #0b7d47 80%, #fff 0%);
     }
     .cta:hover{transform:translateY(-1px); filter:brightness(1.05)}
-    .btn-secondary{
-      background:#0f1713; color:var(--text); border:1px solid #2b4136; text-transform:none; font-weight:700;
-    }
-    .btn-ghost{
-      background:transparent; color:var(--text); border:1px dashed #355144; text-transform:none; font-weight:700;
-    }
+    .btn-secondary{background:#0f1713; color:var(--text); border:1px solid #2b4136; text-transform:none; font-weight:700}
+    .btn-ghost{background:transparent; color:var(--text); border:1px dashed #355144; text-transform:none; font-weight:700}
 
     .box{padding:14px; border:1px dashed var(--line); border-radius:14px; background:rgba(255,255,255,.02)}
     .note{font-size:14px; color:var(--muted); margin-top:8px}
@@ -195,10 +191,10 @@
     const plan      = (params.get('plan') || "").toLowerCase(); // "group" | "individual"
     const homeParam = params.get('home') || "";
 
-    // Провайдер (raif за замовчуванням)
+    // Провайдер (дефолт — MONO до підключення Райфа)
     let provider = (params.get('provider') || "").toLowerCase();
     if(!provider){
-      provider = /raif|raiffeisen|aval/i.test(pay) ? "raif" : /mono|monobank/i.test(pay) ? "mono" : "raif";
+      provider = /raif|raiffeisen|aval/i.test(pay) ? "raif" : /mono|monobank/i.test(pay) ? "mono" : "mono";
     }
     const provMap = {
       mono: {
@@ -206,19 +202,17 @@
         openBtn: "Відкрити оплату в Monobank",
         openTitle: "Відкрити оплату в Monobank",
         openHint: "Платіж відкриється у новій вкладці Monobank.",
-        helpOpen: "Якщо випадково закрили вкладку — натисніть «Відкрити оплату в Monobank» ще раз.",
-        statusPath: "/mono/status"
+        helpOpen: "Якщо випадково закрили вкладку — натисніть «Відкрити оплату в Monobank» ще раз."
       },
       raif: {
         name: "Райфайзен Банк Аваль",
         openBtn: "Відкрити оплату в Райфайзен",
         openTitle: "Відкрити оплату в Райфайзен",
         openHint: "Платіж відкриється у новій вкладці Райфайзен Банку.",
-        helpOpen: "Якщо вкладка з оплатою закрилась — натисніть «Відкрити оплату в Райфайзен» ще раз.",
-        statusPath: "/raif/status"
+        helpOpen: "Якщо вкладка з оплатою закрилась — натисніть «Відкрити оплату в Райфайзен» ще раз."
       }
     };
-    const PROV = provMap[provider] || provMap.raif;
+    const PROV = provMap[provider] || provMap.mono;
 
     // UI ініт
     $('#ref').textContent = ref || '—';
@@ -238,7 +232,7 @@
       HOME = location.origin + location.pathname.replace(/thankyou\.html.*$/,'');
     }
 
-    // Зберігаємо/читаємо invoiceId у localStorage (щоб не втрачався після повернення зі сторінки банку)
+    // Збереження/відновлення invoiceId
     const LS_KEY = ref ? `nx_invoice_${ref}` : null;
     if(invoiceId && LS_KEY){ try{ localStorage.setItem(LS_KEY, invoiceId); }catch{} }
     if((!invoiceId || invoiceId==='') && LS_KEY){
@@ -287,15 +281,15 @@
       $('#botLinkEcho').textContent = botHref;
     }
 
-    // === Полінг статусу з анти-кешем і фолбеком по ref ===
+    // === Полінг статусу через /pay/status з анти-кешем і фолбеком по ref ===
     let pollTimer = null;
     async function fetchStatus(){
       const ts = Date.now();
-      const base = `${WORKER}${PROV.statusPath}`;
+      const base = `${WORKER}/pay/status`;
       let url;
       if(invoiceId){ url = `${base}?invoiceId=${encodeURIComponent(invoiceId)}&_ts=${ts}`; }
-      else if(ref){ url = `${base}?ref=${encodeURIComponent(ref)}&_ts=${ts}`; }
-      else{ return { status:"unknown" }; }
+      else if(ref){  url = `${base}?ref=${encodeURIComponent(ref)}&_ts=${ts}`; }
+      else { return { status:"unknown" }; }
 
       const r = await fetch(url, { cache:'no-store', headers:{ 'pragma':'no-cache', 'cache-control':'no-cache' } });
       return r.ok ? r.json() : { status:"error" };
@@ -304,12 +298,12 @@
     async function checkStatus(){
       try{
         const data = await fetchStatus();
-        const raw = String(data.status || '').toLowerCase();
+        const raw = String(data.status || data.state || '').toLowerCase();
 
         let st = 'очікується';
         let cls = 'wait';
         if (/(success|paid|ok)/.test(raw)){ st = 'успішно'; cls='ok'; }
-        else if (/(failure|failed|expired|reversed|cancelled|error|declined)/.test(raw)){ st = raw; cls='err'; }
+        else if (/(failure|failed|expired|reversed|cancelled|error|declined|failed)/.test(raw)){ st = raw; cls='err'; }
         else if (/(processing|pending|created|waiting|hold)/.test(raw)){ st = 'обробка/очікування'; cls='wait'; }
 
         setStatus(st, cls);
