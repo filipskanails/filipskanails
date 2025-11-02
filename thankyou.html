@@ -6,63 +6,175 @@
   <title>Дякуємо — Next Level</title>
   <meta name="color-scheme" content="dark">
   <style>
-    :root{ --bg:#0c100e; --card:#121614; --line:#223129; --text:#e7f0ea; --muted:#a1b3ab; --accent:#004a25; --accent-2:#0b7d47; }
+    :root{
+      --bg:#0c100e; --card:#0f1512; --line:#223129;
+      --text:#e7f0ea; --muted:#a1b3ab;
+      --accent:#004a25; --accent-2:#0b7d47; --accent-rgb:0,74,37;
+      --success:#c7f5d2; --warn:#ffe3a3; --error:#ffb4b4;
+    }
     *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif}
-    .wrap{max-width:800px;margin:0 auto;padding:24px 16px}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 10px 26px rgba(0,0,0,.22)}
-    h1{font-size:26px;margin:0 0 8px}
-    h2{font-size:20px;margin:16px 0 8px}
+    html,body{margin:0;background:radial-gradient(1200px 600px at 20% -10%, rgba(0,74,37,.18), transparent 55%),
+                           radial-gradient(900px 500px at 100% 0%, rgba(11,125,71,.14), transparent 55%),
+                           var(--bg);
+      color:var(--text); font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif}
+    .wrap{max-width:860px;margin:0 auto;padding:28px 16px}
+    .card{
+      position:relative; border-radius:22px; padding:20px; background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border:1px solid color-mix(in oklab, var(--line) 82%, transparent);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), 0 18px 38px rgba(0,0,0,.35);
+      overflow:hidden;
+    }
+    .card::before{
+      content:""; position:absolute; inset:-1px; border-radius:24px;
+      padding:1px; background:conic-gradient(from 180deg, rgba(var(--accent-rgb),.0), rgba(var(--accent-rgb),.45), rgba(var(--accent-rgb),.0));
+      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; animation:spin 8s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    h1{font-size:28px; margin:0 0 6px; letter-spacing:.2px}
+    h2{font-size:20px; margin:16px 0 10px}
+    p{margin:0 0 10px}
     .muted{color:var(--muted)}
-    .ok{color:#c7f5d2}.wait{color:#ffe3a3}.err{color:#ffb4b4}
-    .cta{display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border-radius:999px;background:linear-gradient(135deg,var(--accent-2),var(--accent));color:#062217;font-weight:900;text-transform:uppercase;box-shadow:0 10px 28px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12);text-decoration:none}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    .row .cta{flex:1;min-width:220px}
-    .box{padding:12px;border:1px dashed var(--line);border-radius:14px;background:rgba(255,255,255,.02)}
-    .btn-secondary{background:#0f1713;color:var(--text);border:1px solid #2b4136}
-    .note{font-size:14px;color:var(--muted);margin-top:8px}
-    .kbd{padding:2px 8px;border-radius:6px;background:#0f1713;border:1px solid #27382f}
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      font-weight:700; padding:6px 10px; border-radius:999px; font-size:14px;
+      background:#0f1713; border:1px solid #2b4136;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);
+    }
+    .badge.ok{color:#09391f; background:#bdf0ce; border-color:#93d8a9}
+    .badge.wait{color:#332b08; background:#ffe9b9; border-color:#f3d47e}
+    .badge.err{color:#3a0d0d; background:#ffc7c7; border-color:#ff9b9b}
+    .dots{display:inline-block; width:14px; text-align:left}
+    .dots::after{content:"…"; animation:dots 1.2s steps(4,end) infinite}
+    @keyframes dots{0%{content:""} 25%{content:"."} 50%{content:".."} 75%{content:"..."} 100%{content:""}}
+
+    .row{display:flex; gap:10px; flex-wrap:wrap}
+    .cta{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding:14px 20px; border-radius:999px; text-decoration:none; font-weight:900; text-transform:uppercase;
+      background:linear-gradient(135deg, var(--accent-2), var(--accent)); color:#062217;
+      box-shadow:0 12px 30px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12); transition:transform .06s ease, filter .2s ease;
+      border:1px solid color-mix(in oklab, #0b7d47 80%, #fff 0%);
+    }
+    .cta:hover{transform:translateY(-1px); filter:brightness(1.05)}
+    .btn-secondary{
+      background:#0f1713; color:var(--text); border:1px solid #2b4136; text-transform:none; font-weight:700;
+    }
+
+    .box{padding:14px; border:1px dashed var(--line); border-radius:14px; background:rgba(255,255,255,.02)}
+    .note{font-size:14px; color:var(--muted); margin-top:8px}
+    .kbd{padding:2px 8px; border-radius:6px; background:#0f1713; border:1px solid #27382f}
+    .split{display:grid; grid-template-columns: 1fr; gap:14px}
+    @media (min-width:720px){ .split{grid-template-columns: 1.2fr .8fr} }
+
+    /* Progress tracker */
+    .steps{display:grid; gap:8px; margin:8px 0 0; counter-reset:step}
+    .step{
+      display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:10px;
+      padding:10px 12px; background:rgba(255,255,255,.02); border:1px solid #24382f; border-radius:12px;
+    }
+    .step::before{
+      counter-increment:step; content:counter(step);
+      width:28px; height:28px; display:inline-grid; place-items:center;
+      border-radius:50%; background:#0f1713; border:1px solid #2b4136; font-weight:800;
+    }
+    .step.done{background:linear-gradient(180deg, rgba(189,240,206,.08), rgba(189,240,206,.03))}
+    .step.done::before{background:#bdf0ce; color:#09391f; border-color:#93d8a9}
+    .step .hint{font-size:13px; color:var(--muted)}
+
+    /* Accordion FAQ */
+    details{background:#0f1512; border:1px solid #223129; border-radius:12px; padding:12px}
+    summary{cursor:pointer; list-style:none; font-weight:700}
+    summary::-webkit-details-marker{display:none}
+
+    /* Success confetti canvas */
+    #fx{position:fixed; inset:0; pointer-events:none; z-index:999}
   </style>
 </head>
 <body>
+  <canvas id="fx"></canvas>
   <div class="wrap">
     <div class="card">
-      <h1>Дякуємо! <span id="statusBadge" class="wait">Очікуємо оплату…</span></h1>
-      <p class="muted">Номер замовлення: <b id="ref">—</b></p>
-      <p class="muted">Статус: <b id="status">очікується</b></p>
-
-      <div class="box" style="margin-top:12px">
-        <h2>Як завершити оформлення</h2>
-        <ol style="margin:8px 0 0; padding-left:18px">
-          <li>Натисніть <b>«Відкрити оплату в Monobank»</b> нижче — платіж відкриється в новій вкладці.</li>
-          <li>Завершіть оплату у Monobank.</li>
-          <li>Поверніться на цю сторінку «Дякуємо». Статус зміниться автоматично (або натисніть «Перевірити статус зараз»).</li>
-        </ol>
-      </div>
-
-      <div id="actions" class="row" style="margin:14px 0">
-        <a id="openPay" class="cta" target="_blank" rel="noopener">Відкрити оплату в Monobank</a>
-        <a id="checkNow" class="cta btn-secondary" href="#">Перевірити статус зараз</a>
-      </div>
-
-      <div id="afterSuccess" style="display:none; margin-top:16px">
-        <h2>Оплата успішна ✅</h2>
-        <p class="muted" id="nextSteps">
-          Далі перейдіть у наш Telegram-бот, щоб отримати доступ до відео-уроків
-          <span id="planHint"></span>. Якщо у вас індивідуальний тариф — надсилайте домашні завдання прямо в боті, викладач відповість там же.
-        </p>
-        <div class="row" style="margin-top:10px" id="tgButtons">
-          <!-- Сюди підставиться кнопка "Продовжити в Telegram-боті" -->
+      <header class="row" style="justify-content:space-between; align-items:flex-start">
+        <div>
+          <h1>Дякуємо! <span id="statusBadge" class="badge wait">Очікуємо оплату <span class="dots"></span></span></h1>
+          <p class="muted">Номер замовлення: <b id="ref">—</b></p>
+          <p class="muted">Статус: <b id="status">очікується</b></p>
         </div>
-        <p class="note">Якщо кнопка не відкриває застосунок, скористайтесь посиланням у браузері: <span id="botLinkEcho" class="kbd"></span></p>
-        <div class="row" style="margin-top:10px">
-          <a id="toHome" class="cta btn-secondary" href="#">Повернутись на сайт</a>
-        </div>
-      </div>
+        <img alt="Next Level" src="data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?><svg xmlns='http://www.w3.org/2000/svg' width='84' height='84' viewBox='0 0 84 84'><defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'><stop offset='0' stop-color='%23004a25'/><stop offset='1' stop-color='%230b7d47'/></linearGradient></defs><rect rx='18' ry='18' width='84' height='84' fill='%230f1512' stroke='%23223129'/><path d='M22 54l10-24 10 16 10-20 10 28' fill='none' stroke='url(%23g)' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/></svg>" style="opacity:.9"/>
+      </header>
 
-      <div id="help" style="margin-top:14px">
-        <p class="muted">Якщо випадково закрили вкладку з оплатою — натисніть «Відкрити оплату в Monobank» ще раз.</p>
-        <p class="muted">Якщо оплата не проходить — спробуйте іншу картку або зв’яжіться з нами.</p>
+      <div class="split">
+        <section class="box">
+          <h2>Як завершити оформлення</h2>
+          <div class="steps" id="steps">
+            <!-- кроки будуть оновлені залежно від провайдера -->
+            <div class="step" id="step-open">
+              <div>
+                <div class="title"><b id="openTitle">Відкрити оплату</b></div>
+                <div class="hint" id="openHint">Платіж відкриється у новій вкладці.</div>
+              </div>
+              <span class="kbd" id="provTag">Bank</span>
+            </div>
+            <div class="step" id="step-pay">
+              <div>
+                <div class="title"><b>Оплатити в банку</b></div>
+                <div class="hint" id="payHint">Підтвердіть платіж у застосунку.</div>
+              </div>
+              <span class="kbd">App</span>
+            </div>
+            <div class="step" id="step-back">
+              <div>
+                <div class="title"><b>Повернутись на цю сторінку</b></div>
+                <div class="hint">Статус оновиться автоматично (або натисніть «Перевірити статус зараз»).</div>
+              </div>
+              <span class="kbd">Auto</span>
+            </div>
+            <div class="step" id="step-tg">
+              <div>
+                <div class="title"><b>Продовжити в Telegram-боті</b></div>
+                <div class="hint">Отримайте доступ до уроків <span id="planHint"></span>.</div>
+              </div>
+              <span class="kbd">Telegram</span>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div id="actions" class="row" style="margin:14px 0">
+            <a id="openPay" class="cta" target="_blank" rel="noopener">Відкрити оплату</a>
+            <a id="checkNow" class="cta btn-secondary" href="#">Перевірити статус зараз</a>
+          </div>
+
+          <div id="afterSuccess" style="display:none; margin-top:16px">
+            <h2>Оплата успішна ✅</h2>
+            <p class="muted" id="nextSteps">
+              Далі перейдіть у наш Telegram-бот, щоб отримати доступ до відео-уроків.
+              Якщо у вас <b>індивідуальний</b> тариф — надсилайте домашні завдання прямо в боті, викладач відповість там же.
+            </p>
+            <div class="row" style="margin-top:10px" id="tgButtons"></div>
+            <p class="note">Якщо кнопка не відкриває застосунок — скористайтесь посиланням для копіювання: <span id="botLinkEcho" class="kbd"></span></p>
+            <div class="row" style="margin-top:10px">
+              <a id="toHome" class="cta btn-secondary" href="#">Повернутись на сайт</a>
+            </div>
+          </div>
+
+          <div id="help" style="margin-top:14px; display:grid; gap:10px">
+            <details>
+              <summary>Не відкривається сторінка оплати</summary>
+              <p class="muted" id="helpOpen">Спробуйте оновити сторінку та натиснути «Відкрити оплату» ще раз.</p>
+            </details>
+            <details>
+              <summary>Оплата пройшла в застосунку, але статус не оновився</summary>
+              <p class="muted">Натисніть «Перевірити статус зараз». Якщо не допоможе — зачекайте 1–2 хвилини або зв’яжіться з нами.</p>
+            </details>
+            <details>
+              <summary>Оплата відхилена / строк дії рахунку минув</summary>
+              <p class="muted">Створіть новий платіж або використайте іншу картку. Якщо проблема лишається — напишіть у підтримку.</p>
+            </details>
+          </div>
+        </section>
       </div>
     </div>
   </div>
@@ -71,8 +183,10 @@
   (function(){
     const $ = s => document.querySelector(s);
 
-    // ===== Налаштування (ім'я бота без @) =====
+    // ===== Конфіг (ім'я бота без @) =====
     const BOT_HANDLE = "NailSchoolFilipskabot";
+
+    // Базовий воркер (залишаємо як у тебе)
     const WORKER = "https://filipskanails-pay.timanov-business.workers.dev";
 
     // Параметри URL
@@ -82,10 +196,16 @@
     const pay       = params.get('pay') || "";
     const plan      = (params.get('plan') || "").toLowerCase(); // "group" | "individual"
     const homeParam = params.get('home') || "";
+    // Явний провайдер або авто-детект по URL
+    let provider = (params.get('provider') || "").toLowerCase();
+    if(!provider){
+      provider = /raif|raiffeisen|aval/i.test(pay) ? "raif" : /mono|monobank/i.test(pay) ? "mono" : "raif";
+    }
 
+    // Відображення ref
     $('#ref').textContent = ref || '—';
 
-    // Нормалізація та вибір правильного HOME (щоб повернутись на те саме оточення)
+    // Нормалізація HOME (повернення на те саме оточення)
     function normalizeHome(h){
       try{ const u=new URL(h); return u.origin + u.pathname.replace(/\/?$/, '/'); }catch{ return null; }
     }
@@ -95,31 +215,68 @@
     ]);
     let HOME = normalizeHome(homeParam);
     if(!HOME || !ALLOWED.has(HOME)){
-      // fallback: базуємося на поточному шляху (працює і на stage, і на prod)
       HOME = location.origin + location.pathname.replace(/thankyou\.html.*$/,'');
     }
 
-    // Кнопка оплатити (відкриває сторінку Mono)
-    if (pay) $('#openPay').href = pay;
-    else $('#openPay').style.display = 'none';
+    // Тексти під провайдера
+    const provMap = {
+      mono: {
+        name: "Monobank",
+        openBtn: "Відкрити оплату в Monobank",
+        openTitle: "Відкрити оплату в Monobank",
+        openHint: "Платіж відкриється у новій вкладці Monobank.",
+        helpOpen: "Якщо випадково закрили вкладку — натисніть «Відкрити оплату в Monobank» ще раз.",
+        statusPath: "/mono/status"
+      },
+      raif: {
+        name: "Райфайзен Банк Аваль",
+        openBtn: "Відкрити оплату в Райфайзен",
+        openTitle: "Відкрити оплату в Райфайзен",
+        openHint: "Платіж відкриється у новій вкладці Райфайзен Банку.",
+        helpOpen: "Якщо вкладка з оплатою закрилась — натисніть «Відкрити оплату в Райфайзен» ще раз.",
+        statusPath: "/raif/status"
+      }
+    };
+    const PROV = provMap[provider] || provMap.raif;
 
-    // Відмалювати підказку за тарифом
+    // Проставити копірайт під провайдера
+    $('#provTag').textContent = PROV.name;
+    $('#openTitle').textContent = PROV.openTitle;
+    $('#openHint').textContent = PROV.openHint;
+    $('#helpOpen').textContent = PROV.helpOpen;
+
+    // Кнопка оплатити
+    if (pay){
+      $('#openPay').href = pay;
+      $('#openPay').textContent = PROV.openBtn;
+    } else {
+      $('#openPay').style.display = 'none';
+    }
+
+    // Підказка за тарифом
     const hint = (plan === 'individual') ? 'та надсилати ДЗ' : '';
-    $('#planHint').textContent = hint ? ` (${hint})` : '';
+    $('#planHint').textContent = hint ? `(${hint})` : '';
 
     // Статус UI
     function setStatus(txt, cls){
       $('#status').textContent = txt;
       const badge = $('#statusBadge');
-      badge.textContent = (cls==='ok') ? 'Оплачено' : (cls==='err') ? 'Помилка' : 'Очікуємо оплату…';
-      badge.className = cls;
+      if(cls==='ok'){ badge.textContent = 'Оплачено'; badge.className = 'badge ok'; fxConfetti(); markStepsDone(true); }
+      else if(cls==='err'){ badge.textContent = 'Помилка'; badge.className = 'badge err'; }
+      else{ badge.innerHTML = 'Очікуємо оплату <span class="dots"></span>'; badge.className = 'badge wait'; }
     }
 
-    // Побудова кнопки в бота (без JS-хаков — проста <a>, працює на мобільному)
-    function renderTelegramButton(){
-      const wrap = $('#tgButtons');
-      wrap.innerHTML = '';
+    // Візуально позначаємо кроки як виконані
+    function markStepsDone(success){
+      $('#step-open')?.classList.add('done');
+      $('#step-pay')?.classList.add('done');
+      $('#step-back')?.classList.add('done');
+      if(success) $('#step-tg')?.classList.add('done');
+    }
 
+    // Побудова кнопки в Telegram
+    function renderTelegramButton(){
+      const wrap = $('#tgButtons'); wrap.innerHTML = '';
       if (!BOT_HANDLE || !ref) {
         const p = document.createElement('p');
         p.className = 'muted';
@@ -127,47 +284,45 @@
         wrap.appendChild(p);
         return;
       }
-
       const botHref = `https://t.me/${BOT_HANDLE}?start=${encodeURIComponent(ref)}`;
-
       const a = document.createElement('a');
       a.className = 'cta';
       a.textContent = 'Продовжити в Telegram-боті';
-      a.href = botHref;
-      a.target = '_blank';
-      a.rel = 'noopener';
+      a.href = botHref; a.target = '_blank'; a.rel = 'noopener';
       wrap.appendChild(a);
-
-      // дублікат-ехо для копіювання вручну (на випадок обмежень системи)
       $('#botLinkEcho').textContent = botHref;
     }
 
-    // Опитування статусу інвойсу
+    // Полінг статусу
     let pollTimer = null;
     async function checkStatus(){
       try{
         if(!invoiceId){
-          setStatus('очікується (без invoiceId)', 'wait');
+          setStatus('очікується (немає invoiceId)', 'wait');
           schedule();
           return;
         }
-        const r = await fetch(`${WORKER}/mono/status?invoiceId=${encodeURIComponent(invoiceId)}`);
+        const url = `${WORKER}${PROV.statusPath}?invoiceId=${encodeURIComponent(invoiceId)}`;
+        const r = await fetch(url);
         const data = await r.json();
-        const st = String(data.status || '').toLowerCase();
+        const raw = String(data.status || '').toLowerCase();
 
-        if(st === 'success' || st === 'paid'){
-          setStatus('успішно', 'ok');
+        // Нормалізуємо перелік можливих статусів
+        // success/paid -> ok; failure/expired/reversed/cancelled -> err; processing/pending/created -> wait
+        let st = 'очікується';
+        let cls = 'wait';
+        if (/(success|paid|ok)/.test(raw)){ st = 'успішно'; cls='ok'; }
+        else if (/(failure|failed|expired|reversed|cancelled|error|declined)/.test(raw)){ st = raw; cls='err'; }
+        else if (/(processing|pending|created|waiting)/.test(raw)){ st = 'обробка/очікування'; cls='wait'; }
+
+        setStatus(st, cls);
+
+        if(cls==='ok'){
           $('#actions').style.display = 'none';
           $('#afterSuccess').style.display = 'block';
           renderTelegramButton();
-          return; // зупиняємо опитування
+          return; // стоп полінг
         }
-        if(st === 'failure' || st === 'expired' || st === 'reversed'){
-          setStatus(st, 'err');
-          return;
-        }
-
-        setStatus(st || 'очікується', 'wait');
         schedule();
       }catch(e){
         setStatus('тимчасова помилка мережі', 'wait');
@@ -176,17 +331,44 @@
     }
     function schedule(){ clearTimeout(pollTimer); pollTimer = setTimeout(checkStatus, 5000); }
 
-    // Кнопка "Перевірити статус зараз"
+    // Події
     $('#checkNow').addEventListener('click', (e)=>{ e.preventDefault(); clearTimeout(pollTimer); checkStatus(); });
-
-    // Якщо вкладка знову стала видимою — одразу перевіримо
     document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkStatus(); });
-
-    // "Повернутись на сайт" — завжди в поточне оточення
     $('#toHome').addEventListener('click', (e)=>{ e.preventDefault(); location.href = HOME + '#top'; });
 
     // Старт
     checkStatus();
+
+    // ====== Простий конфеті-ефект на Canvas (без бібліотек) ======
+    function fxConfetti(){
+      const c = $('#fx'); const ctx = c.getContext('2d');
+      let W = c.width = innerWidth, H = c.height = innerHeight;
+      const N = 140;
+      const parts = Array.from({length:N}, ()=>({
+        x: Math.random()*W, y: -20 - Math.random()*H*0.3,
+        r: 2 + Math.random()*4,
+        vx: -1 + Math.random()*2,
+        vy: 2 + Math.random()*3,
+        a: Math.random()*Math.PI*2,
+        va: -0.1 + Math.random()*0.2
+      }));
+      let t=0, maxT=140; // ~2.2s
+      function draw(){
+        t++; ctx.clearRect(0,0,W,H);
+        for(const p of parts){
+          p.x += p.vx; p.y += p.vy; p.a += p.va;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.a);
+          ctx.fillStyle = `hsl(${120 + Math.random()*60} 60% 60%)`;
+          ctx.fillRect(-p.r, -p.r, p.r*2.2, p.r*2.2);
+          ctx.restore();
+        }
+        if(t<maxT) requestAnimationFrame(draw); else ctx.clearRect(0,0,W,H);
+      }
+      draw();
+      addEventListener('resize', ()=>{ W=c.width=innerWidth; H=c.height=innerHeight; }, {once:true});
+    }
   })();
   </script>
 </body>
