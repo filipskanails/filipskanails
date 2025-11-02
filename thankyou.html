@@ -10,16 +10,21 @@
       --bg:#0c100e; --card:#0f1512; --line:#223129;
       --text:#e7f0ea; --muted:#a1b3ab;
       --accent:#004a25; --accent-2:#0b7d47; --accent-rgb:0,74,37;
-      --success:#c7f5d2; --warn:#ffe3a3; --error:#ffb4b4;
     }
     *{box-sizing:border-box}
-    html,body{margin:0;background:radial-gradient(1200px 600px at 20% -10%, rgba(0,74,37,.18), transparent 55%),
-                           radial-gradient(900px 500px at 100% 0%, rgba(11,125,71,.14), transparent 55%),
-                           var(--bg);
-      color:var(--text); font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif}
+    html,body{
+      margin:0;
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(0,74,37,.18), transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, rgba(11,125,71,.14), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif
+    }
     .wrap{max-width:860px;margin:0 auto;padding:28px 16px}
     .card{
-      position:relative; border-radius:22px; padding:20px; background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      position:relative; border-radius:22px; padding:20px;
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
       border:1px solid color-mix(in oklab, var(--line) 82%, transparent);
       box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), 0 18px 38px rgba(0,0,0,.35);
       overflow:hidden;
@@ -32,7 +37,7 @@
     }
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    h1{font-size:28px; margin:0 0 6px; letter-spacing:.2px}
+    h1{font-size:28px; margin:0 0 6px}
     h2{font-size:20px; margin:16px 0 10px}
     p{margin:0 0 10px}
     .muted{color:var(--muted)}
@@ -54,7 +59,8 @@
       display:inline-flex; align-items:center; justify-content:center; gap:10px;
       padding:14px 20px; border-radius:999px; text-decoration:none; font-weight:900; text-transform:uppercase;
       background:linear-gradient(135deg, var(--accent-2), var(--accent)); color:#062217;
-      box-shadow:0 12px 30px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12); transition:transform .06s ease, filter .2s ease;
+      box-shadow:0 12px 30px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12);
+      transition:transform .06s ease, filter .2s ease;
       border:1px solid color-mix(in oklab, #0b7d47 80%, #fff 0%);
     }
     .cta:hover{transform:translateY(-1px); filter:brightness(1.05)}
@@ -86,6 +92,10 @@
     summary::-webkit-details-marker{display:none}
 
     #fx{position:fixed; inset:0; pointer-events:none; z-index:999}
+
+    /* Debug panel */
+    .debug{margin-top:18px; font-size:12px; color:#9fb3aa}
+    .debug pre{white-space:pre-wrap; word-break:break-word; background:#0f1713; border:1px solid #2b4136; border-radius:10px; padding:8px}
   </style>
 </head>
 <body>
@@ -162,12 +172,15 @@
               <p class="muted" id="helpOpen">Спробуйте оновити сторінку та натиснути «Відкрити оплату» ще раз.</p>
             </details>
             <details>
-              <summary>Оплата пройшла в застосунку, але статус не оновився</summary>
+              <summary>Оплата пройшла, але статус не оновився</summary>
               <p class="muted">Натисніть «Перевірити статус зараз» або «Я оплатив(ла)». Якщо не допоможе — зачекайте 1–2 хвилини або зв’яжіться з нами.</p>
             </details>
-            <details>
-              <summary>Оплата відхилена / строк дії рахунку минув</summary>
-              <p class="muted">Створіть новий платіж або використайте іншу картку. Якщо проблема лишається — напишіть у підтримку.</p>
+          </div>
+
+          <div class="debug">
+            <details id="dbg">
+              <summary>Дебаг</summary>
+              <pre id="dbgpre">—</pre>
             </details>
           </div>
         </section>
@@ -178,48 +191,27 @@
   <script>
   (function(){
     const $ = s => document.querySelector(s);
+    const log = (o) => { try{ $('#dbgpre').textContent = JSON.stringify(o,null,2); }catch{} };
 
-    // ===== Конфіг (ім'я бота без @) =====
+    // ===== Конфіг =====
     const BOT_HANDLE = "NailSchoolFilipskabot";
-    const WORKER = "https://filipskanails-pay.timanov-business.workers.dev";
+    const WORKER = "https://filipskanails-pay.timanov-business.workers.dev"; // перевір, що саме цей домен твого воркера
 
     // Параметри URL
     const params    = new URLSearchParams(location.search);
     const ref       = params.get('ref') || "";
     let invoiceId   = params.get('invoiceId') || "";
     const pay       = params.get('pay') || "";
-    const plan      = (params.get('plan') || "").toLowerCase(); // "group" | "individual"
+    const plan      = (params.get('plan') || "").toLowerCase();
     const homeParam = params.get('home') || "";
 
-    // Провайдер (дефолт — MONO до підключення Райфа)
+    // Провайдер (дефолт — MONO)
     let provider = (params.get('provider') || "").toLowerCase();
     if(!provider){
       provider = /raif|raiffeisen|aval/i.test(pay) ? "raif" : /mono|monobank/i.test(pay) ? "mono" : "mono";
     }
-    const provMap = {
-      mono: {
-        name: "Monobank",
-        openBtn: "Відкрити оплату в Monobank",
-        openTitle: "Відкрити оплату в Monobank",
-        openHint: "Платіж відкриється у новій вкладці Monobank.",
-        helpOpen: "Якщо випадково закрили вкладку — натисніть «Відкрити оплату в Monobank» ще раз."
-      },
-      raif: {
-        name: "Райфайзен Банк Аваль",
-        openBtn: "Відкрити оплату в Райфайзен",
-        openTitle: "Відкрити оплату в Райфайзен",
-        openHint: "Платіж відкриється у новій вкладці Райфайзен Банку.",
-        helpOpen: "Якщо вкладка з оплатою закрилась — натисніть «Відкрити оплату в Райфайзен» ще раз."
-      }
-    };
-    const PROV = provMap[provider] || provMap.mono;
-
-    // UI ініт
-    $('#ref').textContent = ref || '—';
-    $('#provTag').textContent = PROV.name;
-    $('#openTitle').textContent = PROV.openTitle;
-    $('#openHint').textContent = PROV.openHint;
-    $('#helpOpen').textContent = PROV.helpOpen;
+    const PROV = provider === "raif" ? "Райфайзен Банк Аваль" : "Monobank";
+    $('#provTag').textContent = PROV;
 
     // HOME нормалізація
     function normalizeHome(h){ try{ const u=new URL(h); return u.origin + u.pathname.replace(/\/?$/, '/'); }catch{ return null; } }
@@ -233,6 +225,7 @@
     }
 
     // Збереження/відновлення invoiceId
+    $('#ref').textContent = ref || '—';
     const LS_KEY = ref ? `nx_invoice_${ref}` : null;
     if(invoiceId && LS_KEY){ try{ localStorage.setItem(LS_KEY, invoiceId); }catch{} }
     if((!invoiceId || invoiceId==='') && LS_KEY){
@@ -242,34 +235,28 @@
     // Кнопки
     if (pay){
       $('#openPay').href = pay;
-      $('#openPay').textContent = PROV.openBtn;
+      $('#openPay').textContent = provider === "raif" ? "Відкрити оплату в Райфайзен" : "Відкрити оплату в Monobank";
     } else {
       $('#openPay').style.display = 'none';
     }
-    const hint = (plan === 'individual') ? 'та надсилати ДЗ' : '';
-    $('#planHint').textContent = hint ? `(${hint})` : '';
+    $('#planHint').textContent = plan === 'individual' ? '(та надсилати ДЗ)' : '';
 
-    // Статуси
+    // UI статус
     function setStatus(txt, cls){
       $('#status').textContent = txt;
       const badge = $('#statusBadge');
-      if(cls==='ok'){ badge.textContent = 'Оплачено'; badge.className = 'badge ok'; fxConfetti(); markStepsDone(true); }
+      if(cls==='ok'){ badge.textContent = 'Оплачено'; badge.className = 'badge ok'; fxConfetti(); }
       else if(cls==='err'){ badge.textContent = 'Помилка'; badge.className = 'badge err'; }
       else{ badge.innerHTML = 'Очікуємо оплату <span class="dots"></span>'; badge.className = 'badge wait'; }
     }
-    function markStepsDone(success){
-      $('#step-open')?.classList.add('done');
-      $('#step-pay')?.classList.add('done');
-      $('#step-back')?.classList.add('done');
-      if(success) $('#step-tg')?.classList.add('done');
-    }
 
+    // Телеграм кнопка
     function renderTelegramButton(){
       const wrap = $('#tgButtons'); wrap.innerHTML = '';
       if (!BOT_HANDLE || !ref) {
         const p = document.createElement('p');
         p.className = 'muted';
-        p.textContent = 'Посилання на бота тимчасово недоступне. Спробуйте оновити сторінку або зверніться до підтримки.';
+        p.textContent = 'Посилання на бота тимчасово недоступне.';
         wrap.appendChild(p); return;
       }
       const botHref = `https://t.me/${BOT_HANDLE}?start=${encodeURIComponent(ref)}`;
@@ -281,30 +268,51 @@
       $('#botLinkEcho').textContent = botHref;
     }
 
-    // === Полінг статусу через /pay/status з анти-кешем і фолбеком по ref ===
+    // === Полінг статусу з багатоступеневим фолбеком ===
     let pollTimer = null;
-    async function fetchStatus(){
-      const ts = Date.now();
-      const base = `${WORKER}/pay/status`;
-      let url;
-      if(invoiceId){ url = `${base}?invoiceId=${encodeURIComponent(invoiceId)}&_ts=${ts}`; }
-      else if(ref){  url = `${base}?ref=${encodeURIComponent(ref)}&_ts=${ts}`; }
-      else { return { status:"unknown" }; }
 
-      const r = await fetch(url, { cache:'no-store', headers:{ 'pragma':'no-cache', 'cache-control':'no-cache' } });
-      return r.ok ? r.json() : { status:"error" };
+    async function tryFetch(url){
+      const u = `${url}${url.includes('?')?'&':'?'}_ts=${Date.now()}`;
+      const opt = { cache:'no-store', headers:{ 'pragma':'no-cache', 'cache-control':'no-cache' } };
+      try{
+        const r = await fetch(u, opt);
+        const txt = await r.text();
+        let data; try{ data = JSON.parse(txt); }catch{ data = { error:"bad json", raw:txt }; }
+        log({url:u, ok:r.ok, data});
+        if (!r.ok) throw new Error(data?.error || `HTTP ${r.status}`);
+        return data;
+      }catch(e){
+        log({url:u, err:String(e)});
+        throw e;
+      }
+    }
+
+    async function fetchStatus(){
+      const base1 = `${WORKER}/pay/status`;
+      const base2 = `${WORKER}/mono/status`;    // аліас на той самий хендлер
+      const base3 = `/pay/status`;               // раптом ти прокинеш воркер на тому ж домені
+
+      const qsInv = invoiceId ? `?invoiceId=${encodeURIComponent(invoiceId)}` : '';
+      const qsRef = (!invoiceId && ref) ? `?ref=${encodeURIComponent(ref)}` : '';
+
+      const paths = [base1, base2, base3].map(b => b + (qsInv || qsRef));
+      let lastErr = null;
+      for (const p of paths){
+        try{ return await tryFetch(p); }catch(e){ lastErr = e; }
+      }
+      throw lastErr || new Error('network');
     }
 
     async function checkStatus(){
       try{
         const data = await fetchStatus();
-        const raw = String(data.status || data.state || '').toLowerCase();
+        const raw = String(data.status || data.state || data.raw?.status || '').toLowerCase();
 
-        let st = 'очікується';
-        let cls = 'wait';
+        let st = 'очікується'; let cls = 'wait';
         if (/(success|paid|ok)/.test(raw)){ st = 'успішно'; cls='ok'; }
-        else if (/(failure|failed|expired|reversed|cancelled|error|declined|failed)/.test(raw)){ st = raw; cls='err'; }
+        else if (/(failure|failed|expired|reversed|cancelled|declined)/.test(raw)){ st = raw; cls='err'; }
         else if (/(processing|pending|created|waiting|hold)/.test(raw)){ st = 'обробка/очікування'; cls='wait'; }
+        else if (data.error){ st = 'помилка: ' + data.error; cls='err'; }
 
         setStatus(st, cls);
 
@@ -312,7 +320,7 @@
           $('#actions').style.display = 'none';
           $('#afterSuccess').style.display = 'block';
           renderTelegramButton();
-          return; // стоп полінг
+          return;
         }
         schedule();
       }catch(e){
@@ -324,16 +332,15 @@
 
     // Події
     $('#checkNow').addEventListener('click', (e)=>{ e.preventDefault(); clearTimeout(pollTimer); checkStatus(); });
-    $('#iPaid').addEventListener('click', (e)=>{ e.preventDefault(); clearTimeout(pollTimer); checkStatus(); });
+    $('#iPaid').addEventListener('click',   (e)=>{ e.preventDefault(); clearTimeout(pollTimer); checkStatus(); });
     document.addEventListener('visibilitychange', ()=>{ if(!document.hidden){ clearTimeout(pollTimer); checkStatus(); } });
     window.addEventListener('focus', ()=>{ clearTimeout(pollTimer); checkStatus(); });
-
-    $('#toHome').addEventListener('click', (e)=>{ e.preventDefault(); location.href = HOME + '#top'; });
+    $('#toHome')?.addEventListener('click', (e)=>{ e.preventDefault(); location.href = HOME + '#top'; });
 
     // Старт
     checkStatus();
 
-    // ====== Конфеті ======
+    // Конфеті
     function fxConfetti(){
       const c = document.getElementById('fx'); const ctx = c.getContext('2d');
       let W = c.width = innerWidth, H = c.height = innerHeight;
