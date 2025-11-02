@@ -61,6 +61,9 @@
     .btn-secondary{
       background:#0f1713; color:var(--text); border:1px solid #2b4136; text-transform:none; font-weight:700;
     }
+    .btn-ghost{
+      background:transparent; color:var(--text); border:1px dashed #355144; text-transform:none; font-weight:700;
+    }
 
     .box{padding:14px; border:1px dashed var(--line); border-radius:14px; background:rgba(255,255,255,.02)}
     .note{font-size:14px; color:var(--muted); margin-top:8px}
@@ -68,7 +71,6 @@
     .split{display:grid; grid-template-columns: 1fr; gap:14px}
     @media (min-width:720px){ .split{grid-template-columns: 1.2fr .8fr} }
 
-    /* Progress tracker */
     .steps{display:grid; gap:8px; margin:8px 0 0; counter-reset:step}
     .step{
       display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:10px;
@@ -83,12 +85,10 @@
     .step.done::before{background:#bdf0ce; color:#09391f; border-color:#93d8a9}
     .step .hint{font-size:13px; color:var(--muted)}
 
-    /* Accordion FAQ */
     details{background:#0f1512; border:1px solid #223129; border-radius:12px; padding:12px}
     summary{cursor:pointer; list-style:none; font-weight:700}
     summary::-webkit-details-marker{display:none}
 
-    /* Success confetti canvas */
     #fx{position:fixed; inset:0; pointer-events:none; z-index:999}
   </style>
 </head>
@@ -109,7 +109,6 @@
         <section class="box">
           <h2>Як завершити оформлення</h2>
           <div class="steps" id="steps">
-            <!-- кроки будуть оновлені залежно від провайдера -->
             <div class="step" id="step-open">
               <div>
                 <div class="title"><b id="openTitle">Відкрити оплату</b></div>
@@ -145,6 +144,7 @@
           <div id="actions" class="row" style="margin:14px 0">
             <a id="openPay" class="cta" target="_blank" rel="noopener">Відкрити оплату</a>
             <a id="checkNow" class="cta btn-secondary" href="#">Перевірити статус зараз</a>
+            <a id="iPaid" class="cta btn-ghost" href="#">Я оплатив(ла)</a>
           </div>
 
           <div id="afterSuccess" style="display:none; margin-top:16px">
@@ -167,7 +167,7 @@
             </details>
             <details>
               <summary>Оплата пройшла в застосунку, але статус не оновився</summary>
-              <p class="muted">Натисніть «Перевірити статус зараз». Якщо не допоможе — зачекайте 1–2 хвилини або зв’яжіться з нами.</p>
+              <p class="muted">Натисніть «Перевірити статус зараз» або «Я оплатив(ла)». Якщо не допоможе — зачекайте 1–2 хвилини або зв’яжіться з нами.</p>
             </details>
             <details>
               <summary>Оплата відхилена / строк дії рахунку минув</summary>
@@ -185,40 +185,21 @@
 
     // ===== Конфіг (ім'я бота без @) =====
     const BOT_HANDLE = "NailSchoolFilipskabot";
-
-    // Базовий воркер (залишаємо як у тебе)
     const WORKER = "https://filipskanails-pay.timanov-business.workers.dev";
 
     // Параметри URL
     const params    = new URLSearchParams(location.search);
-    const invoiceId = params.get('invoiceId') || "";
     const ref       = params.get('ref') || "";
+    let invoiceId   = params.get('invoiceId') || "";
     const pay       = params.get('pay') || "";
     const plan      = (params.get('plan') || "").toLowerCase(); // "group" | "individual"
     const homeParam = params.get('home') || "";
-    // Явний провайдер або авто-детект по URL
+
+    // Провайдер (raif за замовчуванням)
     let provider = (params.get('provider') || "").toLowerCase();
     if(!provider){
       provider = /raif|raiffeisen|aval/i.test(pay) ? "raif" : /mono|monobank/i.test(pay) ? "mono" : "raif";
     }
-
-    // Відображення ref
-    $('#ref').textContent = ref || '—';
-
-    // Нормалізація HOME (повернення на те саме оточення)
-    function normalizeHome(h){
-      try{ const u=new URL(h); return u.origin + u.pathname.replace(/\/?$/, '/'); }catch{ return null; }
-    }
-    const ALLOWED = new Set([
-      "https://filipskanails.github.io/filipskanails/",
-      "https://filipskanails.github.io/filipska-nails/",
-    ]);
-    let HOME = normalizeHome(homeParam);
-    if(!HOME || !ALLOWED.has(HOME)){
-      HOME = location.origin + location.pathname.replace(/thankyou\.html.*$/,'');
-    }
-
-    // Тексти під провайдера
     const provMap = {
       mono: {
         name: "Monobank",
@@ -239,25 +220,42 @@
     };
     const PROV = provMap[provider] || provMap.raif;
 
-    // Проставити копірайт під провайдера
+    // UI ініт
+    $('#ref').textContent = ref || '—';
     $('#provTag').textContent = PROV.name;
     $('#openTitle').textContent = PROV.openTitle;
     $('#openHint').textContent = PROV.openHint;
     $('#helpOpen').textContent = PROV.helpOpen;
 
-    // Кнопка оплатити
+    // HOME нормалізація
+    function normalizeHome(h){ try{ const u=new URL(h); return u.origin + u.pathname.replace(/\/?$/, '/'); }catch{ return null; } }
+    const ALLOWED = new Set([
+      "https://filipskanails.github.io/filipskanails/",
+      "https://filipskanails.github.io/filipska-nails/",
+    ]);
+    let HOME = normalizeHome(homeParam);
+    if(!HOME || !ALLOWED.has(HOME)){
+      HOME = location.origin + location.pathname.replace(/thankyou\.html.*$/,'');
+    }
+
+    // Зберігаємо/читаємо invoiceId у localStorage (щоб не втрачався після повернення зі сторінки банку)
+    const LS_KEY = ref ? `nx_invoice_${ref}` : null;
+    if(invoiceId && LS_KEY){ try{ localStorage.setItem(LS_KEY, invoiceId); }catch{} }
+    if((!invoiceId || invoiceId==='') && LS_KEY){
+      try{ const stored = localStorage.getItem(LS_KEY); if(stored) invoiceId = stored; }catch{}
+    }
+
+    // Кнопки
     if (pay){
       $('#openPay').href = pay;
       $('#openPay').textContent = PROV.openBtn;
     } else {
       $('#openPay').style.display = 'none';
     }
-
-    // Підказка за тарифом
     const hint = (plan === 'individual') ? 'та надсилати ДЗ' : '';
     $('#planHint').textContent = hint ? `(${hint})` : '';
 
-    // Статус UI
+    // Статуси
     function setStatus(txt, cls){
       $('#status').textContent = txt;
       const badge = $('#statusBadge');
@@ -265,8 +263,6 @@
       else if(cls==='err'){ badge.textContent = 'Помилка'; badge.className = 'badge err'; }
       else{ badge.innerHTML = 'Очікуємо оплату <span class="dots"></span>'; badge.className = 'badge wait'; }
     }
-
-    // Візуально позначаємо кроки як виконані
     function markStepsDone(success){
       $('#step-open')?.classList.add('done');
       $('#step-pay')?.classList.add('done');
@@ -274,15 +270,13 @@
       if(success) $('#step-tg')?.classList.add('done');
     }
 
-    // Побудова кнопки в Telegram
     function renderTelegramButton(){
       const wrap = $('#tgButtons'); wrap.innerHTML = '';
       if (!BOT_HANDLE || !ref) {
         const p = document.createElement('p');
         p.className = 'muted';
         p.textContent = 'Посилання на бота тимчасово недоступне. Спробуйте оновити сторінку або зверніться до підтримки.';
-        wrap.appendChild(p);
-        return;
+        wrap.appendChild(p); return;
       }
       const botHref = `https://t.me/${BOT_HANDLE}?start=${encodeURIComponent(ref)}`;
       const a = document.createElement('a');
@@ -293,27 +287,30 @@
       $('#botLinkEcho').textContent = botHref;
     }
 
-    // Полінг статусу
+    // === Полінг статусу з анти-кешем і фолбеком по ref ===
     let pollTimer = null;
+    async function fetchStatus(){
+      const ts = Date.now();
+      const base = `${WORKER}${PROV.statusPath}`;
+      let url;
+      if(invoiceId){ url = `${base}?invoiceId=${encodeURIComponent(invoiceId)}&_ts=${ts}`; }
+      else if(ref){ url = `${base}?ref=${encodeURIComponent(ref)}&_ts=${ts}`; }
+      else{ return { status:"unknown" }; }
+
+      const r = await fetch(url, { cache:'no-store', headers:{ 'pragma':'no-cache', 'cache-control':'no-cache' } });
+      return r.ok ? r.json() : { status:"error" };
+    }
+
     async function checkStatus(){
       try{
-        if(!invoiceId){
-          setStatus('очікується (немає invoiceId)', 'wait');
-          schedule();
-          return;
-        }
-        const url = `${WORKER}${PROV.statusPath}?invoiceId=${encodeURIComponent(invoiceId)}`;
-        const r = await fetch(url);
-        const data = await r.json();
+        const data = await fetchStatus();
         const raw = String(data.status || '').toLowerCase();
 
-        // Нормалізуємо перелік можливих статусів
-        // success/paid -> ok; failure/expired/reversed/cancelled -> err; processing/pending/created -> wait
         let st = 'очікується';
         let cls = 'wait';
         if (/(success|paid|ok)/.test(raw)){ st = 'успішно'; cls='ok'; }
         else if (/(failure|failed|expired|reversed|cancelled|error|declined)/.test(raw)){ st = raw; cls='err'; }
-        else if (/(processing|pending|created|waiting)/.test(raw)){ st = 'обробка/очікування'; cls='wait'; }
+        else if (/(processing|pending|created|waiting|hold)/.test(raw)){ st = 'обробка/очікування'; cls='wait'; }
 
         setStatus(st, cls);
 
@@ -333,15 +330,18 @@
 
     // Події
     $('#checkNow').addEventListener('click', (e)=>{ e.preventDefault(); clearTimeout(pollTimer); checkStatus(); });
-    document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkStatus(); });
+    $('#iPaid').addEventListener('click', (e)=>{ e.preventDefault(); clearTimeout(pollTimer); checkStatus(); });
+    document.addEventListener('visibilitychange', ()=>{ if(!document.hidden){ clearTimeout(pollTimer); checkStatus(); } });
+    window.addEventListener('focus', ()=>{ clearTimeout(pollTimer); checkStatus(); });
+
     $('#toHome').addEventListener('click', (e)=>{ e.preventDefault(); location.href = HOME + '#top'; });
 
     // Старт
     checkStatus();
 
-    // ====== Простий конфеті-ефект на Canvas (без бібліотек) ======
+    // ====== Конфеті ======
     function fxConfetti(){
-      const c = $('#fx'); const ctx = c.getContext('2d');
+      const c = document.getElementById('fx'); const ctx = c.getContext('2d');
       let W = c.width = innerWidth, H = c.height = innerHeight;
       const N = 140;
       const parts = Array.from({length:N}, ()=>({
@@ -352,14 +352,12 @@
         a: Math.random()*Math.PI*2,
         va: -0.1 + Math.random()*0.2
       }));
-      let t=0, maxT=140; // ~2.2s
+      let t=0, maxT=140;
       function draw(){
         t++; ctx.clearRect(0,0,W,H);
         for(const p of parts){
           p.x += p.vx; p.y += p.vy; p.a += p.va;
-          ctx.save();
-          ctx.translate(p.x, p.y);
-          ctx.rotate(p.a);
+          ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a);
           ctx.fillStyle = `hsl(${120 + Math.random()*60} 60% 60%)`;
           ctx.fillRect(-p.r, -p.r, p.r*2.2, p.r*2.2);
           ctx.restore();
