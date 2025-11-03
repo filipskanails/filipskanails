@@ -32,11 +32,13 @@
     h2{font-size:20px;margin:16px 0 8px}
     .muted{color:var(--muted)}
 
-    /* badge */
+    /* badges */
+    .badges{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 0}
     .badge{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;font-weight:800}
     .badge.ok   {background:rgba(34,197,94,.12); color:var(--ok);  border:1px solid rgba(34,197,94,.35)}
     .badge.err  {background:rgba(239,68,68,.10); color:var(--err); border:1px solid rgba(239,68,68,.32)}
     .badge.wait {background:rgba(234,179,8,.08); color:var(--wait);border:1px solid rgba(234,179,8,.30)}
+    .badge.plan {background:rgba(11,125,71,.12); color:#8BE0B4; border:1px solid rgba(11,125,71,.35)}
     .pulse{animation:pulse 1.4s ease-in-out infinite}
     @keyframes pulse { 0%,100%{ transform:translateZ(0) scale(1); } 50%{ transform:translateZ(0) scale(1.04); } }
 
@@ -77,7 +79,6 @@
     .cta:hover{ transform: translateY(-1px); box-shadow: 0 12px 30px rgba(0,0,0,.33), var(--ring) }
     .cta:active{ transform: translateY(0) scale(.98) }
     .cta:disabled{ opacity:.6; cursor:not-allowed; filter:grayscale(.3) }
-
     .btn-secondary{
       background:#0f1713; color:var(--text); border:1px solid #2b4136; text-transform:none; font-weight:800;
     }
@@ -87,9 +88,13 @@
     }
 
     .box{padding:14px;border:1px dashed var(--line);border-radius:14px;background:rgba(255,255,255,.02)}
-
     .note{font-size:14px;color:var(--muted);margin-top:8px}
-    .kbd{padding:2px 8px;border-radius:6px;background:#0f1713;border:1px solid #27382f}
+
+    /* compact alt-open block */
+    .alt-open{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
+    .mini{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:1px solid #2b4136;background:#0f1713;color:var(--text);text-decoration:none;font-weight:700}
+    .kbd{padding:6px 8px;border-radius:8px;background:#0f1713;border:1px solid #27382f;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
+    .copy{cursor:pointer}
 
     /* confetti canvas */
     #fx{position:fixed; inset:0; pointer-events:none}
@@ -103,8 +108,13 @@
   <canvas id="fx"></canvas>
   <div class="wrap">
     <div class="card">
-      <h1>Дякуємо за замовлення <span id="statusBadge" class="badge wait pulse">Очікуємо оплату…</span></h1>
-      <p class="muted">Замовлення: <b id="ref">—</b> • Провайдер: <b id="prov">—</b></p>
+      <h1>Дякуємо за замовлення</h1>
+      <div class="badges">
+        <span id="statusBadge" class="badge wait pulse">Очікуємо оплату…</span>
+        <span id="planBadge" class="badge plan" title="Обраний тариф">Тариф: —</span>
+      </div>
+
+      <p class="muted" style="margin-top:10px">Замовлення: <b id="ref">—</b> • Провайдер: <b id="prov">—</b></p>
       <p class="muted">Статус: <b id="status">очікується</b></p>
 
       <div class="progress">
@@ -122,20 +132,27 @@
           <button id="paidBtn" class="cta btn-ghost">Я оплатив(ла)</button>
         </div>
         <p class="note" id="helpText">
-          Якщо випадково закрили вкладку з оплатою — натисніть «Відкрити оплату» ще раз.
-          Якщо оплата не проходить — спробуйте іншу картку або зв’яжіться з нами.
+          Якщо випадково закрили вкладку з оплатою — натисніть «Відкрити оплату» ще раз. Якщо оплата не проходить — спробуйте іншу картку або зв’яжіться з нами.
         </p>
       </div>
 
       <div id="afterSuccess" style="display:none; margin-top:16px">
         <h2>Оплата успішна ✅</h2>
         <p class="muted" id="nextSteps">
-          Перейдіть у наш Telegram-бот, щоб отримати доступ до відео-уроків<span id="planHint"></span>.
-          Якщо у вас індивідуальний тариф — надсилайте ДЗ прямо в боті.
+          Ваш план: <b id="planText">—</b>. Перейдіть у наш Telegram-бот, щоб отримати доступ до відео-уроків.
         </p>
+
         <div class="row" style="margin-top:10px" id="tgButtons"></div>
-        <p class="note">Якщо кнопка не відкриває застосунок — скористайтесь посиланням у браузері: <span id="botLinkEcho" class="kbd"></span></p>
-        <div class="row" style="margin-top:10px">
+
+        <!-- красивий компактний блок замість “некрасивого” речення -->
+        <div class="alt-open" id="altOpen" style="display:none;">
+          <a id="botOpenWeb" class="mini" target="_blank" rel="noopener">Відкрити у браузері</a>
+          <span class="kbd" id="botLinkEcho"></span>
+          <button class="mini copy" id="copyBtn" type="button">Скопіювати</button>
+          <span class="note">Якщо кнопка застосунку не спрацьовує — скористайтесь одним із варіантів вище.</span>
+        </div>
+
+        <div class="row" style="margin-top:14px">
           <a id="toHome" class="cta btn-secondary" href="#">Повернутись на сайт</a>
         </div>
       </div>
@@ -155,9 +172,24 @@
     const ref       = params.get('ref') || "";
     const invoiceId = params.get('invoiceId') || "";
     const pay       = params.get('pay') || "";
-    const plan      = (params.get('plan') || "").toLowerCase(); // "group" | "individual"
+    const planParam = (params.get('plan') || "").toLowerCase(); // "group" | "individual"
     const homeParam = params.get('home') || "";
     $('#ref').textContent = ref || '—';
+
+    // Визначаємо план: з param або з префікса ref
+    function derivePlan(){
+      if (planParam === 'group' || planParam === 'individual') return planParam;
+      if (/^NL-I/i.test(ref)) return 'individual';
+      if (/^NL-G/i.test(ref)) return 'group';
+      return '';
+    }
+    function planLabel(p){
+      if (p === 'individual') return 'Індивідуальний';
+      if (p === 'group') return 'Груповий';
+      return '—';
+    }
+    const plan = derivePlan();
+    $('#planBadge').textContent = 'Тариф: ' + planLabel(plan);
 
     function normalizeHome(h){
       try{ const u=new URL(h); return u.origin + u.pathname.replace(/\/?$/, '/'); }catch{ return null; }
@@ -175,10 +207,6 @@
     if (pay) $('#openPay').href = pay;
     else $('#openPay').style.display = 'none';
 
-    // Підказка за тарифом
-    const hint = (plan === 'individual') ? ' (та надсилати ДЗ)' : '';
-    $('#planHint').textContent = hint;
-
     // UI статус
     function setStatus(txt, cls){
       $('#status').textContent = txt;
@@ -187,8 +215,8 @@
       badge.className = 'badge ' + (cls || 'wait') + (cls==='wait' ? ' pulse' : '');
     }
 
-    // Телеграм кнопка
-    function renderTelegramButton(){
+    // Телеграм кнопки + альтернативи
+    function renderTelegramSection(){
       const wrap = $('#tgButtons'); wrap.innerHTML = '';
       if (!BOT_HANDLE || !ref) {
         const p = document.createElement('p');
@@ -198,12 +226,28 @@
         return;
       }
       const botHref = `https://t.me/${BOT_HANDLE}?start=${encodeURIComponent(ref)}`;
+
       const a = document.createElement('a');
       a.className = 'cta';
       a.textContent = 'Продовжити в Telegram-боті';
       a.href = botHref; a.target = '_blank'; a.rel = 'noopener';
       wrap.appendChild(a);
+
+      // Альтернативи: відобразити компактний блок з копією/відкриттям у браузері
       $('#botLinkEcho').textContent = botHref;
+      $('#botOpenWeb').href = botHref;
+      $('#altOpen').style.display = 'flex';
+      $('#copyBtn').onclick = async () => {
+        try{
+          await navigator.clipboard.writeText(botHref);
+          const b = $('#copyBtn'); const prev = b.textContent;
+          b.textContent = 'Скопійовано ✓';
+          setTimeout(()=> b.textContent = prev, 1500);
+        }catch{}
+      };
+
+      // Текст плану в Success-блоці
+      $('#planText').textContent = planLabel(plan);
     }
 
     // fetch JSON із страховкою
@@ -229,7 +273,6 @@
     let confetti = [];
     function resize(){ fx.width = innerWidth; fx.height = innerHeight; }
     addEventListener('resize', resize); resize();
-
     function spawnConfetti(n=150){
       confetti = Array.from({length:n}, ()=>({
         x: Math.random()*fx.width, y: -10 - Math.random()*fx.height*0.3,
@@ -240,8 +283,7 @@
       let t0=null;
       function step(ts){
         if(!t0) t0=ts;
-        const dt=(ts-t0)/16;
-        t0=ts;
+        const dt=(ts-t0)/16; t0=ts;
         ctx.clearRect(0,0,fx.width,fx.height);
         confetti.forEach(p=>{
           p.y+=p.v*dt; p.a+=p.w*dt;
@@ -273,7 +315,7 @@
         setStatus('успішно', 'ok');
         $('#actions').style.display = 'none';
         $('#afterSuccess').style.display = 'block';
-        renderTelegramButton();
+        renderTelegramSection();
         spawnConfetti();
         return;
       }
@@ -281,11 +323,7 @@
         setStatus('помилка', 'err');
         return;
       }
-      if(st === 'error'){
-        setStatus('тимчасова помилка мережі', 'wait');
-      } else {
-        setStatus(st || 'очікується', 'wait');
-      }
+      setStatus(st === 'error' ? 'тимчасова помилка мережі' : (st || 'очікується'), 'wait');
       schedule();
     }
     function schedule(){ clearTimeout(pollTimer); pollTimer = setTimeout(checkStatus, 5000); }
@@ -295,6 +333,19 @@
     $('#paidBtn').addEventListener('click', (e)=>{ e.preventDefault(); checkStatus(); });
     document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkStatus(); });
     $('#toHome').addEventListener('click', (e)=>{ e.preventDefault(); location.href = HOME + '#top'; });
+
+    // HOME нормалізація
+    function normalizeHome(h){
+      try{ const u=new URL(h); return u.origin + u.pathname.replace(/\/?$/, '/'); }catch{ return null; }
+    }
+    const ALLOWED = new Set([
+      "https://filipskanails.github.io/filipskanails/",
+      "https://filipskanails.github.io/filipska-nails/",
+    ]);
+    let HOME = normalizeHome(new URLSearchParams(location.search).get('home')||"");
+    if(!HOME || !ALLOWED.has(HOME)){
+      HOME = location.origin + location.pathname.replace(/thankyou\.html.*$/,'');
+    }
 
     // Старт
     checkStatus();
