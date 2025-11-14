@@ -92,17 +92,6 @@
     .note{font-size:14px;color:var(--muted);margin-top:8px}
     .kbd{padding:2px 8px;border-radius:6px;background:#0f1713;border:1px solid #27382f}
 
-    /* pretty tip */
-    .tip{
-      display:flex;align-items:flex-start;gap:10px;margin-top:10px;padding:12px 14px;
-      background:rgba(255,255,255,.02); border:1px solid var(--line); border-radius:12px;
-    }
-    .tip i{
-      display:inline-flex;align-items:center;justify-content:center;
-      width:22px;height:22px;border-radius:50%;
-      background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#052116; font-weight:900; font-style:normal;
-    }
-
     /* confetti canvas (поки без анімації, просто для майбутнього) */
     #fx{position:fixed; inset:0; pointer-events:none}
     @media (prefers-reduced-motion: reduce){
@@ -159,16 +148,7 @@
       </div>
 
       <div style="margin-top:16px">
-        <div class="tip">
-          <i>!</i>
-          <div>
-            <b>Якщо Telegram не відкривається автоматично</b><br>
-            Скопіюйте це посилання та відкрийте його вручну:
-            <span id="botLinkEcho" class="kbd"></span>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:16px">
+        <div class="row" style="margin-top:0">
           <a id="toHome" class="cta btn-secondary" href="#">Повернутись на сайт</a>
         </div>
       </div>
@@ -223,14 +203,11 @@
     }
 
     const goTg = $('#goTg');
-    const botLinkEcho = $('#botLinkEcho');
 
     if (botLink && goTg) {
       goTg.href = botLink;
-      if (botLinkEcho) botLinkEcho.textContent = botLink;
     } else {
       if (goTg) goTg.style.display = 'none';
-      if (botLinkEcho) botLinkEcho.textContent = 'посилання тимчасово недоступне';
     }
 
     // Копіювання посилання
